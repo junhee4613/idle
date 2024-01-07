@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using DG.Tweening;
 
 public class PlayerController : Unit
 {
@@ -13,16 +13,19 @@ public class PlayerController : Unit
     public float shoot_speed;
     [Header("드래그 할 때의 속도")]
     public float slow_speed;
-    public int player_life = 3;
     public float speed_down;
+    public int player_life = 3;
     public LayerMask collision_target;
     public GameObject shoot_dir_image;
     public Transform arrow_rotation_base;
+    public float invincibility_time;
     #region 클래스 안에서 해결할것들
     Vector2 mouse_pos;
     Vector2 player_pos;
     Vector2 player_move_dir;
     bool wall_collider;
+    public bool hit_statu = false;
+    float time;
     float speed;
     float drag_dis;
     float player_rotation_z;
@@ -40,6 +43,10 @@ public class PlayerController : Unit
     // Update is called once per frame
     void Update()
     {
+        if (Managers.GameManager.player_die)
+        {
+            return;
+        }
         Player_Statu();
         targets = Physics2D.OverlapCircleAll(transform.position, cc.radius, collision_target);
         Collider_target();
@@ -65,16 +72,7 @@ public class PlayerController : Unit
     
    
 
-    public override void Hit(float damage)
-    {
-        if(player_statu != Player_statu.HIT)
-        {
-            player_life -= (int)damage;
-            player_statu = Player_statu.HIT;
-        }
-        
-        //여기에 몇초동안 피격 받은 상태로 만들고 그에 따른 처리를 하면 됨
-    }
+   
     public void Player_Statu()
     {
         switch (player_statu)
@@ -98,22 +96,22 @@ public class PlayerController : Unit
     public void Drag()
     {
         speed = slow_speed;
-        rb.drag = 0;
-        if(rb.velocity != Vector2.zero)
+        if(rb.drag != 0)
         {
-            rb.velocity = drag_before_speed * speed;
-            //지금 이 상태에서 벽에 부딪히면 낌 여기에 입사각과 반사각의 값을 넣는 식으로 해서 처리
+            rb.drag = 0;
+            rb.velocity = drag_before_speed * speed; //이거 속도 일정하게 바꾸기
         }
         shoot_dir_image.SetActive(true);
-        drag_dis = Mathf.Abs(player_pos.magnitude - mouse_pos.magnitude); // - 마우스를 땐 위치의 크기를 가져와서 그만큼 뺀다
+        drag_dis = Mathf.Abs(player_pos.magnitude - mouse_pos.magnitude); 
         player_move_dir = new Vector3(player_pos.x - mouse_pos.x, player_pos.y - mouse_pos.y, 0).normalized;
         player_rotation_z = Mathf.Atan2(player_move_dir.y, player_move_dir.x) * Mathf.Rad2Deg;
         arrow_rotation_base.rotation = Quaternion.Euler(0, 0, player_rotation_z - 90);
         if (Input.GetMouseButtonUp(0))     //순서 3번
         {
+            shoot_dir_image.SetActive(false);
             transform.rotation = arrow_rotation_base.rotation;
             rb.velocity = Vector2.zero;
-            rb.drag = 1;
+            rb.drag = speed_down;
             speed = shoot_speed;
             Drag_shoot();
         }
@@ -125,43 +123,7 @@ public class PlayerController : Unit
     }
     public void Run()
     {
-        /*if(Mathf.Abs(transform.rotation.eulerAngles.z) >= 90)
-        {
-            player_velocity_dir_y = -1;
-            min_speed_y = -drag_dis * shoot_speed;
-            max_speed_y = 0;
-        }
-        else
-        {
-            player_velocity_dir_y = 1;
-            min_speed_y = 0;
-            max_speed_y = drag_dis * shoot_speed;
-        }
-
-        if (transform.rotation.eulerAngles.z >= 0)
-        {
-            player_velocity_dir_x = -1;
-            min_speed_x = -drag_dis * shoot_speed;
-            max_speed_x = 0;
-        }
-        else
-        {
-            player_velocity_dir_x = 1;
-            min_speed_x = 0;
-            max_speed_x = drag_dis * shoot_speed;
-        }
-        shoot_dir_image.SetActive(false);
-        if (rb.velocity.y <= 0)
-        {
-            Debug.Log(rb.velocity.y);
-        }
-        else if (rb.velocity.x <= 0)
-        {
-            Debug.Log(rb.velocity.x);
-        }
-        rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x - Time.deltaTime * speed_down * player_velocity_dir_x, -min_speed_x, max_speed_x), 
-            Mathf.Clamp(rb.velocity.y - Time.deltaTime * speed_down * player_velocity_dir_y, -max_speed_x, min_speed_x));*/
-        //if(속도가 0이 된다면 idle 상태로 바꿔주는 로직)
+        
     }
     public void Collider_target()
     {
@@ -174,9 +136,11 @@ public class PlayerController : Unit
                     //벽에 대한 처리
                     break;
                 case "Obstacle":
+                    Obstacle();
                     //장애물에 대한 처리
                     break;
                 case "Special_zone":
+                    Special_zone();
                     //히트영역이 아닌 곳에 대한 거 정리
                     break;
                 default:
@@ -188,20 +152,49 @@ public class PlayerController : Unit
     }
     public void Wall()
     {
-
         if (!wall_collider)
         {
             wall_collider = true;
-            //입사각과 반사각을 구해 그 값을 이용하여 회전을 준다
         }
-        //벽에 붙이힌다면
-        //속력 * -1을 해주기 또는 회전을 줘서 반댓 방향으로 날아가게 하면서 y축 방향으로 전진함
+    }
+    public void Obstacle()
+    {
+        if(!hit_statu)
+        {
+            Hit(1);
+            Debug.Log("공격당함");
+            //히트 당해도 효과는 받게 하기
+        }
+    }
+    public override void Hit(float damage)
+    {
+        hit_statu = true;
+        player_life -= (int)damage;
+        if (player_life <= 0)
+        {
+            Managers.GameManager.player_die = true;
+            Managers.GameManager.gameover();
+            return;
+        }
+        StartCoroutine(invincibility());
+    }
+    IEnumerator invincibility()
+    {
+        if(player_life != 0)
+        {
+            transform.DOPunchScale(Vector2.one * 1.5f, 2f, 3, 0.5f);
+        }
 
+        while (time < invincibility_time)
+        {
+            time += Time.deltaTime;
+            yield return null;
+        }
+        hit_statu = false;
+        time = 0;
+    }
+    public void Special_zone()
+    {
+        //여기엔 특정 영역에서 얻을 수 있는 능력들 넣기
     }
 }
-//플레이어가 날아갈 크기랑 방향 정하기 nomalize랑 magnitude를 사용
-//좌표 값을 가져오는 걸 클릭한 좌표를 가져올 건지 플레이어 좌표를 가져올 건지 결정
-//플레이어 드래그 표시를 어떻게 할지 결정
-//드래그 차징이 얼마나 됐는지 표현할 방법
-//그외 효과같은건 어떻게 줄지 결정
-//skwnddp wpwkr
