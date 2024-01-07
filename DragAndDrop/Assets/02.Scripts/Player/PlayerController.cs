@@ -7,6 +7,7 @@ public class PlayerController : Unit
 {
     //지금 피직스 머테리얼로 하니까 튕겨지는 각도가 이상함
     //발사 방향을 y축으로 해놓고 벽에 부딪히면 날아온 각도에 따라 그에 맞는 반향으로 날아가게 해야(입사각과 반사각이 일정해야됨) 이렇게 해서 velocity를 줄이면 문제 없어짐
+    
     public Rigidbody2D rb;
     public CircleCollider2D cc;
     [Header("날라갈 때의 초기 속도")]
@@ -31,6 +32,7 @@ public class PlayerController : Unit
     float player_rotation_z;
     public Vector2 drag_before_speed;
     public Collider2D[] targets;
+    Managers Managers => Managers.instance;
     RaycastHit2D ray_hit;
     public Player_statu player_statu = Player_statu.IDLE;
     #endregion
@@ -65,8 +67,7 @@ public class PlayerController : Unit
         if (ray_hit)
         {
             player_statu = Player_statu.DRAG;
-            player_pos = ray_hit.collider.gameObject.transform.position;
-            drag_before_speed = rb.velocity;
+            drag_before_speed = rb.velocity.normalized;
         }
     }
     
@@ -102,6 +103,7 @@ public class PlayerController : Unit
             rb.velocity = drag_before_speed * speed; //이거 속도 일정하게 바꾸기
         }
         shoot_dir_image.SetActive(true);
+        player_pos = ray_hit.collider.gameObject.transform.position;
         drag_dis = Mathf.Abs(player_pos.magnitude - mouse_pos.magnitude); 
         player_move_dir = new Vector3(player_pos.x - mouse_pos.x, player_pos.y - mouse_pos.y, 0).normalized;
         player_rotation_z = Mathf.Atan2(player_move_dir.y, player_move_dir.x) * Mathf.Rad2Deg;
@@ -161,8 +163,10 @@ public class PlayerController : Unit
     {
         if(!hit_statu)
         {
-            Hit(1);
-            Debug.Log("공격당함");
+            if (!Managers.developer_mode)
+            {
+                Hit(1);
+            }
             //히트 당해도 효과는 받게 하기
         }
     }

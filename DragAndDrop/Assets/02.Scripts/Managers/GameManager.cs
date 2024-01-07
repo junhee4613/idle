@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public bool player_die = false;
     public Action gameover;
 
+
     // Start is called before the first frame update
     void Start()
     {

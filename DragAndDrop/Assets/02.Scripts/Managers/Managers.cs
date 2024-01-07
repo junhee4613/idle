@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class Managers : MonoBehaviour
 {
+    public bool developer_mode = false;
     static Managers _instance;
-    static Managers instance { get { Init(); return _instance; } }
+    public static Managers instance { get { Init(); return _instance; } }
+    private void Awake()
+    {
+        Init();
+    }
     public static void Init()
     {
         if (_instance == null)
@@ -23,5 +28,5 @@ public class Managers : MonoBehaviour
     }
     public static GameManager GameManager { get { return instance?._game; } }
 
-    public GameManager _game = new GameManager();
+    GameManager _game = new GameManager();
 }
