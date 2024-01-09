@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Obstacle
   - Special_zone
+  - Virtical
+  - Horizontal
   layers:
   - Default
   - TransparentFX
@@ -16,7 +18,7 @@ TagManager:
   - Player
   - Special_zone
   - Obstacle
-  - 
+  - Wall
   - 
   - 
   - 

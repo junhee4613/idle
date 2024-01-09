@@ -5,6 +5,8 @@ using DG.Tweening;
 
 public class PlayerController : Unit
 {
+    //보니까 addForce랑 velocity랑 값을 대입해줘서 실행되는 원리가 다른 것 같음 velrocity로 지정하면 바운스 머테리얼 넣은 채로 벽에 닿았을 때 튕겨지지가 않고 반대로 addForce는 머테리얼을 안넣고 로직으로 처리하면 작동이 안됨
+    //Drag_statu_walls_collider(); 이 함수가 실행이 생각대로 안됨
     // 스킬을 구현해야되는데 이거 어떻게 데이터를 정리할지 고민중 스킬들의 정보는 json으로 저장
     public Rigidbody2D rb;
     public CircleCollider2D cc;
@@ -12,8 +14,6 @@ public class PlayerController : Unit
     public float shoot_speed;
     [Header("드래그 할 때의 속도")]
     public float slow_speed;
-    [Header("이동할 때 감속되는 속도")]
-    public float speed_down;
     [Header("무적 시간")]
     public float invincibility_time;
     public int player_life = 3;
@@ -28,7 +28,7 @@ public class PlayerController : Unit
     float speed;
     float drag_dis;
     float player_rotation_z;
-    public Vector2 drag_before_speed;
+    public Vector2 drag_before_dir;
     public Collider2D[] targets;
     Managers Managers => Managers.instance;
     RaycastHit2D ray_hit;
@@ -61,10 +61,22 @@ public class PlayerController : Unit
                 Mouse_button_down();
             }
         }
-        if (Input.GetKey(KeyCode.H))
+        if (Managers.developer_mode)
         {
-            Hit(1);
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                Hit(1);
+            }
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                Time.timeScale = 0.2f;
+            }
+            else if (Input.GetKeyUp(KeyCode.D))
+            {
+                Time.timeScale = 1;
+            }
         }
+        
     }
     public void Mouse_button_down()
     {
@@ -72,7 +84,7 @@ public class PlayerController : Unit
         if (ray_hit)
         {
             player_statu = Player_statu.DRAG;
-            drag_before_speed = rb.velocity.normalized;
+            drag_before_dir = rb.velocity.normalized;
         }
     }
    
@@ -99,11 +111,11 @@ public class PlayerController : Unit
     }
     public void Drag()
     {
-        speed = slow_speed;
-        if(rb.drag != 0)
+        Drag_statu_walls_collider();
+        if (speed != slow_speed)
         {
-            rb.drag = 0;
-            rb.velocity = drag_before_speed * speed;
+            speed = slow_speed;
+            rb.velocity = drag_before_dir * speed;
         }
         shoot_dir_image.SetActive(true);
         player_pos = ray_hit.collider.gameObject.transform.position;
@@ -111,12 +123,11 @@ public class PlayerController : Unit
         player_move_dir = new Vector3(player_pos.x - mouse_pos.x, player_pos.y - mouse_pos.y, 0).normalized;
         player_rotation_z = Mathf.Atan2(player_move_dir.y, player_move_dir.x) * Mathf.Rad2Deg;
         arrow_rotation_base.rotation = Quaternion.Euler(0, 0, player_rotation_z - 90);
-        if (Input.GetMouseButtonUp(0))     //순서 3번
+        if (Input.GetMouseButtonUp(0))
         {
             shoot_dir_image.SetActive(false);
             transform.rotation = arrow_rotation_base.rotation;
             rb.velocity = Vector2.zero;
-            rb.drag = speed_down;
             speed = shoot_speed;
             Drag_shoot();
         }
@@ -169,6 +180,26 @@ public class PlayerController : Unit
     {
         gameObject.SetActive(false);
         Managers.GameManager.gameover -= Player_die_setActive;
+    }
+
+    public void Drag_statu_walls_collider()
+    {
+        targets = Physics2D.OverlapCircleAll(transform.position, cc.radius, 1 << 9);
+        for (int i = 0; i < targets.Length; i++)
+        {
+            switch (targets[i].tag)
+            {
+                case "Horizontal":
+                    rb.velocity = new Vector2(rb.velocity.x * -1, rb.velocity.y);
+                        break;
+                case "Virtical":
+                    rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * -1);
+                    break;
+                default:
+                    break;
+            }
+        }
+        
     }
     
 }

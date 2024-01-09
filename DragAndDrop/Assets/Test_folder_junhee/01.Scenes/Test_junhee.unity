@@ -235,7 +235,7 @@ CircleCollider2D:
   m_GameObject: {fileID: 370799818}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: d494a897539ef9e478142ae61779ea8e, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -274,10 +274,10 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 1
+  m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: d494a897539ef9e478142ae61779ea8e, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -304,16 +304,12 @@ MonoBehaviour:
   cc: {fileID: 370799819}
   shoot_speed: 5
   slow_speed: 1
-  speed_down: 2
+  invincibility_time: 2
   player_life: 3
-  collision_target:
-    serializedVersion: 2
-    m_Bits: 384
   shoot_dir_image: {fileID: 189269770}
   arrow_rotation_base: {fileID: 1835264567}
-  invincibility_time: 2
   hit_statu: 0
-  drag_before_speed: {x: 0, y: 0}
+  drag_before_dir: {x: 0, y: 0}
   targets: []
   player_statu: 0
 --- !u!4 &370799822
@@ -342,9 +338,9 @@ GameObject:
   m_Component:
   - component: {fileID: 398229596}
   - component: {fileID: 398229597}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Wall (1)
-  m_TagString: Untagged
+  m_TagString: Virtical
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -419,9 +415,9 @@ GameObject:
   m_Component:
   - component: {fileID: 775444889}
   - component: {fileID: 775444890}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Wall (3)
-  m_TagString: Untagged
+  m_TagString: Horizontal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -763,9 +759,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1310786294}
   - component: {fileID: 1310786295}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: Virtical
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1005,9 +1001,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1572355769}
   - component: {fileID: 1572355770}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Wall (2)
-  m_TagString: Untagged
+  m_TagString: Horizontal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
