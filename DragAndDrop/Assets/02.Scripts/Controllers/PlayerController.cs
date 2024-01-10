@@ -5,34 +5,39 @@ using DG.Tweening;
 
 public class PlayerController : Unit
 {
+    //벽의 옆면에 맞으면 다른 벽
+    //최저 속도는 플레이어가 드래그 상태일 때의 속도로 기준을 잡고 최고 속도는 
     //보니까 addForce랑 velocity랑 값을 대입해줘서 실행되는 원리가 다른 것 같음 velrocity로 지정하면 바운스 머테리얼 넣은 채로 벽에 닿았을 때 튕겨지지가 않고 반대로 addForce는 머테리얼을 안넣고 로직으로 처리하면 작동이 안됨
     //Drag_statu_walls_collider(); 이 함수가 실행이 생각대로 안됨
     // 스킬을 구현해야되는데 이거 어떻게 데이터를 정리할지 고민중 스킬들의 정보는 json으로 저장
     public Rigidbody2D rb;
     public CircleCollider2D cc;
-    [Header("날라갈 때의 초기 속도")]
+    [Header("날아가는 최대 속도")]
     public float shoot_speed;
-    [Header("드래그 할 때의 속도")]
+    [Header("드래그 상태의 속도 및 날아가는 최소 속도")]
     public float slow_speed;
-    [Header("무적 시간")]
+    [Header("피격 당한 후 무적 시간")]
     public float invincibility_time;
+    [Header("처음 목숨 갯수")]
     public int player_life = 3;
     public GameObject shoot_dir_image;
     public Transform arrow_rotation_base;
     #region 클래스 안에서 해결할것들
     Vector2 mouse_pos;
     Vector2 player_pos;
-    Vector2 player_move_dir;
-    public bool hit_statu = false;
+    Vector2 grag_dis;
+    bool hit_statu = false;
     float time;
     float speed;
-    float drag_dis;
+    //float drag_dis;
     float player_rotation_z;
-    public Vector2 drag_before_dir;
+    float shoot_power_range;
+    Vector2 drag_before_dir;
+    string wall_name;
     public Collider2D[] targets;
     Managers Managers => Managers.instance;
     RaycastHit2D ray_hit;
-    public Player_statu player_statu = Player_statu.IDLE;
+    Player_statu player_statu = Player_statu.IDLE;
     #endregion
     // Start is called before the first frame update
     private void Awake()
@@ -52,6 +57,7 @@ public class PlayerController : Unit
         {
             return;
         }
+        Drag_statu_walls_collider();
         Player_Statu();
         if (Input.GetMouseButton(0)) //순서 2번 이거 실행 도중에 버튼 누렀을 때 실행되는 함수가 실행이 됨
         {
@@ -63,10 +69,7 @@ public class PlayerController : Unit
         }
         if (Managers.developer_mode)
         {
-            if (Input.GetKeyDown(KeyCode.H))
-            {
-                Hit(1);
-            }
+            
             if (Input.GetKeyDown(KeyCode.D))
             {
                 Time.timeScale = 0.2f;
@@ -76,7 +79,11 @@ public class PlayerController : Unit
                 Time.timeScale = 1;
             }
         }
-        
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            Hit(1);
+        }
+
     }
     public void Mouse_button_down()
     {
@@ -111,7 +118,6 @@ public class PlayerController : Unit
     }
     public void Drag()
     {
-        Drag_statu_walls_collider();
         if (speed != slow_speed)
         {
             speed = slow_speed;
@@ -119,13 +125,13 @@ public class PlayerController : Unit
         }
         shoot_dir_image.SetActive(true);
         player_pos = ray_hit.collider.gameObject.transform.position;
-        drag_dis = Mathf.Abs(player_pos.magnitude - mouse_pos.magnitude); 
-        player_move_dir = new Vector3(player_pos.x - mouse_pos.x, player_pos.y - mouse_pos.y, 0).normalized;
-        player_rotation_z = Mathf.Atan2(player_move_dir.y, player_move_dir.x) * Mathf.Rad2Deg;
+        grag_dis = new Vector3(player_pos.x - mouse_pos.x, player_pos.y - mouse_pos.y, 0);
+        player_rotation_z = Mathf.Atan2(grag_dis.normalized.y, grag_dis.normalized.x) * Mathf.Rad2Deg;
         arrow_rotation_base.rotation = Quaternion.Euler(0, 0, player_rotation_z - 90);
         if (Input.GetMouseButtonUp(0))
         {
             shoot_dir_image.SetActive(false);
+            shoot_power_range = Mathf.Clamp(grag_dis.magnitude, Mathf.Abs(slow_speed), Mathf.Abs(shoot_speed));
             transform.rotation = arrow_rotation_base.rotation;
             rb.velocity = Vector2.zero;
             speed = shoot_speed;
@@ -134,7 +140,7 @@ public class PlayerController : Unit
     }
     public void Drag_shoot()
     {
-        rb.AddForce(transform.up * drag_dis * speed, ForceMode2D.Impulse);
+        rb.velocity = transform.up * shoot_power_range;
         player_statu = Player_statu.RUN;
     }
     public void Run()
@@ -148,10 +154,12 @@ public class PlayerController : Unit
     
     public override void Hit(float damage)
     {
-        if (!hit_statu && !Managers.developer_mode)
+        if (!hit_statu)
         {
             hit_statu = true;
-            player_life -= (int)damage;
+            if (!Managers.developer_mode)
+                player_life -= (int)damage;
+
             if (player_life <= 0)
             {
                 Managers.GameManager.player_die = true;
@@ -187,19 +195,29 @@ public class PlayerController : Unit
         targets = Physics2D.OverlapCircleAll(transform.position, cc.radius, 1 << 9);
         for (int i = 0; i < targets.Length; i++)
         {
+                        Debug.Log("반대쪽");
             switch (targets[i].tag)
             {
                 case "Horizontal":
-                    rb.velocity = new Vector2(rb.velocity.x * -1, rb.velocity.y);
-                        break;
+                    if(wall_name != targets[i].name)
+                    {
+                        rb.velocity = new Vector2(rb.velocity.x * -1, rb.velocity.y);
+                        wall_name = targets[i].name;
+                        Debug.Log("반대쪽");
+                    }
+                    break;
                 case "Virtical":
-                    rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * -1);
+                    if (wall_name != targets[i].name)
+                    {
+                        rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * -1);
+                        wall_name = targets[i].name;
+                        Debug.Log("반대쪽");
+                    }
+                    
                     break;
                 default:
                     break;
             }
         }
-        
     }
-    
 }
