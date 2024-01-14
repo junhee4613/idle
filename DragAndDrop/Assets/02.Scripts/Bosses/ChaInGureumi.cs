@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
+using Cha_in_gureumi;
 
 public class ChaInGureumi : BossController
 {
@@ -13,14 +14,16 @@ public class ChaInGureumi : BossController
         Managers.GameManager.boss = this.gameObject;
     }
     // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
         pattern_num = Random.Range(1, Enum.GetNames(typeof(Cha_in_gureumi_simple_patterns)).Length);
+        gimmick_count = gimmick_num - 1;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //if(사운드 매니저에서 불러온 노래 길이 / gimmick_count() * gimmick_num 패턴 등장 횟수이거 올림으로 해서 딱 맞아 떨어지게 하기 == 스테이지 진행도(노래의 최대 길이에서 점차 감소할 때))
         Current_pattern();
     }
     public void Current_pattern()
@@ -46,9 +49,9 @@ public class ChaInGureumi : BossController
             case Cha_in_gureumi_simple_patterns.SINGLE_LIGHTNING:
                 Single_lightning();
                 break;
-            case Cha_in_gureumi_simple_patterns.RANDOM_MULTIPLE_LIGHTNING:
+           /* case Cha_in_gureumi_simple_patterns.RANDOM_MULTIPLE_LIGHTNING:
                 Random_multiple_lightning();
-                break;
+                break;*/
             case Cha_in_gureumi_simple_patterns.RAINDROPS:
                 Raindrops();
                 break;
@@ -63,15 +66,15 @@ public class ChaInGureumi : BossController
     {
 
     }
-    void Random_multiple_lightning()
+    /*void Random_multiple_lightning()
+    {
+
+    }*/
+    void Raindrops()                //빗방울
     {
 
     }
-    void Raindrops()
-    {
-
-    }
-    void Broad_based_lightning()
+    void Broad_based_lightning()    //차징 번개
     {
 
     }
@@ -79,7 +82,7 @@ public class ChaInGureumi : BossController
     #region 하드패턴들
     void Hard_patterns()
     {
-
+        
     }
     #endregion
     #endregion

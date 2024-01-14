@@ -27,6 +27,8 @@ public class Managers : MonoBehaviour
         }
     }
     public static GameManager GameManager { get { return instance?._game; } }
+    public static PoolManager Pool { get { return instance?._pool; } }
 
     GameManager _game = new GameManager();
+    PoolManager _pool = new PoolManager();
 }

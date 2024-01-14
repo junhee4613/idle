@@ -15,11 +15,22 @@ public enum Player_statu
     HIT,
     SKILLS
 }
-public enum Cha_in_gureumi_simple_patterns
+
+namespace Cha_in_gureumi
 {
-    SINGLE_LIGHTNING,
-    RANDOM_MULTIPLE_LIGHTNING,
-    RAINDROPS,
-    BROAD_BASED_LIGHTNING
+    public enum Cha_in_gureumi_simple_patterns
+    {
+        SINGLE_LIGHTNING,
+        /*RANDOM_MULTIPLE_LIGHTNING,*/
+        RAINDROPS,
+        BROAD_BASED_LIGHTNING
+    }
+    public enum Cha_in_gureumi_hard_patterns
+    {
+        LIGHTNING_SPHERE,
+        REINFORCED_RAINDROPS,
+        SHOWER
+    }
 }
+
 
