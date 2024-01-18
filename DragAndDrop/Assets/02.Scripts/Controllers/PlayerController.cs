@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class PlayerController : Unit
+public class PlayerController : playerData
 {
     //벽의 옆면에 맞으면 다른 벽
     //최저 속도는 플레이어가 드래그 상태일 때의 속도로 기준을 잡고 최고 속도는 
@@ -12,17 +12,10 @@ public class PlayerController : Unit
     // 스킬을 구현해야되는데 이거 어떻게 데이터를 정리할지 고민중 스킬들의 정보는 json으로 저장
     public Rigidbody2D rb;
     public CircleCollider2D cc;
-    [Header("날아가는 최대 속도")]
-    public float shoot_speed;
-    [Header("드래그 상태의 속도 및 날아가는 최소 속도")]
-    public float slow_speed;
-    [Header("피격 당한 후 무적 시간")]
-    public float invincibility_time;
-    [Header("처음 목숨 갯수")]
-    public int player_life = 3;
     public GameObject shoot_dir_image;
     public Transform arrow_rotation_base;
     #region 클래스 안에서 해결할것들
+    public bool q_down;
     Vector2 mouse_pos;
     Vector2 player_pos;
     Vector2 grag_dis;
@@ -35,6 +28,7 @@ public class PlayerController : Unit
     Vector2 drag_before_dir;
     string wall_name;
     public Collider2D[] targets;
+    public Collider2D[] walls_sence;
     Managers Managers => Managers.instance;
     RaycastHit2D ray_hit;
     Player_statu player_statu = Player_statu.IDLE;
@@ -67,6 +61,8 @@ public class PlayerController : Unit
                 Mouse_button_down();
             }
         }
+        Skills();
+        #region 여기부턴 개발자용 
         if (Managers.developer_mode)
         {
             
@@ -78,11 +74,13 @@ public class PlayerController : Unit
             {
                 Time.timeScale = 1;
             }
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                Hit(1);
+            }
         }
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            Hit(1);
-        }
+        
+        #endregion
 
     }
     public void Mouse_button_down()
@@ -109,9 +107,6 @@ public class PlayerController : Unit
                 break;
             case Player_statu.HIT:
                 break;
-            case Player_statu.SKILLS:
-                Skills();   //스킬이 키 별로 따로 있어서 굳이 이 상태를 안넣어도 될 것 같음
-                break;
             default:
                 break;
         }
@@ -128,7 +123,7 @@ public class PlayerController : Unit
         grag_dis = new Vector3(player_pos.x - mouse_pos.x, player_pos.y - mouse_pos.y, 0);
         player_rotation_z = Mathf.Atan2(grag_dis.normalized.y, grag_dis.normalized.x) * Mathf.Rad2Deg;
         arrow_rotation_base.rotation = Quaternion.Euler(0, 0, player_rotation_z - 90);
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0))      //여기에 누르는 동안 시간이 흘러가고 너무 많이 흐르면 피해를 입는 로직으로 일단 추가
         {
             shoot_dir_image.SetActive(false);
             shoot_power_range = Mathf.Clamp(grag_dis.magnitude, Mathf.Abs(slow_speed), Mathf.Abs(shoot_speed));
@@ -147,18 +142,14 @@ public class PlayerController : Unit
     {
         //이 상태 빼도 될것같음
     }
-    public void Skills()
-    {
-
-    }
     
     public override void Hit(float damage)
     {
         if (!hit_statu)
         {
             hit_statu = true;
-            if (!Managers.developer_mode)
-                player_life -= (int)damage;
+            if (!Managers.invincibility)
+                player_life -= (byte)damage;
 
             if (player_life <= 0)
             {
@@ -192,10 +183,9 @@ public class PlayerController : Unit
 
     public void Drag_statu_walls_collider()
     {
-        targets = Physics2D.OverlapCircleAll(transform.position, cc.radius, 1 << 9);
+        walls_sence = Physics2D.OverlapCircleAll(transform.position, cc.radius, 1 << 9);
         for (int i = 0; i < targets.Length; i++)
         {
-                        Debug.Log("반대쪽");
             switch (targets[i].tag)
             {
                 case "Horizontal":
@@ -203,7 +193,6 @@ public class PlayerController : Unit
                     {
                         rb.velocity = new Vector2(rb.velocity.x * -1, rb.velocity.y);
                         wall_name = targets[i].name;
-                        Debug.Log("반대쪽");
                     }
                     break;
                 case "Virtical":
@@ -211,13 +200,42 @@ public class PlayerController : Unit
                     {
                         rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * -1);
                         wall_name = targets[i].name;
-                        Debug.Log("반대쪽");
                     }
                     
                     break;
                 default:
                     break;
             }
+        }
+    }
+    public void Skills()
+    {
+        if (q_down)
+        {
+            targets = Physics2D.OverlapCircleAll(transform.position, slow_skill_range, slow_skill_targets);
+            foreach (var item in targets)
+            {
+                //느려진 스킬 한번이라도 맞은 애들 스킬 종료 후에도 계속 지속됨
+
+            }
+            //이거 장애물 자체에 컴포넌트를 넣을지 아니면 플레이어에게 놔둘지 고민중인데 
+            //플레이어에게 놔둘거면 Getcomponent하지말고 다른 방법 어디 리스트에 넣어서 그 리스트 안에 있는 것들에게만 속도 감속 시키는거?
+            //장애물에게 넣으면 Physics2D가 너무 많아질수도 있다는걸 명심해야됨
+        }
+        /*else if
+        {
+
+        }*/
+    }
+    public void Key_Press()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            q_down = true;
+        }
+        else if (Input.GetKeyUp(KeyCode.Q))
+        {
+            q_down = false;
         }
     }
 }

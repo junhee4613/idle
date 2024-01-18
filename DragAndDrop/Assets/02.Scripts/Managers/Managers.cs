@@ -5,6 +5,7 @@ using UnityEngine;
 public class Managers : MonoBehaviour
 {
     public bool developer_mode = false;
+    public bool invincibility = false;
     static Managers _instance;
     public static Managers instance { get { Init(); return _instance; } }
     private void Awake()
