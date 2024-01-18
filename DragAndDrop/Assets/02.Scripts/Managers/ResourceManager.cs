@@ -18,7 +18,6 @@ public class ResourceManager
         {
             return resource as T;
         }
-
         if(typeof(T) == typeof(Sprite))
         {
             key = key + ".sprite";
@@ -27,11 +26,10 @@ public class ResourceManager
                 return temp as T;
             }
         }
-
         return null;
     }
 
-    public GameObject Instantiate(string key, Transform parent = null, bool pooling = false)
+    public GameObject Instantiate(string key, Transform parent = null, bool pooling = false)        //이걸로 오브젝트를 소환하면 됨 
     {
         GameObject prefab = Load<GameObject>($"{key}");
         if(prefab == null)
@@ -58,8 +56,9 @@ public class ResourceManager
     public void LoadAsync<T>(string key, Action<T> callback = null) where T : Object
     {
         string loadkey = key;
-        if (key.Contains(".sprite")) ;
-        loadkey = $"{key}[{key.Replace(".sprite", "")}]";
+        if (key.Contains(".sprite"))
+            loadkey = $"{key}[{key.Replace(".sprite", "")}]";
+
 
         var asyncOperation = Addressables.LoadAssetAsync<T>(loadkey);
 
@@ -92,6 +91,7 @@ public class ResourceManager
                     LoadAsync<Sprite>(result.PrimaryKey, (obj) =>
                     {
                         loadCount++;
+                        Debug.Log(result.PrimaryKey);
                         callback?.Invoke(result.PrimaryKey, loadCount, totalCount);
                     });
                 }
@@ -100,6 +100,7 @@ public class ResourceManager
                     LoadAsync<T>(result.PrimaryKey, (obj) =>
                     {
                         loadCount++;
+                        //result.PrimaryKey <- 이건 오브젝트 이름임           
                         callback?.Invoke(result.PrimaryKey, loadCount, totalCount);
                     });
                 }

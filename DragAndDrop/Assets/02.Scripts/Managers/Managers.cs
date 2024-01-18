@@ -28,8 +28,10 @@ public class Managers : MonoBehaviour
         }
     }
     public static GameManager GameManager { get { return instance?._game; } }
+    public static ResourceManager Resources { get { return instance?._resources; } }
     public static PoolManager Pool { get { return instance?._pool; } }
 
+    ResourceManager _resources = new ResourceManager();
     GameManager _game = new GameManager();
     PoolManager _pool = new PoolManager();
 }

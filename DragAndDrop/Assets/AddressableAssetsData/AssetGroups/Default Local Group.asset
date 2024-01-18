@@ -16,7 +16,25 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 8017d67e8a759a24f8452d0dcc127a2c
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 7534a74e7b642c14d8ce5315a3cd4b1f
+    m_Address: Test_Obstacle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9c0c94cad5288fd4a86910714e2dc839
+    m_Address: Test_Obstacle2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 782a653c94abd9f42bd2cd6ea8f6a240
+    m_Address: Test_Image
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: ca7e6c5fcf72e2642944e03c7574a351, type: 2}
   m_SchemaSet:

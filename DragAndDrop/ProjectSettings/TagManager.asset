@@ -12,15 +12,15 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Test
   - Water
   - UI
   - Player
   - Special_zone
-  - Obstacle
+  - 
   - Wall
-  - 
-  - 
+  - Slow_obstacle
+  - Nomal_obstacle
   - 
   - 
   - 

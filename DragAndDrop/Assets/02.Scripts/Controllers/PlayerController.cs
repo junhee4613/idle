@@ -14,7 +14,11 @@ public class PlayerController : playerData
     public CircleCollider2D cc;
     public GameObject shoot_dir_image;
     public Transform arrow_rotation_base;
+
     #region 클래스 안에서 해결할것들
+    public GameObject Test2;
+    public CircleCollider2D test;
+    public HashSet<Collider2D> slow_Obstacle = new HashSet<Collider2D>(); 
     public bool q_down;
     Vector2 mouse_pos;
     Vector2 player_pos;
@@ -210,13 +214,24 @@ public class PlayerController : playerData
     }
     public void Skills()
     {
+        Key_Press();
         if (q_down)
         {
             targets = Physics2D.OverlapCircleAll(transform.position, slow_skill_range, slow_skill_targets);
             foreach (var item in targets)
             {
-                //느려진 스킬 한번이라도 맞은 애들 스킬 종료 후에도 계속 지속됨
-
+                        Debug.Log("적용");
+                if (!slow_Obstacle.Contains(item))
+                {
+                        Debug.Log("적용");
+                    if (item.TryGetComponent<slow_eligibility>(out slow_eligibility target))
+                    {
+                        Debug.Log("적용");
+                        target.Slow_apply();
+                    }
+                    slow_Obstacle.Add(item);
+                    item.gameObject.layer = 11;
+                }
             }
             //이거 장애물 자체에 컴포넌트를 넣을지 아니면 플레이어에게 놔둘지 고민중인데 
             //플레이어에게 놔둘거면 Getcomponent하지말고 다른 방법 어디 리스트에 넣어서 그 리스트 안에 있는 것들에게만 속도 감속 시키는거?
@@ -231,10 +246,12 @@ public class PlayerController : playerData
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
+            Test2.SetActive(true);
             q_down = true;
         }
         else if (Input.GetKeyUp(KeyCode.Q))
         {
+            Test2.SetActive(false);
             q_down = false;
         }
     }

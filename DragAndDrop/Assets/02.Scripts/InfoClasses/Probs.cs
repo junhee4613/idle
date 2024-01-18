@@ -11,7 +11,7 @@ public class playerData : Unit
     [Header("스킬 사용 시 100에서 초당 회복하는 속도")]
     public float sp_recovery;
     [Header("스킬 사용 시 100에서 초당 감소하는 속도")]
-    public float sp_eeduction;
+    public float sp_eduction;
     [Header("날아가는 최대 속도")]
     public float shoot_speed;
     [Header("드래그 상태의 속도 및 날아가는 최소 속도")]
@@ -20,7 +20,7 @@ public class playerData : Unit
     public float invincibility_time;
     [Header("처음 목숨 갯수")]
     public byte player_life = 3;
-    [Header("처음 목숨 갯수")]
+    [Header("스킬 범위")]
     public float slow_skill_range;
     [Header("슬로우 스킬 적용할 대상 레이어")]
     public LayerMask slow_skill_targets;
@@ -38,7 +38,15 @@ public enum Player_statu
     RUN,
     HIT,
 }
-
+public class slow_eligibility : MonoBehaviour
+{
+    public float slow_speed;
+    public float speed;
+    public virtual void Slow_apply()
+    {
+        speed = slow_speed;
+    }
+}
 
 namespace Cha_in_gureumi
 {
