@@ -20,10 +20,7 @@ public class playerData : Unit
     public float invincibility_time;
     [Header("처음 목숨 갯수")]
     public byte player_life = 3;
-    [Header("스킬 범위")]
-    public float slow_skill_range;
-    [Header("슬로우 스킬 적용할 대상 레이어")]
-    public LayerMask slow_skill_targets;
+    
 
 
     public override void Hit(float damage)

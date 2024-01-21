@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class PlayerController : playerData
 {
@@ -16,10 +17,7 @@ public class PlayerController : playerData
     public Transform arrow_rotation_base;
 
     #region 클래스 안에서 해결할것들
-    public GameObject Test2;
     public CircleCollider2D test;
-    public HashSet<Collider2D> slow_Obstacle = new HashSet<Collider2D>(); 
-    public bool q_down;
     Vector2 mouse_pos;
     Vector2 player_pos;
     Vector2 grag_dis;
@@ -31,7 +29,7 @@ public class PlayerController : playerData
     float shoot_power_range;
     Vector2 drag_before_dir;
     string wall_name;
-    public Collider2D[] targets;
+    
     public Collider2D[] walls_sence;
     Managers Managers => Managers.instance;
     RaycastHit2D ray_hit;
@@ -42,6 +40,8 @@ public class PlayerController : playerData
     {
         Managers.GameManager.player = gameObject.GetComponent<PlayerController>();
         Managers.GameManager.gameover += Player_die_setActive;
+        
+
     }
     void Start()
     {
@@ -65,7 +65,6 @@ public class PlayerController : playerData
                 Mouse_button_down();
             }
         }
-        Skills();
         #region 여기부턴 개발자용 
         if (Managers.developer_mode)
         {
@@ -92,6 +91,7 @@ public class PlayerController : playerData
         ray_hit = Physics2D.Raycast(mouse_pos, Vector2.zero, 0, 1 << 6);
         if (ray_hit)
         {
+            wall_name = string.Empty;
             player_statu = Player_statu.DRAG;
             drag_before_dir = rb.velocity.normalized;
         }
@@ -188,22 +188,22 @@ public class PlayerController : playerData
     public void Drag_statu_walls_collider()
     {
         walls_sence = Physics2D.OverlapCircleAll(transform.position, cc.radius, 1 << 9);
-        for (int i = 0; i < targets.Length; i++)
+        for (int i = 0; i < walls_sence.Length; i++)
         {
-            switch (targets[i].tag)
+            switch (walls_sence[i].tag)
             {
-                case "Horizontal":
-                    if(wall_name != targets[i].name)
+                case "Virtical":
+                    if (wall_name != walls_sence[i].name)
                     {
                         rb.velocity = new Vector2(rb.velocity.x * -1, rb.velocity.y);
-                        wall_name = targets[i].name;
+                        wall_name = walls_sence[i].name;
                     }
                     break;
-                case "Virtical":
-                    if (wall_name != targets[i].name)
+                case "Horizontal":
+                    if (wall_name != walls_sence[i].name)
                     {
                         rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * -1);
-                        wall_name = targets[i].name;
+                        wall_name = walls_sence[i].name;
                     }
                     
                     break;
@@ -212,47 +212,5 @@ public class PlayerController : playerData
             }
         }
     }
-    public void Skills()
-    {
-        Key_Press();
-        if (q_down)
-        {
-            targets = Physics2D.OverlapCircleAll(transform.position, slow_skill_range, slow_skill_targets);
-            foreach (var item in targets)
-            {
-                        Debug.Log("적용");
-                if (!slow_Obstacle.Contains(item))
-                {
-                        Debug.Log("적용");
-                    if (item.TryGetComponent<slow_eligibility>(out slow_eligibility target))
-                    {
-                        Debug.Log("적용");
-                        target.Slow_apply();
-                    }
-                    slow_Obstacle.Add(item);
-                    item.gameObject.layer = 11;
-                }
-            }
-            //이거 장애물 자체에 컴포넌트를 넣을지 아니면 플레이어에게 놔둘지 고민중인데 
-            //플레이어에게 놔둘거면 Getcomponent하지말고 다른 방법 어디 리스트에 넣어서 그 리스트 안에 있는 것들에게만 속도 감속 시키는거?
-            //장애물에게 넣으면 Physics2D가 너무 많아질수도 있다는걸 명심해야됨
-        }
-        /*else if
-        {
-
-        }*/
-    }
-    public void Key_Press()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Test2.SetActive(true);
-            q_down = true;
-        }
-        else if (Input.GetKeyUp(KeyCode.Q))
-        {
-            Test2.SetActive(false);
-            q_down = false;
-        }
-    }
+    
 }
