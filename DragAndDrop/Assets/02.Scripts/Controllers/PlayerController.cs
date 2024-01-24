@@ -45,7 +45,7 @@ public class PlayerController : playerData
     }
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -84,7 +84,6 @@ public class PlayerController : playerData
         }
         
         #endregion
-
     }
     public void Mouse_button_down()
     {

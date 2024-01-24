@@ -61,5 +61,16 @@ namespace Cha_in_gureumi
         SHOWER
     }
 }
+namespace Test_boss
+{
+    public enum Test_patterns 
+    {
+        PATTERN1,
+        PATTERN2,
+        PATTERN3,
+    }
+
+}
+
 
 

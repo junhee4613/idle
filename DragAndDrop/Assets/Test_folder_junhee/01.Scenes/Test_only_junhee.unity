@@ -440,7 +440,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe75fd6fd95b4a0489e1988adbce585e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pattern_end_time: 2
+  test_pattern_end_time: 3
   bpm: 110
+  au: {fileID: 1622049638}
+  clip: {fileID: 8300000, guid: 8b6d58a7821bca74d9bf0acdcecaba50, type: 3}
+  current_pattern: 0
 --- !u!212 &1622049636
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -518,7 +523,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 8b6d58a7821bca74d9bf0acdcecaba50, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
