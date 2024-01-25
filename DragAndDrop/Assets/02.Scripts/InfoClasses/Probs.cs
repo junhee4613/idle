@@ -63,7 +63,7 @@ namespace Cha_in_gureumi
 }
 namespace Test_boss
 {
-    public enum Test_patterns 
+    public enum Test_patterns_enum
     {
         PATTERN1,
         PATTERN2,

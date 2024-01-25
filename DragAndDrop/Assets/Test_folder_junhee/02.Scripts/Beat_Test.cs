@@ -15,7 +15,7 @@ public class Beat_Test : MonoBehaviour
     float beat_time;
     public AudioSource au;
     public AudioClip clip;
-    public Test_patterns current_pattern;
+    public Test_patterns_enum current_pattern;
     bool pattern_start;
     sbyte pattern_num;
 
@@ -43,7 +43,7 @@ public class Beat_Test : MonoBehaviour
             {
                 pattern_start = true;
                 pattern_num = (sbyte)Random.Range(0, 3);
-                current_pattern = (Test_patterns)pattern_num;
+                current_pattern = (Test_patterns_enum)pattern_num;
             }
             else if(test_pattern_current_time <= test_pattern_end_time)   //이거 테스트용이라 else로 해야됨
             {
@@ -64,13 +64,13 @@ public class Beat_Test : MonoBehaviour
     {
         switch (current_pattern)
         {
-            case Test_patterns.PATTERN1:
+            case Test_patterns_enum.PATTERN1:
                 Pattern1();
                 break;
-            case Test_patterns.PATTERN2:
+            case Test_patterns_enum.PATTERN2:
                 Pattern2();
                 break;
-            case Test_patterns.PATTERN3:
+            case Test_patterns_enum.PATTERN3:
                 Pattern3();
                 break;
             default:
@@ -84,13 +84,13 @@ public class Beat_Test : MonoBehaviour
         {
             switch (current_pattern)
             {
-                case Test_patterns.PATTERN1:
+                case Test_patterns_enum.PATTERN1:
                     Pattern1();
                     break;
-                case Test_patterns.PATTERN2:
+                case Test_patterns_enum.PATTERN2:
                     Pattern2();
                     break;
-                case Test_patterns.PATTERN3:
+                case Test_patterns_enum.PATTERN3:
                     Pattern3();
                     break;
                 default:
