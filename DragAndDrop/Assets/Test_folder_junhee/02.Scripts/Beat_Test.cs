@@ -16,6 +16,7 @@ public class Beat_Test : MonoBehaviour
     public Test_patterns_enum current_pattern;
     bool pattern_start;
     public sbyte pattern_num;
+    public float test;
 
 
     #region 테스트용
@@ -25,6 +26,7 @@ public class Beat_Test : MonoBehaviour
 
     private void Awake()
     {
+        test = clip.length;
     }
     private void Start()
     {
