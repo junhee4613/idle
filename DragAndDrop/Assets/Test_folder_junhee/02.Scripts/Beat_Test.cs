@@ -7,9 +7,7 @@ using DG.Tweening;
 public class Beat_Test : MonoBehaviour
 {
     public float pattern_end_time;
-    public float test_pattern_end_time;
     float pattern_current_time;
-    float test_pattern_current_time;
     float beat;
     public float bpm;       //0이 안나올라면 float / float를 해야된다
     float beat_time;
@@ -17,7 +15,13 @@ public class Beat_Test : MonoBehaviour
     public AudioClip clip;
     public Test_patterns_enum current_pattern;
     bool pattern_start;
-    sbyte pattern_num;
+    public sbyte pattern_num;
+
+
+    #region 테스트용
+    public float test_pattern_end_time;
+    public float test_pattern_current_time;
+    #endregion
 
     private void Awake()
     {
@@ -34,8 +38,6 @@ public class Beat_Test : MonoBehaviour
             au.Play();
         }
         beat_time += Time.fixedDeltaTime;
-        test_pattern_current_time += Time.fixedDeltaTime;
-
         if (beat <= beat_time)
         {
             beat_time -= beat;
@@ -44,16 +46,22 @@ public class Beat_Test : MonoBehaviour
                 pattern_start = true;
                 pattern_num = (sbyte)Random.Range(0, 3);
                 current_pattern = (Test_patterns_enum)pattern_num;
+                test_pattern_current_time = 0;
             }
-            else if(test_pattern_current_time <= test_pattern_end_time)   //이거 테스트용이라 else로 해야됨
+
+            if(pattern_start && test_pattern_current_time <= test_pattern_end_time)   //이거 테스트용이라 else로 해야됨
             {
                 Test_beat_patterns();
             }
             else
             {
-                test_pattern_current_time = 0;
                 pattern_start = false;
             }
+        }
+        test_pattern_current_time += Time.fixedDeltaTime;
+        if(test_pattern_current_time > test_pattern_end_time)   //이거 테스트용이라 else로 해야됨
+        {
+            pattern_start = false;
         }
         /*if (pattern_start)
         {
