@@ -8,12 +8,10 @@ public abstract class Unit : MonoBehaviour
 }
 public class playerData : Unit
 {
-    [Header("스킬 사용 시 100에서 초당 회복하는 속도")]
-    public float sp_recovery;
-    [Header("스킬 사용 시 100에서 초당 감소하는 속도")]
-    public float sp_eduction;
     [Header("날아가는 최대 속도")]
     public float shoot_speed;
+    [Header("점차 감소하는 속도의 세기 1로 설정 시 초당 속력 1씩 줄어듬")]
+    public float gradually_down_speed;
     [Header("드래그 상태의 속도 및 날아가는 최소 속도")]
     public float slow_speed;
     [Header("피격 당한 후 무적 시간")]

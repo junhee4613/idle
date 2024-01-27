@@ -8,7 +8,7 @@ public class Beat_Test : MonoBehaviour
 {
     public float pattern_end_time;
     float pattern_current_time;
-    float beat;
+    public float beat;
     public float bpm;       //0이 안나올라면 float / float를 해야된다
     float beat_time;
     public AudioSource au;

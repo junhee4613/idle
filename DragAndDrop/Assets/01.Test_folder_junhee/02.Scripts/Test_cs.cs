@@ -2,40 +2,65 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class Test_cs : slow_eligibility
+public class Test_cs : MonoBehaviour
 {
-    /*public collider2d[] test;
-    public boxcollider2d bc;*/
-    public int dir = 1;
-    public Button apply_button;
-    public Button init_button;
-    public float max_speed;
-    private void Awake()
-    {
-        apply_button.onClick.AddListener(() =>
-        {
-            dir = dir * -1;
-        });
-        init_button.onClick.AddListener(() =>
-        {
-            gameObject.layer = 10;
-            speed = max_speed;
-        });
-    }
-    private void Start()
-    {
-
-    }
+    public RaycastHit2D note_hit;
+    public LayerMask hit_layers;
+    public GameObject target;
+    float beat_time;
+    public AudioSource au;
+    float beat;
+    public AudioClip clip;
+    bool pattern_start;
     private void Update()
     {
-        transform.position = new Vector2(Mathf.Clamp(transform.position.x - Time.deltaTime * dir * speed, -5, 5),0);
+        if (au.clip != clip)
+        {
+            au.clip = clip;
+            au.Play();
+        }
+        beat_time += Time.fixedDeltaTime;
+        note_hit = Physics2D.Raycast(transform.position, Vector2.up, 5f, hit_layers);
+        if (!pattern_start)
+        {
+            pattern_start = true;
+            if (note_hit)
+            {
+                Debug.Log("ÀÎ½Ä");
+            }
+            if (note_hit && beat <= beat_time)
+            {
+                if (note_hit.collider.gameObject.layer == 20)
+                {
+                    Pattern1();
+                }
+                else if (note_hit.collider.gameObject.layer == 21)
+                {
+                    Pattern2();
+                }
+                else if (note_hit.collider.gameObject.layer == 22)
+                {
+                    Pattern3();
+                }
+            } 
+        }
+        if (!note_hit)
+        {
+            pattern_start = false;
+        }
     }
-    public void Dir_trans()
+    public void Pattern1()
     {
-        dir = dir * -1;
+        target.transform.localScale = Vector2.one * 0.5f;
     }
-    public override void Slow_apply()
+    public void Pattern2()
     {
-        base.Slow_apply();
+        target.transform.localScale = Vector2.one;
+    }
+    public void Pattern3()
+    {
+        target.transform.Rotate(0, 0, 15);
     }
 }
+
+

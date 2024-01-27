@@ -5,12 +5,25 @@ using System;
 
 public class GameManager : MonoBehaviour
 {
-    public PlayerController player;
+    PlayerController player;
+    public PlayerController Player 
+    { 
+        get { 
+            if (player == null)
+            {
+                player = GameObject.FindObjectOfType<PlayerController>();
+                if(player == null)
+                {
+                    Debug.LogError("플레이어가 없어");
+                }
+            } 
+            return player; 
+        }
+    }
     public GameObject boss;
     public bool boss_die = false;
     public bool player_die = false;
     public Action gameover;
-
 
     // Start is called before the first frame update
     void Start()

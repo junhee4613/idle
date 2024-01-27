@@ -518,9 +518,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2b7eb7c6def3fd46bb06c7e6a1d7e2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sp_recovery: 0
-  sp_eduction: 0
   shoot_speed: 4
+  gradually_down_speed: 2
   slow_speed: 1
   invincibility_time: 2
   player_life: 3
@@ -528,8 +527,9 @@ MonoBehaviour:
   cc: {fileID: 370799823}
   shoot_dir_image: {fileID: 189269770}
   arrow_rotation_base: {fileID: 1835264567}
-  test: {fileID: 0}
+  mouse_pos: {x: 0, y: 0}
   walls_sence: []
+  player_statu: 0
 --- !u!4 &370799822
 Transform:
   m_ObjectHideFlags: 0
@@ -1510,9 +1510,9 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_PressedColor: {r: 1, g: 1, b: 1, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -1526,7 +1526,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1035324217}
   m_HandleRect: {fileID: 0}
   m_Direction: 0
@@ -2399,12 +2399,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 407f10983950c014c98fe663ba310bce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slow_speed: 0
-  speed: 0
-  dir: 1
-  apply_button: {fileID: 0}
-  init_button: {fileID: 0}
-  max_speed: 0
+  hit_layers:
+    serializedVersion: 2
+    m_Bits: 0
+  target: {fileID: 0}
+  au: {fileID: 0}
+  clip: {fileID: 0}
 --- !u!4 &1599354583
 Transform:
   m_ObjectHideFlags: 0
@@ -2664,7 +2664,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!61 &1782684565
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2789,12 +2789,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 407f10983950c014c98fe663ba310bce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slow_speed: 1
-  speed: 5
-  dir: 1
-  apply_button: {fileID: 314800031}
-  init_button: {fileID: 1444512616}
-  max_speed: 5
+  hit_layers:
+    serializedVersion: 2
+    m_Bits: 0
+  target: {fileID: 0}
+  au: {fileID: 0}
+  clip: {fileID: 0}
 --- !u!1 &1835264564
 GameObject:
   m_ObjectHideFlags: 0

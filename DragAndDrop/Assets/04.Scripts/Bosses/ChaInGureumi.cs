@@ -89,7 +89,7 @@ public class ChaInGureumi : BossController
     
     void Player_hit()
     {
-        Managers.GameManager.player.Hit(1);
+        Managers.GameManager.Player.Hit(1);
     }
 
     public override void Hit(float damage)
