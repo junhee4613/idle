@@ -18,20 +18,17 @@ public class PlayerController : playerData
 
     #region 클래스 안에서 해결할것들
     sbyte break_num = 0;
-    public Vector2 mouse_pos;
+    Vector2 mouse_pos;
     Vector2 player_pos;
     Vector2 drag_dis;
     bool hit_statu = false;
     float time;
-    float speed;
-    //float drag_dis;
     float player_rotation_z;
     float shoot_power_range;
     Vector2 spacebar_dir;
     float spacebar_mag;
-    string wall_name;
-    
-    public Collider2D[] walls_sence;
+    //string wall_name;
+    //public Collider2D[] walls_sence;
     Managers Managers => Managers.instance;                 //지금 드래그 상태일 때 발사가 안되는 버그 있음
     [SerializeField]
     RaycastHit2D ray_hit;
@@ -47,52 +44,30 @@ public class PlayerController : playerData
     {
         Managers.GameManager.gameover += Player_die_setActive;
     }
-    void Start()
+    public void Player_slow_skill_down()
+    {
+        //rb.velocity
+    }
+    public void Player_slow_skill_up()
     {
 
     }
+    void Start()
+    {
+        Managers.GameManager.slow_skill_down += Player_slow_skill_down;
+        Managers.GameManager.slow_skill_up += Player_slow_skill_up;
+    }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
+
         if (Managers.GameManager.player_die)
         {
             return;
         }
-        Drag_statu_walls_collider();
-        if (Input.GetMouseButtonDown(0))    //순서 1번
-        {
-            mouse_pos_ray_pos = Camera.main.ScreenPointToRay(Input.mousePosition);
-            ray_hit = Physics2D.Raycast(mouse_pos_ray_pos.origin, mouse_pos_ray_pos.direction, 1, 1 << 6);
-            if (ray_hit.collider != null)
-            {
-                Mouse_button_down();
-            }
-            else
-            {
-                Debug.Log("여기서부터야");
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.Space) && break_num == 1)
-        {
-            break_num = 0;
-            speed = slow_speed;
-            spacebar_dir = rb.velocity.normalized;
-            spacebar_mag = rb.velocity.magnitude;
-            rb.velocity = spacebar_dir * Mathf.Clamp(spacebar_mag - 4, 0, shoot_speed);
-            if (rb.velocity == Vector2.zero)
-            {
-                player_statu = Player_statu.IDLE;
-            }
-        }
-        Player_Statu();
-        mouse_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        
-        /*if (Input.GetMouseButton(0)) //순서 2번 이거 실행 도중에 버튼 누렀을 때 실행되는 함수가 실행이 됨
-        {
-            
-        }*/
-        
+        //Drag_statu_walls_collider();
+        Key_operate();
         #region 여기부턴 개발자용 
         /*if (Managers.developer_mode)
         {
@@ -110,14 +85,13 @@ public class PlayerController : playerData
                 Hit(1);
             }
         }*/
-        
+
         #endregion
     }
     public void Mouse_button_down()
     {
-        wall_name = string.Empty;
+        //wall_name = string.Empty;
         player_statu = Player_statu.DRAG;
-        
     }
    
     public void Player_Statu()
@@ -127,10 +101,11 @@ public class PlayerController : playerData
             case Player_statu.IDLE:
                 break;
             case Player_statu.DRAG:
+                mouse_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 Drag();
+                
                 break;
             case Player_statu.RUN:
-                Run();
                 break;
             case Player_statu.HIT:
                 break;
@@ -138,38 +113,56 @@ public class PlayerController : playerData
                 break;
         }
     }
+    private void FixedUpdate()      //감속은 여기서 처리해야 같은 범위까지만 움직여지는 것 같음
+    {
+        Run();
+    }
+    public void Key_operate()
+    {
+        Player_Statu();
+        
+        if (Input.GetMouseButtonDown(0))    //순서 1번
+        {
+            mouse_pos_ray_pos = Camera.main.ScreenPointToRay(Input.mousePosition);
+            ray_hit = Physics2D.Raycast(mouse_pos_ray_pos.origin, mouse_pos_ray_pos.direction, 1, 1 << 6);
+            if (ray_hit.collider != null)
+            {
+                shoot_dir_image.SetActive(true);
+                player_pos = ray_hit.collider.gameObject.transform.position;
+                Mouse_button_down();
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Space) && break_num == 1)
+        {
+            break_num = 0;
+            spacebar_dir = rb.velocity.normalized;
+            spacebar_mag = rb.velocity.magnitude;
+            rb.velocity = spacebar_dir * Mathf.Clamp(spacebar_mag - 4, 0, shoot_speed);
+            if (rb.velocity == Vector2.zero)
+            {
+                player_statu = Player_statu.IDLE;
+            }
+        }
+    }
     public void Drag()
     {
-        /*if (speed != slow_speed) 이거 스페이스바로 옮기기
-        {
-            speed = slow_speed;
-            rb.velocity = drag_before_dir * speed;
-        }*/
-        shoot_dir_image.SetActive(true);
         if (ray_hit.collider != null)
         {
-            player_pos = ray_hit.collider.gameObject.transform.position;
-        }
-        else
-        {
-            Debug.Log("널이야");
-        }
-        drag_dis = new Vector3(player_pos.x - mouse_pos.x, player_pos.y - mouse_pos.y, 0);
-        player_rotation_z = Mathf.Atan2(drag_dis.normalized.y, drag_dis.normalized.x) * Mathf.Rad2Deg;
-        arrow_rotation_base.rotation = Quaternion.Euler(0, 0, player_rotation_z - 90);
-        if (Input.GetMouseButtonUp(0))      //여기에 누르는 동안 시간이 흘러가고 너무 많이 흐르면 피해를 입는 로직으로 일단 추가
-        {
-            Debug.Log("슛");
-            if(break_num == 0)
+            drag_dis = new Vector3(player_pos.x - mouse_pos.x, player_pos.y - mouse_pos.y, 0);
+            player_rotation_z = Mathf.Atan2(drag_dis.normalized.y, drag_dis.normalized.x) * Mathf.Rad2Deg;
+            arrow_rotation_base.rotation = Quaternion.Euler(0, 0, player_rotation_z - 90); 
+            if (Input.GetMouseButtonUp(0))      //여기에 누르는 동안 시간이 흘러가고 너무 많이 흐르면 피해를 입는 로직으로 일단 추가
             {
-                break_num = 1;
+                if (break_num == 0)
+                {
+                    break_num = 1;
+                }
+                shoot_dir_image.SetActive(false);
+                shoot_power_range = Mathf.Clamp(drag_dis.magnitude, Mathf.Abs(slow_speed), Mathf.Abs(shoot_speed));
+                transform.rotation = arrow_rotation_base.rotation;
+                rb.velocity = Vector2.zero;
+                Drag_shoot();
             }
-            shoot_dir_image.SetActive(false);
-            shoot_power_range = Mathf.Clamp(drag_dis.magnitude, Mathf.Abs(slow_speed), Mathf.Abs(shoot_speed));
-            transform.rotation = arrow_rotation_base.rotation;
-            rb.velocity = Vector2.zero;
-            //speed = shoot_speed;
-            Drag_shoot();
         }
     }
     public void Drag_shoot()
@@ -179,8 +172,7 @@ public class PlayerController : playerData
     }
     public void Run()
     {
-        rb.velocity = rb.velocity.normalized * (rb.velocity.magnitude - Time.fixedDeltaTime * gradually_down_speed);
-        //이 상태 빼도 될것같음
+        rb.velocity = rb.velocity.normalized * (Mathf.Clamp(rb.velocity.magnitude - Time.fixedDeltaTime * gradually_down_speed, 0, shoot_speed));
     }
     
     public override void Hit(float damage)
@@ -209,7 +201,7 @@ public class PlayerController : playerData
 
         while (time < invincibility_time)
         {
-            time += Time.deltaTime;
+            time += Time.fixedDeltaTime;
             yield return null;
         }
         hit_statu = false;
@@ -221,7 +213,7 @@ public class PlayerController : playerData
         Managers.GameManager.gameover -= Player_die_setActive;
     }
 
-    public void Drag_statu_walls_collider()
+    /*public void Drag_statu_walls_collider()
     {
         walls_sence = Physics2D.OverlapCircleAll(transform.position, cc.radius, 1 << 9);
         for (int i = 0; i < walls_sence.Length; i++)
@@ -247,6 +239,6 @@ public class PlayerController : playerData
                     break;
             }
         }
-    }
+    }*/
     
 }
