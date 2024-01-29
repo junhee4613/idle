@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Default Local Group
+  m_Name: Test
   m_EditorClassIdentifier: 
-  m_GroupName: Default Local Group
+  m_GroupName: Test
   m_Data:
     m_SerializedData: []
   m_GUID: 8017d67e8a759a24f8452d0dcc127a2c
@@ -33,7 +33,7 @@ MonoBehaviour:
     m_Address: Test_Image
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Sprite
+    - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: ca7e6c5fcf72e2642944e03c7574a351, type: 2}

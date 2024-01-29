@@ -2,115 +2,73 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Test_boss;
+using DG.Tweening;
+using UnityEngine.UI;
+using System;
+using Random = UnityEngine.Random;
 
 public class Test_patterns : MonoBehaviour
 {
-    public float bpm;       //0이 안나올라면 float / float를 해야된다
-    public float pattern_end_time;
-    public AudioSource au;
-    public AudioClip clip;
-    float pattern_duration;     //패턴이 지속된 시간
-    float beat;                     //비트(박자)
-    float time_gone;        //흘러간 시간
-    Test_patterns_enum current_pattern;
-    bool pattern_start;
-    public Pattern1_tle test;
-    public class Pattern1_tle 
-    {
-       public sbyte rain_drop_num;
-    }
+    [Header("패턴이 등장하는 위치(높이)")]
+    public float pos_y;
+    [Header("패턴이 등장하는 x축 위치들")]
+    public float[] pos_min_x;
+    Stack<float> pos_x = new Stack<float>();
+    List<float> temp_x = new List<float>();
+    [Header("패턴이 등장하는 횟수")]
+    public sbyte pattern_num;
+    sbyte pattern_count;
+    Vector2 pos;
+    bool pattern_setting = false;
+    public GameObject lightning;
+    int pos_select_range;
+    public float time;
 
 
-    private void Awake()
+    // Start is called before the first frame update
+    void Start()
     {
+        pattern_count = pattern_num;
     }
-    private void Start()
-    {
-        beat = 60 / bpm;
-    }
+
+    // Update is called once per frame
     private void FixedUpdate()
     {
-        if (au.clip != clip)
+        time += Time.fixedDeltaTime;
+        if (0 < pattern_count)
         {
-            au.clip = clip;
-            au.Play();
-        }
-        time_gone += Time.fixedDeltaTime;
-
-        if (beat <= time_gone)
-        {
-            time_gone -= beat;
-            if (!pattern_start)
+            if (time > 1)
             {
-                pattern_start = true;
-                sbyte pattern_num = (sbyte)Random.Range(0, 3);
-                current_pattern = (Test_patterns_enum)pattern_num;
+                if (!pattern_setting)
+                {
+                    pos_select_range = pos_min_x.Length - 1;
+                    pattern_setting = true;
+                    pattern_count = pattern_num;
+                    for (int i = pos_min_x.Length - 1; i >= 0; i--)
+                    {
+                        temp_x.Add(pos_min_x[i]);
+                    }
+
+                    for (int i = 0; i < pattern_num; i++)
+                    {
+                        Debug.Log(pos_select_range);
+                        int num = Random.Range(0, pos_select_range);
+                        pos_x.Push(temp_x[num]);
+                        temp_x.RemoveAt(num);
+                        pos_select_range--;
+                    }
+                }
+                pos = new Vector2(pos_x.Pop(), pos_y);
+                GameObject obj = Instantiate(lightning);
+                obj.transform.position = pos;
+                time -= 1;
+                pattern_count--;
             }
         }
-        if (pattern_start)
+        /*else
         {
-            Pattern_in_progress();
-        }
-    }
-    public void Pattern_in_progress()
-    {
-        switch (current_pattern)
-        {
-            case Test_patterns_enum.PATTERN1:
-                Pattern1();
-                break;
-            case Test_patterns_enum.PATTERN2:
-                Pattern2();
-                break;
-            case Test_patterns_enum.PATTERN3:
-                Pattern3();
-                break;
-            default:
-                break;
-        }
-        
-
-    }
-    
-    public void Pattern1()
-    {
-        if (pattern_duration <= pattern_end_time)
-        {
-
-            pattern_duration += Time.fixedDeltaTime;
-        }
-        else if (beat <= time_gone)
-        {
-            pattern_duration = 0;
-            pattern_start = false;
-        }
-    }
-    public void Pattern2()
-    {
-        if (pattern_duration <= pattern_end_time)
-        {
-
-            pattern_duration += Time.fixedDeltaTime;
-
-        }
-        else if (beat <= time_gone)
-        {
-            pattern_duration = 0;
-            pattern_start = false;
-        }
-    }
-    public void Pattern3()
-    {
-        if (pattern_duration <= pattern_end_time)
-        {
-
-            pattern_duration += Time.fixedDeltaTime;
-
-        }
-        else if (beat <= time_gone)
-        {
-            pattern_duration = 0;
-            pattern_start = false;
-        }
+            pattern_setting = false;
+            pattern_count = pattern_num;
+        }*/
     }
 }

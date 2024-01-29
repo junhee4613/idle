@@ -17,7 +17,7 @@ TagManager:
   - UI
   - Player
   - Special_zone
-  - 
+  - Interaction_obj
   - Wall
   - Slow_obstacle
   - Nomal_obstacle

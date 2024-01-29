@@ -15,6 +15,7 @@ public class PlayerController : playerData
     public CircleCollider2D cc;
     public GameObject shoot_dir_image;
     public Transform arrow_rotation_base;
+    public float obj_size;
 
     #region 클래스 안에서 해결할것들
     sbyte break_num = 0;
@@ -34,7 +35,7 @@ public class PlayerController : playerData
     RaycastHit2D ray_hit;
     Ray mouse_pos_ray_pos;
     public Player_statu player_statu = Player_statu.IDLE;
-
+    public Collider2D[] interation_obj;
     #endregion
     #region 테스트용
     //[Header("테스트용")]
@@ -54,8 +55,6 @@ public class PlayerController : playerData
     }
     void Start()
     {
-        Managers.GameManager.slow_skill_down += Player_slow_skill_down;
-        Managers.GameManager.slow_skill_up += Player_slow_skill_up;
     }
 
     // Update is called once per frame
@@ -67,6 +66,7 @@ public class PlayerController : playerData
             return;
         }
         //Drag_statu_walls_collider();
+        Interaction_obj();
         Key_operate();
         #region 여기부턴 개발자용 
         /*if (Managers.developer_mode)
@@ -211,6 +211,19 @@ public class PlayerController : playerData
     {
         gameObject.SetActive(false);
         Managers.GameManager.gameover -= Player_die_setActive;
+    }
+    public void Interaction_obj()
+    {
+        interation_obj = Physics2D.OverlapCircleAll(transform.position, obj_size, 1 << 8);
+        
+        foreach (var item in interation_obj)
+        {
+            if(item.TryGetComponent<IInteraction_obj>(out IInteraction_obj interaction))
+            {
+                interaction.practice();
+            }
+        }
+        
     }
 
     /*public void Drag_statu_walls_collider()

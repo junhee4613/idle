@@ -1,11 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public abstract class Unit : MonoBehaviour
 {
     public abstract void Hit(float damage);
 }
+public class Beat_setting 
+{
+    public float beat;
+    public float bgm_length;
+}
+
 public class playerData : Unit
 {
     [Header("날아가는 최대 속도")]
@@ -68,6 +73,10 @@ namespace Test_boss
         PATTERN3,
     }
 
+}
+interface IInteraction_obj
+{
+    void practice();
 }
 
 

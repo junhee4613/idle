@@ -25,8 +25,6 @@ public class GameManager : MonoBehaviour
     public bool player_die = false;
     public Action gameover;
     public float game_speed = 1;
-    public Action slow_skill_down;
-    public Action slow_skill_up;
     // Start is called before the first frame update
     void Start()
     {

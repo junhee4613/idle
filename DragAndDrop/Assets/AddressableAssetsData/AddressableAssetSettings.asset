@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 8017d67e8a759a24f8452d0dcc127a2c
   m_currentHash:
     serializedVersion: 2
-    Hash: 6d80521eb29f21b038b0a828c04f2663
+    Hash: 45edf8ab21315732305087e50f43c141
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -46,6 +46,10 @@ MonoBehaviour:
   m_GroupAssets:
   - {fileID: 11400000, guid: 55417ed8a5f2a56438153a5de0ed9de3, type: 2}
   - {fileID: 11400000, guid: 721f917155c7c1740a59dc70eb19d3b8, type: 2}
+  - {fileID: 11400000, guid: b5981587c6c06d4448d7b28075d9d84d, type: 2}
+  - {fileID: 11400000, guid: df8e2593bd837f74697d935f2713e7bf, type: 2}
+  - {fileID: 11400000, guid: 994b95a3bba1bd440a75456257904b10, type: 2}
+  - {fileID: 11400000, guid: 9b278c96bd56bed49bc3a794fa2a86d8, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -89,6 +93,7 @@ MonoBehaviour:
     - default
     - PreLoad
     - Sprite
+    - BGM
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 588dfaaef49fc7e428c64e22102578bc, type: 2}
