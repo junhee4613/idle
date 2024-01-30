@@ -19,11 +19,6 @@ public class Test_the_pattern : MonoBehaviour
     float time;
     private void FixedUpdate()
     {
-        /*if (!pattern_start)
-        {
-            pattern_start = true;
-            
-        }*/
         if (!warning_end)
         {
             if (!pattern_start)

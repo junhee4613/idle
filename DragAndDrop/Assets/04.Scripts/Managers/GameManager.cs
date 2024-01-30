@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour        //여기서 비트를 관리
 {
     PlayerController player;
     public PlayerController Player 
@@ -24,7 +24,8 @@ public class GameManager : MonoBehaviour
     public bool boss_die = false;
     public bool player_die = false;
     public Action gameover;
-    public float game_speed = 1;
+    public float beat;
+    public float audio_clip_length;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,5 +37,8 @@ public class GameManager : MonoBehaviour
     {
         
     }
-    
+    private void FixedUpdate()
+    {
+    }
+
 }

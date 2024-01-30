@@ -9,7 +9,12 @@ using Random = UnityEngine.Random;
 
 public class Test_patterns : MonoBehaviour
 {
-    [Header("패턴이 등장하는 위치(높이)")]
+    
+}
+
+
+//번개 패턴
+/*[Header("패턴이 등장하는 위치(높이)")]
     public float pos_y;
     [Header("패턴이 등장하는 x축 위치들")]
     public float[] pos_min_x;
@@ -65,10 +70,9 @@ public class Test_patterns : MonoBehaviour
                 pattern_count--;
             }
         }
-        /*else
+        *//*else
         {
             pattern_setting = false;
             pattern_count = pattern_num;
-        }*/
-    }
-}
+        }*//*
+    }*/
