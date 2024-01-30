@@ -9,7 +9,26 @@ using Random = UnityEngine.Random;
 
 public class Test_patterns : MonoBehaviour
 {
-    
+    [Header("한 패턴에 떨어지는 빗물의 갯수")]
+    public sbyte rain_drop_num;
+    [Header("생성되는 높이")]
+    public float pos_y;
+    [Header("생성되는 빗물 오브젝트 할당")]
+    public GameObject rain_drop_obj;
+    [Header("생성되는 x축 양의 범위")]
+    public float pos_x;
+    sbyte rain_drop_count;
+    public float test_time;
+    private void FixedUpdate()
+    {
+        test_time += Time.fixedDeltaTime;
+        if (rain_drop_num > rain_drop_count && test_time >= 1)
+        {
+            test_time -= 1;
+            Instantiate(rain_drop_obj).transform.position = new Vector2(Random.Range(-pos_x, pos_x), pos_y);
+            rain_drop_count++;
+        }
+    }
 }
 
 

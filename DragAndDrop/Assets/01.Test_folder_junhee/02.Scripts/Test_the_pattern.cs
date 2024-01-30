@@ -5,48 +5,45 @@ using DG.Tweening;
 
 public class Test_the_pattern : MonoBehaviour
 {
-    //경고판은 a가 0부터 시작
-    [Header("깜빡이는 횟수")]
-    public sbyte fade_num;
-    [Header("a값이 목표치까지 변하는 시간")]
-    public float fade_time;
-    [Header("최소 a값")]
-    public float min_a;
-    bool pattern_start = false;
-    public SpriteRenderer warning_sprite;
-    public GameObject lightning;
-    bool warning_end = false;
-    float time;
+    [Header("처음에 날아가는 최대 각도")]
+    public float rotation_z;
+    [Header("초기에 날아가는 힘")]
+    public float shoot_power;
+    float rotation_init;
+    [Header("z축이 0으로 돌아오는 속도 ")]
+    public float rotation_zero_speed;
+    bool positive_num;
+    [Header("1을 설정하면 초기 속도가 초당 1미터 이동")]
+    public float test_num;
+
+    private void Start()
+    {
+        rotation_init = Random.Range(-rotation_z, rotation_z);
+        transform.rotation = Quaternion.Euler(0, 0, rotation_init);
+        Debug.Log(transform.rotation.eulerAngles.z);
+        if (transform.rotation.eulerAngles.z < 90)
+        {
+            positive_num = true;
+            //양수
+        }
+        else if (transform.rotation.eulerAngles.z > 270)
+        {
+            positive_num = false;
+            //음수
+        }
+    }
+
     private void FixedUpdate()
     {
-        if (!warning_end)
+        //transform.position = new Vector3(transform.position.x + Mathf.Cos(transform.rotation.eulerAngles.z * Mathf.Deg2Rad), transform.position.y + Mathf.Sin(transform.rotation.eulerAngles.z * Mathf.Deg2Rad)) * (transform.position.magnitude + test_num + Time.fixedDeltaTime);
+        transform.position = new Vector3(transform.position.x + Mathf.Sin(transform.rotation.eulerAngles.z * Mathf.Deg2Rad) * Time.fixedDeltaTime * shoot_power, transform.position.y - (test_num += Time.fixedDeltaTime) * Time.fixedDeltaTime);
+        if (positive_num)
         {
-            if (!pattern_start)
-            {
-
-                pattern_start = true;
-                warning_sprite.DOFade(min_a, fade_time).SetLoops(fade_num, LoopType.Yoyo).OnComplete(() =>
-                {
-                    warning_end = true;
-                });
-            }
+            transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, Mathf.Clamp(transform.rotation.eulerAngles.z - rotation_zero_speed * Time.fixedDeltaTime, 0, 90));
         }
         else
         {
-            if (time < 1)
-            {
-                time += Time.fixedDeltaTime;
-                if (!lightning.activeSelf)
-                {
-                    lightning.SetActive(true);
-                }
-            }
-            else
-            {
-                time = 0;
-                lightning.SetActive(false);
-                gameObject.SetActive(false);
-            }
+            transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, Mathf.Clamp(transform.rotation.eulerAngles.z + rotation_zero_speed * Time.fixedDeltaTime, 0, 359.99f));
         }
     }
 }
