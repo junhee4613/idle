@@ -8,6 +8,7 @@ TagManager:
   - Special_zone
   - Virtical
   - Horizontal
+  - UI_sub
   layers:
   - Default
   - TransparentFX

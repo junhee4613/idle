@@ -10,7 +10,7 @@ using Object = UnityEngine.Object;
 
 public class ResourceManager
 {
-    Dictionary<string, Object> _resources = new Dictionary<string, Object>();
+    public Dictionary<string, Object> _resources = new Dictionary<string, Object>();
 
     public T Load<T>(string key) where T : Object
     {
@@ -91,7 +91,6 @@ public class ResourceManager
                     LoadAsync<Sprite>(result.PrimaryKey, (obj) =>
                     {
                         loadCount++;
-                        Debug.Log(result.PrimaryKey);
                         callback?.Invoke(result.PrimaryKey, loadCount, totalCount);
                     });
                 }

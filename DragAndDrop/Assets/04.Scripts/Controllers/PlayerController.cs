@@ -16,6 +16,7 @@ public class PlayerController : playerData
     public GameObject shoot_dir_image;
     public Transform arrow_rotation_base;
     public float obj_size;
+    public AudioClip bounce_sound;
 
     #region 클래스 안에서 해결할것들
     sbyte break_num = 0;
@@ -93,7 +94,6 @@ public class PlayerController : playerData
         //wall_name = string.Empty;
         player_statu = Player_statu.DRAG;
     }
-   
     public void Player_Statu()
     {
         switch (player_statu)
@@ -225,6 +225,9 @@ public class PlayerController : playerData
         }
         
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+    }
 
     /*public void Drag_statu_walls_collider()
     {
@@ -253,5 +256,5 @@ public class PlayerController : playerData
             }
         }
     }*/
-    
+
 }

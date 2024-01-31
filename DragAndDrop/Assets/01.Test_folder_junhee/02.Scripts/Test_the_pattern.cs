@@ -10,10 +10,10 @@ public class Test_the_pattern : MonoBehaviour
     [Header("초기에 날아가는 힘")]
     public float shoot_power;
     float rotation_init;
-    [Header("z축이 0으로 돌아오는 속도 ")]
+    [Header("z축이 0으로 돌아오는 속도(높을수록 빨리 0으로 되돌아감)")]
     public float rotation_zero_speed;
     bool positive_num;
-    [Header("1을 설정하면 초기 속도가 초당 1미터 이동")]
+    [Header("중력 값")]
     public float test_num;
 
     private void Start()
@@ -35,7 +35,6 @@ public class Test_the_pattern : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //transform.position = new Vector3(transform.position.x + Mathf.Cos(transform.rotation.eulerAngles.z * Mathf.Deg2Rad), transform.position.y + Mathf.Sin(transform.rotation.eulerAngles.z * Mathf.Deg2Rad)) * (transform.position.magnitude + test_num + Time.fixedDeltaTime);
         transform.position = new Vector3(transform.position.x + Mathf.Sin(transform.rotation.eulerAngles.z * Mathf.Deg2Rad) * Time.fixedDeltaTime * shoot_power, transform.position.y - (test_num += Time.fixedDeltaTime) * Time.fixedDeltaTime);
         if (positive_num)
         {
@@ -47,111 +46,3 @@ public class Test_the_pattern : MonoBehaviour
         }
     }
 }
-/*public float bpm;       //0이 안나올라면 float / float를 해야된다
-    public float pattern_end_time;
-    public AudioSource au;
-    public AudioClip clip;
-    float pattern_duration;     //패턴이 지속된 시간
-    float beat;                     //비트(박자)
-    float time_gone;        //흘러간 시간
-    Test_patterns_enum current_pattern;
-    bool pattern_start;
-    public Pattern1_tle test;
-    public class Pattern1_tle 
-    {
-       public sbyte rain_drop_num;
-    }
-
-
-    private void Awake()
-    {
-    }
-    private void Start()
-    {
-        beat = 60 / bpm;
-    }
-    private void FixedUpdate()
-    {
-        if (au.clip != clip)
-        {
-            au.clip = clip;
-            au.Play();
-        }
-        time_gone += Time.fixedDeltaTime;
-
-        if (beat <= time_gone)
-        {
-            time_gone -= beat;
-            if (!pattern_start)
-            {
-                pattern_start = true;
-                sbyte pattern_num = (sbyte)Random.Range(0, 3);
-                current_pattern = (Test_patterns_enum)pattern_num;
-            }
-        }
-        if (pattern_start)
-        {
-            Pattern_in_progress();
-        }
-    }
-    public void Pattern_in_progress()
-    {
-        switch (current_pattern)
-        {
-            case Test_patterns_enum.PATTERN1:
-                Pattern1();
-                break;
-            case Test_patterns_enum.PATTERN2:
-                Pattern2();
-                break;
-            case Test_patterns_enum.PATTERN3:
-                Pattern3();
-                break;
-            default:
-                break;
-        }
-        
-
-    }
-    
-    public void Pattern1()
-    {
-        if (pattern_duration <= pattern_end_time)
-        {
-
-            pattern_duration += Time.fixedDeltaTime;
-        }
-        else if (beat <= time_gone)
-        {
-            pattern_duration = 0;
-            pattern_start = false;
-        }
-    }
-    public void Pattern2()
-    {
-        if (pattern_duration <= pattern_end_time)
-        {
-
-            pattern_duration += Time.fixedDeltaTime;
-
-        }
-        else if (beat <= time_gone)
-        {
-            pattern_duration = 0;
-            pattern_start = false;
-        }
-    }
-    public void Pattern3()
-    {
-        if (pattern_duration <= pattern_end_time)
-        {
-
-            pattern_duration += Time.fixedDeltaTime;
-
-        }
-        else if (beat <= time_gone)
-        {
-            pattern_duration = 0;
-            pattern_start = false;
-        }
-    }*/

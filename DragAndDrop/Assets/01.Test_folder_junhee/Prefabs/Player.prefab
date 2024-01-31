@@ -282,7 +282,9 @@ MonoBehaviour:
   shoot_dir_image: {fileID: 6676198884699601683}
   arrow_rotation_base: {fileID: 4285212989196001677}
   obj_size: 0.5
+  bounce_sound: {fileID: 8300000, guid: 522b68e3c77f015429dc6471a0badbc5, type: 3}
   player_statu: 0
+  interation_obj: []
 --- !u!114 &3143182108099521394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295,6 +297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 343b59bd5619faf4ab91633588f1a228, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  au: {fileID: 0}
   slow_speed: 0.2
   q_down: 0
   init_button: {fileID: 0}

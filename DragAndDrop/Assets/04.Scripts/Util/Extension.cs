@@ -14,13 +14,13 @@ public static class Extension //¿·¿¡´Â Á¤Àû Å¬·¡½ºÀÌ´Ù. ¾Æ·¡¿¡ ÀÖ´Â ¸Þ¼­µåµéÀº È
         return Util.GetOrAddComponent<T>(go);
     }
 
-    public static void BindEvent(this GameObject go
+    /*public static void BindEvent(this GameObject go
         ,Action action = null
         ,Action<BaseEventData> dragAction = null
         ,Define.UIEvent type = Define.UIEvent.Click)
     {
         UIBase.BindEvent(go, action, dragAction, type);
-    }
+    }*/
 
     public static bool IsValid(this GameObject go)
     {

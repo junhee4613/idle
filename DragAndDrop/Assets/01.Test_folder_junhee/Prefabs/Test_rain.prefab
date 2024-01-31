@@ -47,9 +47,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotation_z: 50
-  shoot_power: 2
+  shoot_power: 5
   rotation_zero_speed: 20
-  test_num: 1
+  test_num: 5
 --- !u!1 &2140249262971864738
 GameObject:
   m_ObjectHideFlags: 0
