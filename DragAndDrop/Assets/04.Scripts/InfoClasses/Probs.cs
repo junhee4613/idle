@@ -5,11 +5,7 @@ public abstract class Unit : MonoBehaviour
 {
     public abstract void Hit(float damage);
 }
-public class Beat_setting 
-{
-    public float beat;
-    public float bgm_length;
-}
+
 
 public class playerData : Unit
 {
@@ -52,16 +48,15 @@ namespace Cha_in_gureumi
 {
     public enum Cha_in_gureumi_simple_patterns
     {
-        SINGLE_LIGHTNING,
-        /*RANDOM_MULTIPLE_LIGHTNING,*/
         RAINDROPS,
-        BROAD_BASED_LIGHTNING
+        RAIN_STORM,
+        SHOWER
     }
     public enum Cha_in_gureumi_hard_patterns
     {
-        LIGHTNING_SPHERE,
-        REINFORCED_RAINDROPS,
-        SHOWER
+        BROAD_LIGHTNING,
+        SINGLE_LIGHTNING,
+        LIGHTNING_BALL
     }
 }
 namespace Test_boss
@@ -77,6 +72,17 @@ namespace Test_boss
 interface IInteraction_obj
 {
     void practice();
+}
+public class Pattern_state
+{
+    [SerializeField]public float time;
+    [SerializeField]public sbyte simple_pattern_type;
+    [SerializeField]public sbyte hard_pattern_type;
+}
+public class Stage_setting
+{
+    public float beat;
+    public float bgm_length;
 }
 
 

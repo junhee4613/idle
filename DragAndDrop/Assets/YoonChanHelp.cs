@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
+
 public class YoonChanHelp : MonoBehaviour
 {
     [SerializeField]private TextAsset TestText;
@@ -21,8 +22,7 @@ public class YoonChanHelp : MonoBehaviour
 [System.Serializable]
 public class TestObject
 {
-    [SerializeField] public float time;
-    [SerializeField] public byte pattern_type;
-    [SerializeField]public float duration;
-    [SerializeField]public string collider_type;
+    [SerializeField]public float simple_time;
+    [SerializeField]public byte simple_pattern_type;
+    [SerializeField]public byte hard_pattern_type;
 }

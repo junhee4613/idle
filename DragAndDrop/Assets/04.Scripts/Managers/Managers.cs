@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
+using UnityEngine.Audio;
 public class Managers : MonoBehaviour
 {
     public bool developer_mode = false;
     public bool invincibility = false;
     static Managers _instance;
-    public string scene_name;
     public GameObject option;
     public static Managers instance { get { Init(); return _instance; } }
     private void Awake()
@@ -20,10 +20,11 @@ public class Managers : MonoBehaviour
                 Debug.Log(Resource._resources.Count);
 
                 UI_jun.Init();
-                SceneManager.sceneLoaded += Next_sceneLoaded;
+                Sound.mixer = Resource.Load<AudioMixer>("Sound_option.mixer");
+                SceneManager.sceneLoaded += GameManager.Next_sceneLoaded;
                 SceneManager.sceneLoaded += Sound.OnSceneLoaded;
                 Sound.bgSound = gameObject.GetOrAddComponent<AudioSource>();
-                scene_name = SceneManager.GetActiveScene().name;
+                GameManager.scene_name = SceneManager.GetActiveScene().name;
             }
             //여기부터 하면 됨 
             /*Debug.Log("key : " + key + " Count : " + count + " totalCount : " + totalCount);
@@ -78,16 +79,7 @@ public class Managers : MonoBehaviour
     }*/
 
 
-    public void Next_sceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        scene_name = scene.name;
-        switch (scene_name)
-        {
-            default:
-                break;
-        }
-        UI_jun.option_window_on = false;
-    }
+    
     public static SoundManager Sound { get { return instance?._sound; } }
     public static UIManager_jun UI_jun { get { return instance?._ui; } }
     //public static UIManager UI_base { get { return instance?._ui_base; } }

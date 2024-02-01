@@ -238,7 +238,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   developer_mode: 0
   invincibility: 0
-  scene_name: 
   option: {fileID: 1037051338}
 --- !u!4 &338457427
 Transform:

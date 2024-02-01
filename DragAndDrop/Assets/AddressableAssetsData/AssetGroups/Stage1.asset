@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Stage1
+  m_EditorClassIdentifier: 
+  m_GroupName: Stage1
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 9a77580d35e94574691aac3f2f9a769f
+  m_SerializeEntries:
+  - m_GUID: fc38c75262abdc9438defe5792dec413
+    m_Address: Stage1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 983b7098a3b7ae84ea21f0fca33da855
+    m_Address: Lightning
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2a5bdc111079f3d4fa78dc8aa88ea6ca
+    m_Address: Stage1_data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 279382c77ce4d6849b8248f51d149490
+    m_Address: Rain_drop
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: ca7e6c5fcf72e2642944e03c7574a351, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 885665c372f8cf243b347d38b9112cf4, type: 2}
+    - {fileID: 11400000, guid: c08afddc355d19b49a473f1da452e538, type: 2}

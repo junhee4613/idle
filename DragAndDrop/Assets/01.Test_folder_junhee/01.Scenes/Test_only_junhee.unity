@@ -152,8 +152,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6163143ee3695094ebe050294dbb4c57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TestText: {fileID: 4900000, guid: 6f3d44dd08bd2a545ac4c55209ecb2a9, type: 3}
-  targetOBj: []
+  TestText: {fileID: 4900000, guid: e8eea92bec4d6b74a923752427772cd8, type: 3}
+  targetOBj:
+  - simple_time: 0
+    simple_pattern_type: 0
+    hard_pattern_type: 0
+  - simple_time: 0
+    simple_pattern_type: 0
+    hard_pattern_type: 0
+  - simple_time: 0
+    simple_pattern_type: 0
+    hard_pattern_type: 0
+  - simple_time: 0
+    simple_pattern_type: 0
+    hard_pattern_type: 0
+  - simple_time: 0
+    simple_pattern_type: 0
+    hard_pattern_type: 0
 --- !u!4 &42747404
 Transform:
   m_ObjectHideFlags: 0
@@ -1296,7 +1311,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2327533933647803065, guid: f054acdf6f51f484bb3b7536e528f45f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2730576694993779675, guid: f054acdf6f51f484bb3b7536e528f45f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1991,7 +2006,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1252458947
 Transform:
   m_ObjectHideFlags: 0
@@ -2168,6 +2183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 407f10983950c014c98fe663ba310bce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  test: 0
 --- !u!61 &1306143914
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2297,7 +2313,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1356917696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2310,35 +2326,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 159d312a8e595a4478cd475ac6df8684, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gimmick_complete_num: 0
-  hp: 0
-  hard_pattern_start_hp: 0
   gimmick_num: -1
-  patterns_speed: 0
-  pattern_kind:
-    serializedVersion: 2
-    m_Bits: 7340032
-  note_pos: {fileID: 1252458947}
+  pattern_num: 0
   simple_pattern: 0
-  lightning:
-    pos_y: 5.5
-    pos_min_x:
-    - -8
-    - -6
-    - -4
-    - -2
-    - 0
-    - 2
-    - 4
-    - 6
-    - 8
-    pattern_num: 5
-    temp_x: []
-    pattern_count: 0
-    pos: {x: 0, y: 0}
-    pattern_setting: 0
-    lightning: {fileID: 7329736153266219983, guid: 983b7098a3b7ae84ea21f0fca33da855, type: 3}
-    pos_select_range: 0
+  hard_pattern: 0
 --- !u!212 &1356917697
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3368,7 +3359,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1757441725
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3732,6 +3723,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 407f10983950c014c98fe663ba310bce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  test: 0
 --- !u!4 &1822996915
 Transform:
   m_ObjectHideFlags: 0

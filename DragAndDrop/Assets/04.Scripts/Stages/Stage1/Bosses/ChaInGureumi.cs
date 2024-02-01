@@ -9,88 +9,66 @@ using Cha_in_gureumi;
 public class ChaInGureumi : BossController          //비트는 80dlek
 {
     public Cha_in_gureumi_simple_patterns simple_pattern;
-    [SerializeField]
+    public Cha_in_gureumi_hard_patterns hard_pattern;
     Lightning_pattern lightning;
-    private void Awake()
+    public Rain_drop_pattern rain_drop;
+    public override void Simple_pattern()
     {
-        
+        base.Simple_pattern();
+        switch (Managers.GameManager.pattern_data[pattern_num].simple_pattern_type)
+        {
+            case (sbyte)Cha_in_gureumi_simple_patterns.RAINDROPS:
+                Rain_drop();
+                break;
+            case (sbyte)Cha_in_gureumi_simple_patterns.RAIN_STORM:
+                Rain_storm();
+                break;
+            case (sbyte)Cha_in_gureumi_simple_patterns.SHOWER:
+                Shower();
+                break;
+            default:
+                break;
+        }
     }
-    // Start is called before the first frame update
-    public override void Start()
+    public override void Hard_pattern()
     {
-        Managers.GameManager.boss = this.gameObject;
-        Managers.GameManager.beat = 60f / 80f;
-        Debug.Log(Managers.GameManager.beat);
-        gimmick_count = gimmick_num - 1;
+        base.Hard_pattern();
+        switch (Managers.GameManager.pattern_data[pattern_num].hard_pattern_type)
+        {
+            case (sbyte)Cha_in_gureumi_hard_patterns.BROAD_LIGHTNING:
+                Broad_lightning();
+                break;
+            case (sbyte)Cha_in_gureumi_hard_patterns.LIGHTNING_BALL:
+                Lightning_ball();
+                break;
+            case (sbyte)Cha_in_gureumi_hard_patterns.SINGLE_LIGHTNING:
+                Single_lightning();
+                break;
+            default:
+                break;
+        }
     }
+    public void Rain_drop()
+    {
+        Managers.Resource.Instantiate("Rain_drop", null, true).transform.position = new Vector2(rain_drop.center_pos.position.x + Random.Range(-rain_drop.pos_x, rain_drop.pos_x), rain_drop.pos_y.position.y);
+    }
+    public void Rain_storm()
+    {
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        pattern_note = Physics2D.Raycast(note_pos.position, transform.up, 1, pattern_kind);
-        time += Time.fixedDeltaTime;
-        //if(사운드 매니저에서 불러온 노래 길이 / gimmick_count() * gimmick_num 패턴 등장 횟수이거 올림으로 해서 딱 맞아 떨어지게 하기 == 스테이지 진행도(노래의 최대 길이에서 점차 감소할 때))
-        if(Managers.GameManager.beat <= time && pattern_note)
-        {
-            time -= Managers.GameManager.beat;
-            if (hp <= hard_pattern_start_hp)
-            {
-                Simple_patterns();
-            }
-            else
-            {
-                Hard_patterns();
-            }
-            
-        }
     }
-    public void Current_pattern()
+    public void Shower()
     {
-        if (hp <= hard_pattern_start_hp)
-        {
-            Simple_patterns();
-        }
-        else
-        {
-            Hard_patterns();
-        }
+
     }
-    #region 패턴들
-    #region 심플 패턴들
-    void Simple_patterns()
+    public void Broad_lightning()
     {
-        switch (pattern_note.collider.gameObject.layer)
-        {
-            case 20:
-                Raindrops();
-                break;
-            case 21:
-                Broad_based_lightning();
-                break;
-            case 22:
-                Single_lightning();
-                break;
-            default:
-                break;
-        }
-        /*pattern_num = Random.Range(1, Enum.GetNames(typeof(Cha_in_gureumi_simple_patterns)).Length);
-        simple_pattern = (Cha_in_gureumi_simple_patterns)pattern_num;
-        switch (simple_pattern)
-        {
-            case Cha_in_gureumi_simple_patterns.SINGLE_LIGHTNING:
-                Single_lightning();
-                break;
-            case Cha_in_gureumi_simple_patterns.RAINDROPS:
-                Raindrops();
-                break;
-            case Cha_in_gureumi_simple_patterns.BROAD_BASED_LIGHTNING:
-                Broad_based_lightning();
-                break;
-            default:
-                break;
-        }*/
+
     }
-    void Single_lightning()
+    public void Lightning_ball()
+    {
+
+    }
+    public void Single_lightning()
     {
         if (!lightning.pattern_setting)
         {
@@ -125,39 +103,12 @@ public class ChaInGureumi : BossController          //비트는 80dlek
             }
         }
     }
-    /*void Random_multiple_lightning()
-    {
-
-    }*/
-    void Raindrops()                //빗방울
-    {
-
-    }
-    void Broad_based_lightning()    //차징 번개
-    {
-
-    }
-    #endregion
-    #region 하드패턴들
-    void Hard_patterns()
-    {
-        
-    }
-    #endregion
-    #endregion
-    
-    void Player_hit()
-    {
-        Managers.GameManager.Player.Hit(1);
-    }
-
     public override void Hit(float damage)
     {
         throw new NotImplementedException();
     }
-
     [Serializable]
-    public class Lightning_pattern 
+    public class Lightning_pattern
     {
         [Header("패턴이 등장하는 위치(높이)")]
         public float pos_y;
@@ -180,5 +131,13 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         [HideInInspector]
         public int pos_select_range;
     }
-
+    [Serializable]
+    public class Rain_drop_pattern
+    {
+        [Header("생성되는 높이")]
+        public Transform pos_y;
+        [Header("생성되는 x축 양의 범위")]
+        public float pos_x;
+        public Transform center_pos;
+    }
 }
