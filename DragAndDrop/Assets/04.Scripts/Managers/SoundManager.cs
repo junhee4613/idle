@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class SoundManager : MonoBehaviour
 {
-    public AudioClip[] bgm;
     public AudioSource bgSound;
     public AudioMixer mixer;
     public Slider bgm_slider;
@@ -22,17 +21,19 @@ public class SoundManager : MonoBehaviour
     }
     public void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
-        for (int i = 0; i < bgm.Length; i++)
+        AudioClip temp = Managers.Resource.Load<AudioClip>(arg0.name);
+        if(temp != null)
         {
-            if (arg0.name == bgm[i].name)
+            if (arg0.name == temp.name)
             {
-                BGMSound(bgm[i]);
+                BGMSound(temp);
             }
         }
     }
 
     public void BGMSound(AudioClip clip)
     {
+        Debug.Log(clip.name);
         bgSound.clip = clip;
         bgSound.outputAudioMixerGroup = mixer.FindMatchingGroups("BGM_sound_volume")[0];
         bgSound.loop = true;

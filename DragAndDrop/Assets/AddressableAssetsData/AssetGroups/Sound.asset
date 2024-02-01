@@ -18,7 +18,7 @@ MonoBehaviour:
   m_GUID: f57748ebe245fa147bdb0c1d7adc2eb0
   m_SerializeEntries:
   - m_GUID: fc38c75262abdc9438defe5792dec413
-    m_Address: Stage_1_BGM
+    m_Address: Stage1
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad

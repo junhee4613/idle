@@ -1,0 +1,26 @@
+﻿[
+    {
+        "time": "500",
+        "pattern_type": "2",
+        "duration": "5",
+        "collider_type": "asdf"
+    },
+    {
+        "time": "850",
+        "pattern_type": "2",
+        "duration": "5",
+        "collider_type": "asdf"
+    },
+    {
+        "time": "30",
+        "pattern_type": "1",
+        "duration": "5",
+        "collider_type": "dfdf"
+    },
+    {
+        "time": "1500",
+        "pattern_type": "5",
+        "duration": "5",
+        "collider_type": "sdf"
+    }
+]

@@ -36,6 +36,7 @@ public class Skills : MonoBehaviour
     }
     public void FixedUpdate()
     {
+
     }
     public void Skill()
     {
@@ -55,7 +56,7 @@ public class Skills : MonoBehaviour
         {
             Time.timeScale = slow_speed;
             au.pitch = slow_speed;
-            Time.fixedDeltaTime = Time.deltaTime /** slow_speed*/;
+            Time.fixedDeltaTime = Time.deltaTime /* slow_speed*/;
             q_down = true;
         }
         else if (Input.GetKeyUp(KeyCode.Q))

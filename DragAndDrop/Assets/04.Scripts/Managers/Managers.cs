@@ -22,6 +22,7 @@ public class Managers : MonoBehaviour
                 UI_jun.Init();
                 SceneManager.sceneLoaded += Next_sceneLoaded;
                 SceneManager.sceneLoaded += Sound.OnSceneLoaded;
+                Sound.bgSound = gameObject.GetOrAddComponent<AudioSource>();
                 scene_name = SceneManager.GetActiveScene().name;
             }
             //여기부터 하면 됨 

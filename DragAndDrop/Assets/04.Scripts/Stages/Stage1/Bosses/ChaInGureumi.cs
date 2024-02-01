@@ -5,6 +5,7 @@ using System;
 using Random = UnityEngine.Random;
 using Cha_in_gureumi;
 
+
 public class ChaInGureumi : BossController          //ºñÆ®´Â 80dlek
 {
     public Cha_in_gureumi_simple_patterns simple_pattern;

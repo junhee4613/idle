@@ -591,7 +591,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faa2504a58a7b6a4899201c5e42071de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bgm: []
   bgSound: {fileID: 1156436987}
   mixer: {fileID: 24100000, guid: 3fe2d68f639cf304281282d2d3f9bec7, type: 2}
   bgm_slider: {fileID: 0}
