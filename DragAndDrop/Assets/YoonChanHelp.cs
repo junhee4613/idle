@@ -6,11 +6,11 @@ using Newtonsoft.Json;
 public class YoonChanHelp : MonoBehaviour
 {
     [SerializeField]private TextAsset TestText;
-    [SerializeField] List<TestObject> targetOBj;
+    [SerializeField]public List<Pattern_state> targetOBj;
     // Start is called before the first frame update
     void Start()
     {
-        targetOBj = JsonConvert.DeserializeObject<List<TestObject>>(TestText.text);
+        targetOBj = JsonConvert.DeserializeObject<List<Pattern_state>>(TestText.text);
     }
 
     // Update is called once per frame

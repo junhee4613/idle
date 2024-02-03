@@ -13,10 +13,14 @@ public class Rain_drop : MonoBehaviour
     public float rotation_zero_speed;
     bool positive_num;
     [Header("중력 값")]
-    public float test_num;
-
+    public float temp_gravity;
+    float gravity;
+    [Header("사라지는 시간")]
+    public float push_time;
+    float time;
     private void Start()
     {
+        gravity = temp_gravity;
         rotation_init = Random.Range(-rotation_z, rotation_z);
         transform.rotation = Quaternion.Euler(0, 0, rotation_init);
         if (transform.rotation.eulerAngles.z < 90)
@@ -31,18 +35,33 @@ public class Rain_drop : MonoBehaviour
 
     private void FixedUpdate()
     {
-        transform.position = new Vector3(transform.position.x + Mathf.Sin(transform.rotation.eulerAngles.z * Mathf.Deg2Rad) * Time.fixedDeltaTime * shoot_power, transform.position.y - (test_num += Time.fixedDeltaTime) * Time.fixedDeltaTime);
+        if(push_time <= time)
+        {
+            time = 0;
+            Managers.Pool.Push(this.gameObject);
+            gravity = temp_gravity;
+        }
+        time += Time.fixedDeltaTime;
+        transform.position = new Vector3(transform.position.x + Mathf.Sin(transform.rotation.eulerAngles.z * Mathf.Deg2Rad) * Time.fixedDeltaTime * shoot_power, transform.position.y - (gravity += Time.fixedDeltaTime) * Time.fixedDeltaTime);
         if (positive_num)
         {
-            transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, Mathf.Clamp(transform.rotation.eulerAngles.z - rotation_zero_speed * Time.fixedDeltaTime, 0, 90));
+            if(transform.rotation.eulerAngles.z != 0)
+            {
+                transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, Mathf.Clamp(transform.rotation.eulerAngles.z - rotation_zero_speed * Time.fixedDeltaTime, 0, 90));
+            }
         }
         else
         {
-            transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, Mathf.Clamp(transform.rotation.eulerAngles.z + rotation_zero_speed * Time.fixedDeltaTime, 0, 359.99f));
+            if (transform.rotation.eulerAngles.z != 359.99f)
+            {
+                transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, Mathf.Clamp(transform.rotation.eulerAngles.z + rotation_zero_speed * Time.fixedDeltaTime, 0, 359.99f));
+
+            }
         }
     }
     private void OnEnable()
     {
+
         rotation_init = Random.Range(-rotation_z, rotation_z);
         transform.rotation = Quaternion.Euler(0, 0, rotation_init);
         if (transform.rotation.eulerAngles.z < 90)

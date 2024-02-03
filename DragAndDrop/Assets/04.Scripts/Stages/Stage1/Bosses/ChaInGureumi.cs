@@ -17,6 +17,9 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         base.Simple_pattern();
         switch (Managers.GameManager.pattern_data[pattern_num].simple_pattern_type)
         {
+            case (sbyte)Cha_in_gureumi_hard_patterns.IDLE:
+                Idle();
+                break;
             case (sbyte)Cha_in_gureumi_simple_patterns.RAINDROPS:
                 Rain_drop();
                 break;
@@ -35,6 +38,9 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         base.Hard_pattern();
         switch (Managers.GameManager.pattern_data[pattern_num].hard_pattern_type)
         {
+            case (sbyte)Cha_in_gureumi_hard_patterns.IDLE:
+                Idle();
+                break;
             case (sbyte)Cha_in_gureumi_hard_patterns.BROAD_LIGHTNING:
                 Broad_lightning();
                 break;
@@ -48,9 +54,14 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 break;
         }
     }
+    public void Idle()
+    {
+        Anim_state_machin(anim_state["simple_pattern0"]);
+    }
     public void Rain_drop()
     {
-        Managers.Resource.Instantiate("Rain_drop", null, true).transform.position = new Vector2(rain_drop.center_pos.position.x + Random.Range(-rain_drop.pos_x, rain_drop.pos_x), rain_drop.pos_y.position.y);
+        Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Rain_drop")).transform.position = new Vector2(rain_drop.center_pos.position.x + Random.Range(-rain_drop.pos_x, rain_drop.pos_x), rain_drop.pos_y.position.y);
+        Anim_state_machin(anim_state["simple_pattern1"]);
     }
     public void Rain_storm()
     {
@@ -102,10 +113,6 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 lightning.pattern_setting = false;
             }
         }
-    }
-    public override void Hit(float damage)
-    {
-        throw new NotImplementedException();
     }
     [Serializable]
     public class Lightning_pattern

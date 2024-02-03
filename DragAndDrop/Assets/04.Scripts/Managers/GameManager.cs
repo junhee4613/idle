@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour        //여기서 비트를 관리
                 player = GameObject.FindObjectOfType<PlayerController>();
                 if(player == null)
                 {
-                    Debug.LogError("플레이어가 없어");
+                    Managers.Resource.Load<GameObject>("Player");
                 }
             } 
             return player; 

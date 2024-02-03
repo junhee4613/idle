@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Stage_FSM;
 
 public static class Extension //¿·¿¡´Â Á¤Àû Å¬·¡½ºÀÌ´Ù. ¾Æ·¡¿¡ ÀÖ´Â ¸Þ¼­µåµéÀº È®Àå ¸Þ¼­µå¶ó°í ÇÏ´Âµ¥ staticÅ°¿öµå¿Í ÇÔ²² Á¤Àû Å¬·¡½º ³»¿¡ Á¤ÀÇµÅÀÖ¾î¾ßµÇ¸ç this¶ó´Â Å°¿öµå¸¦ ½á¾ßµÈ´Ù. ±×·¯¸é ÇØ´ç Å¸ÀÔ°ú °°Àº º¯¼ö µÚ¿¡¼­ ¹Ù·Î ÇØ´ç (È®Àå)¸Þ¼­µå¸¦ ¾µ¼öÀÖ´Ù.
 {
@@ -51,6 +52,23 @@ public static class Extension //¿·¿¡´Â Á¤Àû Å¬·¡½ºÀÌ´Ù. ¾Æ·¡¿¡ ÀÖ´Â ¸Þ¼­µåµéÀº È
             T value = list[k];
             list[k] = list[n];
             list[n] = value;
+        }
+    }
+    public static void Anim_processing(this Dictionary<string, Anim_stage_state> dic, ref Animator anim, GameObject target, sbyte simplae_pattern_num, sbyte hard_pattern_num )
+    {
+        if(anim == null)
+        {
+            Debug.LogError("¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ¾ø¾î");
+        }
+        Animator temp = anim;
+        for (int i = 0; i < simplae_pattern_num; i++)
+        {
+            dic.Add($"simple_pattern{i}", new Simple_pattern($"simple_pattern{i}", anim));
+        }
+        for (int i = 0; i < hard_pattern_num; i++)
+        {
+            dic.Add($"hard_pattern{i}", new Hard_pattern($"hard_pattern{i}", anim));
+
         }
     }
 }

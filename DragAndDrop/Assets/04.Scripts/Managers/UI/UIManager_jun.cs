@@ -31,8 +31,6 @@ public class UIManager_jun : MonoBehaviour
                 UI_window_on.Add(child.name, child.gameObject);
             }
         }
-        Debug.Log(UI_window_on.Count);
-
     }
 
 }

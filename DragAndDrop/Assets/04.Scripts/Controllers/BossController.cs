@@ -2,11 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BossController : Unit
+public abstract class BossController : Stage_base_controller
 {
     public sbyte gimmick_num = 4;
     protected sbyte boss_hp = 5;
     public sbyte pattern_num;
+    //public Animator an;
+    protected override void Awake()
+    {
+        base.Awake();
+    }
     public void FixedUpdate()
     {
         if (Managers.GameManager.game_start)
@@ -23,7 +28,6 @@ public abstract class BossController : Unit
     }
     public void Pattern_processing()
     {
-        Debug.Log(Managers.Sound.bgSound.time);
         if (Managers.GameManager.pattern_data[pattern_num].time <= Managers.Sound.bgSound.time)
         {
             if (boss_hp > 3)
@@ -48,4 +52,16 @@ public abstract class BossController : Unit
     {
 
     }
+    /*public void Anim_state_machin(string clip_name)
+    {
+        if(an.GetCurrentAnimatorStateInfo(0). != clip_name)
+        {
+
+        }
+        if (an.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+        {
+            an.Play(clip_name);
+        }
+
+    }*/
 }

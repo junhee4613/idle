@@ -1,0 +1,326 @@
+﻿[
+    {
+        "time": "0.75",
+        "simple_pattern_type": "0",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "1.13",
+        "simple_pattern_type": "0",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "1.315",
+        "simple_pattern_type": "0",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "1.5",
+        "simple_pattern_type": "0",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "2.06",
+        "simple_pattern_type": "0",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "2.25",
+        "simple_pattern_type": "0",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "3",
+        "simple_pattern_type": "0",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "3.75",
+        "simple_pattern_type": "0",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "4.12",
+        "simple_pattern_type": "0",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "4.31",
+        "simple_pattern_type": "0",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "4.5",
+        "simple_pattern_type": "0",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "5.06",
+        "simple_pattern_type": "0",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "5.25",
+        "simple_pattern_type": "0",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "6",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "6.75",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "7.125",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "7.31",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "7.5",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "8.06",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "8.25",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "9",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "9.75",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "10.12",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "10.315",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "10.5",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "11.06",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "11.25",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "FALSE"
+    },
+    {
+        "time": "12",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "12.75",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "13.12",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "13.315",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "13.5",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "14.06",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "14.25",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "15",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "15.75",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "16.12",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "16.315",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "16.5",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "17.06",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "17.25",
+        "simple_pattern_type": "1",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "18",
+        "simple_pattern_type": "2",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "25.5",
+        "simple_pattern_type": "3",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "25.885",
+        "simple_pattern_type": "3",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "26.25",
+        "simple_pattern_type": "3",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "27",
+        "simple_pattern_type": "3",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "27.37",
+        "simple_pattern_type": "3",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "28.02",
+        "simple_pattern_type": "3",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "28.5",
+        "simple_pattern_type": "3",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "28.87",
+        "simple_pattern_type": "3",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "29.52",
+        "simple_pattern_type": "3",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "30",
+        "simple_pattern_type": "3",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "30.37",
+        "simple_pattern_type": "3",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    },
+    {
+        "time": "31.022",
+        "simple_pattern_type": "3",
+        "hard_pattern_type": "0",
+        "trans": "TRUE"
+    }
+]

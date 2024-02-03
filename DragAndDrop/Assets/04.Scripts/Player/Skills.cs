@@ -26,7 +26,14 @@ public class Skills : MonoBehaviour
     }
     void Start()
     {
-        
+        if (au == null)
+        {
+            GameObject managers = GameObject.FindAnyObjectByType<Managers>().gameObject;
+            if (managers.TryGetComponent<AudioSource>(out AudioSource temp_au))
+            {
+                au = temp_au;
+            }
+        }
     }
     
     // Update is called once per frame
@@ -36,35 +43,41 @@ public class Skills : MonoBehaviour
     }
     public void FixedUpdate()
     {
-
+        Key_Press();
     }
     public void Skill()
     {
-        Key_Press();
-        if (q_down)
-        {
-            
-        }
-        else
-        {
-            
-        }
-    }
-    public void Key_Press()
-    {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            Time.timeScale = slow_speed;
-            au.pitch = slow_speed;
-            Time.fixedDeltaTime = Time.deltaTime /* slow_speed*/;
+            
             q_down = true;
         }
         else if (Input.GetKeyUp(KeyCode.Q))
         {
-            Time.fixedDeltaTime = Time.deltaTime;
-            au.pitch = 1;
-            Time.timeScale = 1f;
+            
             q_down = false;
+        }
+        
+    }
+    public void Key_Press()
+    {
+        if (q_down)
+        {
+            if(Time.timeScale != slow_speed)
+            {
+                Time.timeScale = slow_speed;
+                au.pitch = slow_speed;
+                Time.fixedDeltaTime = Time.deltaTime * slow_speed;
+            }
+        }
+        else
+        {
+            if(Time.timeScale != 1)
+            {
+                Time.timeScale = 1f;
+                Time.fixedDeltaTime = Time.deltaTime;
+                au.pitch = 1;
+            }
         }
     }
 }

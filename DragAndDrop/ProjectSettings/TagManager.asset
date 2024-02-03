@@ -46,3 +46,27 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Base_back_ground
+    uniqueID: 4268383523
+    locked: 0
+  - name: Middle_effect
+    uniqueID: 790437641
+    locked: 0
+  - name: Front_back_ground
+    uniqueID: 2052406515
+    locked: 0
+  - name: Front_effect
+    uniqueID: 2662981551
+    locked: 0
+  - name: Player_box
+    uniqueID: 1647982771
+    locked: 0
+  - name: Pattern
+    uniqueID: 1041099229
+    locked: 0
+  - name: Boss
+    uniqueID: 2767242371
+    locked: 0
+  - name: Player
+    uniqueID: 2392649191
+    locked: 0

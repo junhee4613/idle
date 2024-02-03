@@ -48,12 +48,14 @@ namespace Cha_in_gureumi
 {
     public enum Cha_in_gureumi_simple_patterns
     {
+        IDLE,
         RAINDROPS,
         RAIN_STORM,
         SHOWER
     }
     public enum Cha_in_gureumi_hard_patterns
     {
+        IDLE,
         BROAD_LIGHTNING,
         SINGLE_LIGHTNING,
         LIGHTNING_BALL
@@ -73,16 +75,146 @@ interface IInteraction_obj
 {
     void practice();
 }
+[System.Serializable]
 public class Pattern_state
 {
     [SerializeField]public float time;
     [SerializeField]public sbyte simple_pattern_type;
     [SerializeField]public sbyte hard_pattern_type;
+    [SerializeField]public bool trans;
 }
 public class Stage_setting
 {
     public float beat;
     public float bgm_length;
+}
+public abstract class Anim_stage_state
+{
+    public Animator an;
+    public string temp_name;
+    public abstract void On_state_enter();
+    public abstract void On_state_update(sbyte loop_num);
+    public abstract void On_state_exit();
+}
+namespace Stage_FSM
+{
+    public class Simple_pattern : Anim_stage_state
+    {
+        public Simple_pattern(string anim_name, Animator temp_an)
+        {
+            this.an = temp_an;
+            temp_name = anim_name;
+        }
+        public override void On_state_enter()
+        {
+            an.Play(temp_name);
+        }
+        public override void On_state_update(sbyte loop_num)
+        {
+
+        }
+        public override void On_state_exit()
+        {
+
+        }
+    }
+    /*public class Simple_pattern1 : Anim_stage_state
+    {
+        public Simple_pattern1(string anim_name)
+        {
+            temp_name = anim_name;
+        }
+        public override void On_state_enter()
+        {
+            an.Play(temp_name);
+        }
+        public override void On_state_update(sbyte loop_num)
+        {
+
+        }
+        public override void On_state_exit()
+        {
+
+        }
+
+    }
+    public class Simple_pattern2 : Anim_stage_state
+    {
+        public Simple_pattern2(string anim_name)
+        {
+            temp_name = anim_name;
+        }
+        public override void On_state_enter()
+        {
+            an.Play(temp_name);
+        }
+        public override void On_state_update(sbyte loop_num)
+        {
+
+        }
+        public override void On_state_exit()
+        {
+
+        }
+    }*/
+    public class Hard_pattern : Anim_stage_state
+    {
+        public Hard_pattern(string anim_name, Animator temp_an)
+        {
+            an = temp_an;
+            temp_name = anim_name;
+        }
+        public override void On_state_enter()
+        {
+            an.Play(temp_name);
+        }
+        public override void On_state_update(sbyte loop_num)
+        {
+
+        }
+        public override void On_state_exit()
+        {
+
+        }
+    }
+    /*public class Hard_pattern1 : Anim_stage_state
+    {
+        public Hard_pattern1(string anim_name)
+        {
+            temp_name = anim_name;
+        }
+        public override void On_state_enter()
+        {
+            an.Play(temp_name);
+        }
+        public override void On_state_update(sbyte loop_num)
+        {
+
+        }
+        public override void On_state_exit()
+        {
+
+        }
+    }
+    public class Hard_pattern3 : Anim_stage_state
+    {
+        public Hard_pattern3(string anim_name)
+        {
+            temp_name = anim_name;
+        }
+        public override void On_state_enter()
+        {
+            an.Play(temp_name);
+        }
+        public override void On_state_update(sbyte loop_num)
+        {
+
+        }
+        public override void On_state_exit()
+        {
+
+        }
+    }*/
 }
 
 
