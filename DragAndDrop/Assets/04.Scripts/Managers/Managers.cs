@@ -23,6 +23,7 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
                 Sound.mixer = Resource.Load<AudioMixer>("Sound_option.mixer");
                 SceneManager.sceneLoaded += GameManager.Next_sceneLoaded;
                 SceneManager.sceneLoaded += Sound.OnSceneLoaded;
+                SceneManager.sceneLoaded += UI_jun.UI_on_scene_loaded;
                 Sound.bgSound = gameObject.GetOrAddComponent<AudioSource>();
                 GameManager.scene_name = SceneManager.GetActiveScene().name;
             }
@@ -58,15 +59,16 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
     }
     public void Update()        
     {
-        if (Input.GetKeyDown(KeyCode.Escape))       //FIX : ³ªÁß¿¡ ¿©±â ¼öÁ¤ÇØ¾ßµÊ
+        if (Input.GetKeyDown(KeyCode.Escape) && GameManager.scene_name != "Lobby_screen")       //FIX : ³ªÁß¿¡ ¿©±â ¼öÁ¤ÇØ¾ßµÊ
         {
-            if (option.activeSelf)
+            if (UI_jun.UI_window_on["Option"].activeSelf)
             {
-                option.SetActive(false);
+                UI_jun.UI_window_off.Peek().SetActive(false);
             }
             else
             {
-                option.SetActive(true);
+                UI_jun.UI_window_on["Option"].SetActive(true);
+                UI_jun.UI_window_off.Push(UI_jun.UI_window_on["Option"]);
 
             }
             //StartCoroutine(Option_window());

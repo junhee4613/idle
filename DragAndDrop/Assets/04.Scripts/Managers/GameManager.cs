@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour        //여기서 비트를 관리
     public float beat;
     public float bmg_length;        //음악 진행 시간
     public bool game_start = false;
+    public sbyte pattern_num;
     // Start is called before the first frame update
     void Start()
     {

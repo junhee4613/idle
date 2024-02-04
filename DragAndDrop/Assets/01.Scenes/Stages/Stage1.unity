@@ -187,7 +187,6 @@ MonoBehaviour:
   simple_pattern_num: 4
   hard_pattern_num: 4
   gimmick_num: 0
-  pattern_num: 0
   simple_pattern: 0
   hard_pattern: 0
   rain_drop:
@@ -531,11 +530,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2730576694993779675, guid: f054acdf6f51f484bb3b7536e528f45f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.13
+      value: -2.49
       objectReference: {fileID: 0}
     - target: {fileID: 2730576694993779675, guid: f054acdf6f51f484bb3b7536e528f45f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.891
+      value: -3.58
       objectReference: {fileID: 0}
     - target: {fileID: 2730576694993779675, guid: f054acdf6f51f484bb3b7536e528f45f, type: 3}
       propertyPath: m_LocalPosition.z

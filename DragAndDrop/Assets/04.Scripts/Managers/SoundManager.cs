@@ -9,8 +9,7 @@ public class SoundManager : MonoBehaviour
 {
     public AudioSource bgSound;
     public AudioMixer mixer;
-    public Slider bgm_slider;
-    public Slider sfx_slider;
+    
 
 
 
@@ -22,6 +21,7 @@ public class SoundManager : MonoBehaviour
     public void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
         AudioClip temp = Managers.Resource.Load<AudioClip>(arg0.name);
+        Debug.Log(temp.name);
         if(temp != null)
         {
             if (arg0.name == temp.name)
@@ -33,7 +33,6 @@ public class SoundManager : MonoBehaviour
 
     public void BGMSound(AudioClip clip)
     {
-        Debug.Log(clip.name);
         bgSound.clip = clip;
         bgSound.outputAudioMixerGroup = mixer.FindMatchingGroups("BGM_sound_volume")[0];
         bgSound.loop = true;
@@ -58,12 +57,12 @@ public class SoundManager : MonoBehaviour
     {
         if (volume > 0)
         {
-            mixer.SetFloat("BGMSoundVolume", Mathf.Log10(volume) * 20);
+            mixer.SetFloat("BGM_sound_volume", Mathf.Log10(volume) * 20);
 
         }
         else
         {
-            mixer.SetFloat("BGMSoundVolume", Mathf.Log10(-80));
+            mixer.SetFloat("BGM_sound_volume", Mathf.Log10(-80));
         }
     }
 
@@ -71,11 +70,11 @@ public class SoundManager : MonoBehaviour
     {
         if (volume > 0)
         {
-            mixer.SetFloat("SFXSoundVolume", Mathf.Log10(volume) * 20);
+            mixer.SetFloat("SFX_sound_volume", Mathf.Log10(volume) * 20);
         }
         else
         {
-            mixer.SetFloat("SFXSoundVolume", Mathf.Log10(-80));
+            mixer.SetFloat("SFX_sound_volume", Mathf.Log10(-80));
         }
     }
 }

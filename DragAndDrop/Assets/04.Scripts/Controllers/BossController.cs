@@ -6,7 +6,6 @@ public abstract class BossController : Stage_base_controller
 {
     public sbyte gimmick_num = 4;
     protected sbyte boss_hp = 5;
-    public sbyte pattern_num;
     //public Animator an;
     protected override void Awake()
     {
@@ -28,7 +27,7 @@ public abstract class BossController : Stage_base_controller
     }
     public void Pattern_processing()
     {
-        if (Managers.GameManager.pattern_data[pattern_num].time <= Managers.Sound.bgSound.time)
+        if (Managers.GameManager.pattern_data[Managers.GameManager.pattern_num].time <= Managers.Sound.bgSound.time)
         {
             if (boss_hp > 3)
             {
@@ -38,9 +37,9 @@ public abstract class BossController : Stage_base_controller
             {
                 Hard_pattern();
             }
-            if(Managers.GameManager.pattern_data.Count - 1 > pattern_num)
+            if(Managers.GameManager.pattern_data.Count - 1 > Managers.GameManager.pattern_num)
             {
-                pattern_num++;
+                Managers.GameManager.pattern_num++;
             }
         }
     }

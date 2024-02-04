@@ -35,6 +35,15 @@ public class Rain_drop : MonoBehaviour
 
     private void FixedUpdate()
     {
+        switch (Managers.GameManager.pattern_data[Managers.GameManager.pattern_num].action_num)
+        {
+            case 0:
+                break;
+            case 1:
+                break;
+            default:
+                break;
+        }
         if(push_time <= time)
         {
             time = 0;

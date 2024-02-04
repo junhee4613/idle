@@ -51,7 +51,8 @@ namespace Cha_in_gureumi
         IDLE,
         RAINDROPS,
         RAIN_STORM,
-        SHOWER
+        SHOWER,
+        RUSH
     }
     public enum Cha_in_gureumi_hard_patterns
     {
@@ -81,7 +82,7 @@ public class Pattern_state
     [SerializeField]public float time;
     [SerializeField]public sbyte simple_pattern_type;
     [SerializeField]public sbyte hard_pattern_type;
-    [SerializeField]public bool trans;
+    [SerializeField]public sbyte action_num;
 }
 public class Stage_setting
 {

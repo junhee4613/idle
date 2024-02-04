@@ -15,7 +15,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     public override void Simple_pattern()
     {
         base.Simple_pattern();
-        switch (Managers.GameManager.pattern_data[pattern_num].simple_pattern_type)
+        switch (Managers.GameManager.pattern_data[Managers.GameManager.pattern_num].simple_pattern_type)
         {
             case (sbyte)Cha_in_gureumi_hard_patterns.IDLE:
                 Idle();
@@ -36,7 +36,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     public override void Hard_pattern()
     {
         base.Hard_pattern();
-        switch (Managers.GameManager.pattern_data[pattern_num].hard_pattern_type)
+        switch (Managers.GameManager.pattern_data[Managers.GameManager.pattern_num].hard_pattern_type)
         {
             case (sbyte)Cha_in_gureumi_hard_patterns.IDLE:
                 Idle();
@@ -65,7 +65,8 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     }
     public void Rain_storm()
     {
-
+        Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Rain_drop")).transform.position = new Vector2(rain_drop.center_pos.position.x + Random.Range(-rain_drop.pos_x, rain_drop.pos_x), rain_drop.pos_y.position.y);
+        Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Rain_drop")).transform.position = new Vector2(rain_drop.center_pos.position.x + Random.Range(-rain_drop.pos_x, rain_drop.pos_x), rain_drop.pos_y.position.y);
     }
     public void Shower()
     {
