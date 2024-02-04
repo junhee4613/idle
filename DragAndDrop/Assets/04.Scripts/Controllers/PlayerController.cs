@@ -23,7 +23,7 @@ public class PlayerController : playerData
     Vector2 mouse_pos;
     Vector2 player_pos;
     Vector2 drag_dis;
-    bool hit_statu = false;
+    public bool hit_statu = false;
     float time;
     float player_rotation_z;
     float shoot_power_range;
@@ -61,12 +61,8 @@ public class PlayerController : playerData
     // Update is called once per frame
     void Update()
     {
-
-        if (Managers.GameManager.player_die)
-        {
-            return;
-        }
         //Drag_statu_walls_collider();
+        
         Interaction_obj();
         Key_operate();
         #region 여기부턴 개발자용 
@@ -115,6 +111,15 @@ public class PlayerController : playerData
     }
     private void FixedUpdate()      //감속은 여기서 처리해야 같은 범위까지만 움직여지는 것 같음
     {
+        if (hit_statu)
+        {
+            time += Time.fixedDeltaTime;
+            if(time > invincibility_time)
+            {
+                hit_statu = false;
+                time = 0;
+            }
+        }
         Run();
     }
     public void Key_operate()
@@ -137,7 +142,7 @@ public class PlayerController : playerData
             break_num = 0;
             spacebar_dir = rb.velocity.normalized;
             spacebar_mag = rb.velocity.magnitude;
-            rb.velocity = spacebar_dir * Mathf.Clamp(spacebar_mag - 4, 0, shoot_speed);
+            rb.velocity = spacebar_dir * Mathf.Clamp(spacebar_mag - speed_break, 0, shoot_speed);
             if (rb.velocity == Vector2.zero)
             {
                 player_statu = Player_statu.IDLE;
@@ -175,21 +180,22 @@ public class PlayerController : playerData
         rb.velocity = rb.velocity.normalized * (Mathf.Clamp(rb.velocity.magnitude - Time.fixedDeltaTime * gradually_down_speed, 0, shoot_speed));
     }
     
-    public override void Hit(float damage)
+    public void Hit()
     {
         if (!hit_statu)
         {
             hit_statu = true;
             if (!Managers.invincibility)
-                player_life -= (byte)damage;
+                player_life -= 1;
 
-            if (player_life <= 0)
+            if (player_life < 0)
             {
                 Managers.GameManager.player_die = true;
+                gameObject.SetActive(false);
                 Managers.GameManager.gameover();
                 return;
             }
-            StartCoroutine(invincibility());
+            //StartCoroutine(invincibility());
         }
     }
     IEnumerator invincibility()
@@ -209,20 +215,24 @@ public class PlayerController : playerData
     }
     public void Player_die_setActive()
     {
-        gameObject.SetActive(false);
+        Debug.Log("여기");
         Managers.GameManager.gameover -= Player_die_setActive;
     }
     public void Interaction_obj()
     {
-        interation_obj = Physics2D.OverlapCircleAll(transform.position, obj_size, 1 << 8);
-        
-        foreach (var item in interation_obj)
+        if (!hit_statu)
         {
-            if(item.TryGetComponent<IInteraction_obj>(out IInteraction_obj interaction))
+            interation_obj = Physics2D.OverlapCircleAll(transform.position, obj_size, 1 << 8);
+
+            foreach (var item in interation_obj)
             {
-                interaction.practice();
+                if (item.TryGetComponent<IInteraction_obj>(out IInteraction_obj interaction))
+                {
+                    interaction.practice();
+                }
             }
         }
+        
         
     }
     private void OnCollisionEnter2D(Collision2D collision)

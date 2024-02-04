@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 public abstract class Unit : MonoBehaviour
 {
-    public abstract void Hit(float damage);
 }
 
 
@@ -18,14 +17,9 @@ public class playerData : Unit
     [Header("피격 당한 후 무적 시간")]
     public float invincibility_time;
     [Header("처음 목숨 갯수")]
-    public byte player_life = 3;
-    
-
-
-    public override void Hit(float damage)
-    {
-
-    }
+    public int player_life = 3;
+    [Header("브레이크 크기")]
+    public byte speed_break = 3;
 }
 public enum Player_statu
 {
@@ -83,6 +77,7 @@ public class Pattern_state
     [SerializeField]public sbyte simple_pattern_type;
     [SerializeField]public sbyte hard_pattern_type;
     [SerializeField]public sbyte action_num;
+    [SerializeField]public bool ready;
 }
 public class Stage_setting
 {

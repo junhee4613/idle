@@ -11,10 +11,6 @@ public class Stage_base_controller : MonoBehaviour
     public sbyte hard_pattern_num;
     protected virtual void Awake()
     {
-        if(now_anim == null)
-        {
-            Debug.Log("이거때문임");
-        }
         anim_state.Anim_processing(ref an, gameObject, simple_pattern_num, hard_pattern_num);
     }
     // Start is called before the first frame update

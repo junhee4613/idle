@@ -10,8 +10,12 @@ public class ChaInGureumi : BossController          //비트는 80dlek
 {
     public Cha_in_gureumi_simple_patterns simple_pattern;
     public Cha_in_gureumi_hard_patterns hard_pattern;
-    Lightning_pattern lightning;
+    [Header("단일 번개 패턴")]
+    public Lightning_pattern lightning;
+    [Header("비 패턴")]
     public Rain_drop_pattern rain_drop;
+    [Header("비바람 패턴")]
+    public Rain_storm_pattern rain_storm;
     public override void Simple_pattern()
     {
         base.Simple_pattern();
@@ -65,8 +69,13 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     }
     public void Rain_storm()
     {
-        Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Rain_drop")).transform.position = new Vector2(rain_drop.center_pos.position.x + Random.Range(-rain_drop.pos_x, rain_drop.pos_x), rain_drop.pos_y.position.y);
-        Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Rain_drop")).transform.position = new Vector2(rain_drop.center_pos.position.x + Random.Range(-rain_drop.pos_x, rain_drop.pos_x), rain_drop.pos_y.position.y);
+        if (!Managers.GameManager.pattern_data[Managers.GameManager.pattern_num].ready)
+        {
+            Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Rain_drop")).transform.position = new Vector2(rain_storm.center_pos.position.x + Random.Range(-rain_storm.pos_x, rain_drop.pos_x), rain_storm.pos_y.position.y);
+            Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Rain_drop")).transform.position = new Vector2(rain_storm.center_pos.position.x + Random.Range(-rain_storm.pos_x, rain_drop.pos_x), rain_storm.pos_y.position.y);
+        }
+        
+        
     }
     public void Shower()
     {
@@ -141,6 +150,15 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     }
     [Serializable]
     public class Rain_drop_pattern
+    {
+        [Header("생성되는 높이")]
+        public Transform pos_y;
+        [Header("생성되는 x축 양의 범위")]
+        public float pos_x;
+        public Transform center_pos;
+    }
+    [Serializable]
+    public class Rain_storm_pattern
     {
         [Header("생성되는 높이")]
         public Transform pos_y;

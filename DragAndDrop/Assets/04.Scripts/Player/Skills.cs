@@ -61,23 +61,30 @@ public class Skills : MonoBehaviour
     }
     public void Key_Press()
     {
-        if (q_down)
+        if (!Managers.GameManager.game_stop)
         {
-            if(Time.timeScale != slow_speed)
+            if (q_down)
             {
-                Time.timeScale = slow_speed;
-                au.pitch = slow_speed;
-                Time.fixedDeltaTime = Time.deltaTime * slow_speed;
+                if (Time.timeScale != slow_speed)
+                {
+                    Time.timeScale = slow_speed;
+                    au.pitch = slow_speed;
+                    Time.fixedDeltaTime = Time.deltaTime * slow_speed;
+                }
             }
+            else
+            {
+                if (Time.timeScale != 1)
+                {
+                    Time.timeScale = 1f;
+                    Time.fixedDeltaTime = Time.deltaTime;
+                    au.pitch = 1;
+                }
+            } 
         }
         else
         {
-            if(Time.timeScale != 1)
-            {
-                Time.timeScale = 1f;
-                Time.fixedDeltaTime = Time.deltaTime;
-                au.pitch = 1;
-            }
+            au.pitch = 0;
         }
     }
 }

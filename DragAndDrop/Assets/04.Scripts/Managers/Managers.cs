@@ -9,7 +9,6 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
     public bool developer_mode = false;
     public bool invincibility = false;
     static Managers _instance;
-    public GameObject option;
     public static Managers instance { get { Init(); return _instance; } }
     private void Awake()
     {
@@ -36,7 +35,10 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
                 Init();
             }*/
         });
-        
+
+        GameManager.gameover += Game_system_stop;
+
+
     }
     private void Start()
     {
@@ -63,11 +65,23 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
         {
             if (UI_jun.UI_window_on["Option"].activeSelf)
             {
+                GameManager.game_stop = false;
                 UI_jun.UI_window_off.Peek().SetActive(false);
+                if(GameManager.scene_name != "Main_screen")
+                {
+                    Sound.bgSound.pitch = 1;
+                }
+                Time.timeScale = 1;
             }
             else
             {
+                GameManager.game_stop = true;
                 UI_jun.UI_window_on["Option"].SetActive(true);
+                Time.timeScale = 0;
+                if (GameManager.scene_name != "Main_screen")
+                {
+                    Sound.bgSound.pitch = 0;
+                }
                 UI_jun.UI_window_off.Push(UI_jun.UI_window_on["Option"]);
 
             }
@@ -79,7 +93,11 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
 
         yield return null;
     }*/
-
+    public void Game_system_stop()
+    {
+        Time.timeScale = 0;
+        Sound.bgSound.pitch = 0;
+    }
 
     
     public static SoundManager Sound { get { return instance?._sound; } }
