@@ -43,48 +43,40 @@ public class Skills : MonoBehaviour
     }
     public void FixedUpdate()
     {
-        Key_Press();
     }
     public void Skill()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            
-            q_down = true;
-        }
-        else if (Input.GetKeyUp(KeyCode.Q))
-        {
-            
-            q_down = false;
-        }
-        
-    }
-    public void Key_Press()
-    {
         if (!Managers.GameManager.game_stop)
         {
-            if (q_down)
+            if (Input.GetKeyDown(KeyCode.Q))
             {
+
                 if (Time.timeScale != slow_speed)
                 {
                     Time.timeScale = slow_speed;
                     au.pitch = slow_speed;
                     Time.fixedDeltaTime = Time.deltaTime * slow_speed;
+                    Debug.Log(Time.fixedDeltaTime);
                 }
             }
-            else
+            if (Input.GetKeyUp(KeyCode.Q))
             {
+
                 if (Time.timeScale != 1)
                 {
                     Time.timeScale = 1f;
                     Time.fixedDeltaTime = Time.deltaTime;
                     au.pitch = 1;
+                    Debug.Log(Time.fixedDeltaTime);
                 }
-            } 
+            }
         }
         else
         {
             au.pitch = 0;
         }
+        
+        
     }
+    
 }

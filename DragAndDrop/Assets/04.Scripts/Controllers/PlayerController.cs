@@ -12,12 +12,16 @@ public class PlayerController : playerData
     //Drag_statu_walls_collider(); 이 함수가 실행이 생각대로 안됨
     // 스킬을 구현해야되는데 이거 어떻게 데이터를 정리할지 고민중 스킬들의 정보는 json으로 저장
     public Rigidbody2D rb;
-    public CircleCollider2D cc;
+    public CapsuleCollider2D cc;
     public GameObject shoot_dir_image;
     public Transform arrow_rotation_base;
     public float obj_size;
     public AudioClip bounce_sound;
-
+    public GameObject player;
+    [Header("플레이어 사이즈")]
+    public float player_size;
+    [Header("플레이어 사이즈 배율 1이 기본 값")]
+    public float player_size_magnification;
     #region 클래스 안에서 해결할것들
     sbyte break_num = 0;
     Vector2 mouse_pos;
@@ -155,7 +159,8 @@ public class PlayerController : playerData
         {
             drag_dis = new Vector3(player_pos.x - mouse_pos.x, player_pos.y - mouse_pos.y, 0);
             player_rotation_z = Mathf.Atan2(drag_dis.normalized.y, drag_dis.normalized.x) * Mathf.Rad2Deg;
-            arrow_rotation_base.rotation = Quaternion.Euler(0, 0, player_rotation_z - 90); 
+            player.transform.rotation = Quaternion.Euler(0, 0, player_rotation_z - 90);
+            player.transform.localScale = new Vector3(player.transform.localScale.x, Mathf.Clamp(player_size + (drag_dis.magnitude / player_size_magnification), player_size, player_size + (shoot_speed / player_size_magnification)));
             if (Input.GetMouseButtonUp(0))      //여기에 누르는 동안 시간이 흘러가고 너무 많이 흐르면 피해를 입는 로직으로 일단 추가
             {
                 if (break_num == 0)
@@ -166,9 +171,22 @@ public class PlayerController : playerData
                 shoot_power_range = Mathf.Clamp(drag_dis.magnitude, Mathf.Abs(slow_speed), Mathf.Abs(shoot_speed));
                 transform.rotation = arrow_rotation_base.rotation;
                 rb.velocity = Vector2.zero;
+                StopCoroutine(Pingpong_effect());
+                StartCoroutine(Pingpong_effect());
+                //player.transform.localScale = Vector3.one * player_size;
                 Drag_shoot();
             }
         }
+    }
+    IEnumerator Pingpong_effect()
+    {
+        while (player.transform.localScale.y != player_size)
+        {
+            player.transform.localScale = new Vector3(transform.localScale.x, Mathf.Clamp(transform.localScale.y - Time.fixedDeltaTime * 50, player_size, player_size + (shoot_speed / player_size_magnification)), transform.localScale.z);
+            Debug.Log(Time.fixedDeltaTime);
+            yield return null;
+        }
+        player.transform.DOPunchScale(Vector3.one * 0.2f, 0.2f);
     }
     public void Drag_shoot()
     {
