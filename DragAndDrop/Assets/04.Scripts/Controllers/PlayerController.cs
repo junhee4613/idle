@@ -186,7 +186,7 @@ public class PlayerController : playerData
             Debug.Log(Time.fixedDeltaTime);
             yield return null;
         }
-        player.transform.DOPunchScale(Vector3.one * 0.2f, 0.2f);
+        //player.transform.DOPunchScale(Vector3.one * 0.2f, 0.2f);
     }
     public void Drag_shoot()
     {
@@ -233,7 +233,6 @@ public class PlayerController : playerData
     }
     public void Player_die_setActive()
     {
-        Debug.Log("¿©±â");
         Managers.GameManager.gameover -= Player_die_setActive;
     }
     public void Interaction_obj()
@@ -250,8 +249,8 @@ public class PlayerController : playerData
                 }
             }
         }
-        
-        
+
+
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
