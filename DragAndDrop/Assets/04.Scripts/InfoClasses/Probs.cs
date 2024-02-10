@@ -71,6 +71,21 @@ interface IInteraction_obj
     void practice();
 }
 [System.Serializable]
+public class Pattern_base_data
+{
+    public List<Pattern_state_date> pattenr_data = new List<Pattern_state_date>();
+    [HideInInspector]
+    public sbyte pattern_count = 0;
+    [HideInInspector]
+    public bool pattern_ending = false;
+}
+public class Pattern_state_date 
+{
+    public float time;
+    public sbyte action_num;
+}
+
+[System.Serializable]
 public class Pattern_state
 {
     [SerializeField]public float time;

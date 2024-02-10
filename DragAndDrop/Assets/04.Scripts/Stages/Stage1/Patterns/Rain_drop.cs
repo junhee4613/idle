@@ -4,7 +4,21 @@ using UnityEngine;
 
 public class Rain_drop : MonoBehaviour, IInteraction_obj
 {
-    [Header("처음에 날아가는 최대 각도")]
+    [Header("떨어지는 속도")]
+    public float gravity_value;
+    private void FixedUpdate()
+    {
+        transform.position -= new Vector3(gravity_value * Time.fixedDeltaTime * Mathf.Sin(transform.rotation.eulerAngles.z), gravity_value * Time.fixedDeltaTime * Mathf.Cos(transform.rotation.eulerAngles.z), 0);
+    }
+
+    public void practice()
+    {
+        //time = 0;
+        Managers.GameManager.Player.Hit();
+        Managers.Pool.Push(this.gameObject);
+    }
+}
+/*[Header("처음에 날아가는 최대 각도")]
     public float rotation_z;
     [Header("초기에 날아가는 힘")]
     public float shoot_power;
@@ -167,12 +181,4 @@ public class Rain_drop : MonoBehaviour, IInteraction_obj
         {
             right_tilt = false;
         }
-    }
-
-    public void practice()
-    {
-        time = 0;
-        Managers.GameManager.Player.Hit();
-        Managers.Pool.Push(this.gameObject);
-    }
-}
+    }*/
