@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Portal : MonoBehaviour, IInteraction_obj
 {
+    public GameObject barricade;
     public void Awake()
     {
         gameObject.TryGetComponent<BoxCollider2D>(out BoxCollider2D bc);
@@ -15,6 +16,14 @@ public class Portal : MonoBehaviour, IInteraction_obj
         if (gameObject.layer == 0)
         {
             gameObject.layer = 8;
+        }
+        if(barricade == null)
+        {
+            barricade = GameObject.Find(this.name + "_barricade");
+        }
+        if (Managers.GameManager.stage_clear[this.gameObject.name])
+        {
+            barricade.SetActive(false);
         }
     }
     private void Start()
