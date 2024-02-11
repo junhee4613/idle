@@ -40,6 +40,10 @@ public class Single_lightning : MonoBehaviour
                 {
                     lightning.SetActive(true);
                 }
+                else
+                {
+                    //FIX : 번개 좌우 반전 로직
+                }
             }
             else
             {
