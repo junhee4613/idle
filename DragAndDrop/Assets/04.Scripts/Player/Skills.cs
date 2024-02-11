@@ -39,7 +39,10 @@ public class Skills : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Key_press();
+        if (Managers.GameManager.game_start)
+        {
+            Key_press();
+        }
     }
     public void FixedUpdate()
     {

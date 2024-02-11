@@ -35,7 +35,6 @@ public class SoundManager : MonoBehaviour
     {
         bgSound.clip = clip;
         bgSound.outputAudioMixerGroup = mixer.FindMatchingGroups("BGM_sound_volume")[0];
-        Managers.GameManager.game_start = true;
         if (Managers.GameManager.scene_name.Contains("Stage"))
         {
             bgSound.loop = false;

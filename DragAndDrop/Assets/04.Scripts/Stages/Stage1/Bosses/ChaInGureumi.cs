@@ -19,12 +19,26 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     public Rush_pattern rush_pattern;
     [Header("단일 번개 패턴")]
     public Lightning_pattern lightning;
+    public GameObject camera_obj;
     protected override void Awake()
     {
         base.Awake();
         rain_storm.pattenr_data = JsonConvert.DeserializeObject<List<Pattern_state_date>>(Managers.Resource.Load<TextAsset>("Rain_storm_data").text);
         rush_pattern.pattenr_data = JsonConvert.DeserializeObject<List<Pattern_state_date>>(Managers.Resource.Load<TextAsset>("Cloud_rush_data").text);
 
+    }
+    public void Start()
+    {
+        StartCoroutine(Temp_method());
+    }
+    IEnumerator Temp_method()
+    {
+        while (camera_obj.transform.position.y != 0)
+        {
+            camera_obj.transform.position = new Vector3(camera_obj.transform.position.x, Mathf.Clamp(camera_obj.transform.position.y + Time.deltaTime * 5, -11, 0), camera_obj.transform.position.z);
+            yield return null;
+        }
+        Managers.GameManager.game_start = true;
     }
     public override void Pattern_processing()
     {

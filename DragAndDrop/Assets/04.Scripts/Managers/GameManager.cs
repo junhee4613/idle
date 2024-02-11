@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviour        //여기서 비트를 관리
     }
     public void Next_sceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        game_start = false;
         scene_name = scene.name;
         Managers.Pool.Clear();
         switch (scene_name)
