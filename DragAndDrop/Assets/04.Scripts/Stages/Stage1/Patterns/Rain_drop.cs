@@ -6,11 +6,23 @@ public class Rain_drop : MonoBehaviour, IInteraction_obj
 {
     [Header("떨어지는 속도")]
     public float gravity_value;
+    [Header("사라지는 시간")]
+    public float push_time;
+    float time = 0;
     private void FixedUpdate()
     {
-        transform.position -= new Vector3(gravity_value * Time.fixedDeltaTime * Mathf.Sin(transform.rotation.eulerAngles.z), gravity_value * Time.fixedDeltaTime * Mathf.Cos(transform.rotation.eulerAngles.z), 0);
-    }
+        time += Time.fixedDeltaTime;
+        transform.position += new Vector3(gravity_value * Time.fixedDeltaTime * Mathf.Sin(transform.rotation.eulerAngles.z * Mathf.Deg2Rad), -gravity_value * Time.fixedDeltaTime * Mathf.Abs(Mathf.Cos(transform.rotation.eulerAngles.z * Mathf.Deg2Rad)), 0);
+        if(time >= push_time)
+        {
+            Managers.Pool.Push(this.gameObject);
+        }
 
+    }
+    private void OnEnable()
+    {
+        time = 0;
+    }
     public void practice()
     {
         //time = 0;

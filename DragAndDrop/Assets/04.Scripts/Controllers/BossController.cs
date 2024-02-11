@@ -15,6 +15,8 @@ public abstract class BossController : Stage_base_controller
     {
         if (Managers.GameManager.game_start)
         {
+            Managers.UI_jun.timer.value = Mathf.Clamp(Managers.UI_jun.timer.value - Time.fixedDeltaTime, 0, Managers.UI_jun.timer.value);
+            Managers.UI_jun.timer.value -= 1f / Managers.GameManager.bgm_length * Time.fixedDeltaTime;
             if (boss_hp > 0)
             {
                 Pattern_processing();

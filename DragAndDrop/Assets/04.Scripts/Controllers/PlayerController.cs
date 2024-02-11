@@ -183,7 +183,6 @@ public class PlayerController : playerData
         while (player.transform.localScale.y != player_size)
         {
             player.transform.localScale = new Vector3(transform.localScale.x, Mathf.Clamp(transform.localScale.y - Time.fixedDeltaTime * 50, player_size, player_size + (shoot_speed / player_size_magnification)), transform.localScale.z);
-            Debug.Log(Time.fixedDeltaTime);
             yield return null;
         }
         //player.transform.DOPunchScale(Vector3.one * 0.2f, 0.2f);
@@ -204,9 +203,12 @@ public class PlayerController : playerData
         {
             hit_statu = true;
             if (!Managers.invincibility)
+            {
                 player_life -= 1;
+                Managers.UI_jun.player_hp[player_life].SetActive(false);
+            }
 
-            if (player_life < 0)
+            if (player_life <= 0)
             {
                 Managers.GameManager.player_die = true;
                 gameObject.SetActive(false);
@@ -233,7 +235,7 @@ public class PlayerController : playerData
     }
     public void Player_die_setActive()
     {
-        Managers.GameManager.gameover -= Player_die_setActive;
+        //플레이어 죽은 후 처리 애니메이션이 작동한다든지 등등
     }
     public void Interaction_obj()
     {

@@ -43,10 +43,6 @@ public class Skills : MonoBehaviour
     }
     public void FixedUpdate()
     {
-        
-        Debug.Log(Time.deltaTime);
-        Debug.Log(Time.fixedDeltaTime);
-
         Skill();
     }
     public void Skill()

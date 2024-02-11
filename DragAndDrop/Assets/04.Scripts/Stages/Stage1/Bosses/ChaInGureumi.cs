@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
 using Cha_in_gureumi;
+using Newtonsoft.Json;
 
 
 public class ChaInGureumi : BossController          //비트는 80dlek
@@ -21,46 +22,164 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     protected override void Awake()
     {
         base.Awake();
+        rain_storm.pattenr_data = JsonConvert.DeserializeObject<List<Pattern_state_date>>(Managers.Resource.Load<TextAsset>("Rain_storm_data").text);
+        rush_pattern.pattenr_data = JsonConvert.DeserializeObject<List<Pattern_state_date>>(Managers.Resource.Load<TextAsset>("Cloud_rush_data").text);
+
     }
     public override void Pattern_processing()
     {
         base.Pattern_processing();
-       /* if (rain_drop.pattenr_data[rain_drop.pattern_count].time >= Managers.Sound.bgSound.time && !rain_drop.pattern_ending)
+        /* if (rain_drop.pattenr_data[rain_drop.pattern_count].time >= Managers.Sound.bgSound.time && !rain_drop.pattern_ending)
+         {
+             Rain_drop();
+             rain_drop.pattern_count++;
+             if(rain_drop.pattenr_data.Count == rain_drop.pattern_count)
+             {
+                 rain_drop.pattern_ending = true;
+             }
+         }*/
+        if (!rain_storm.pattern_ending)
         {
-            Rain_drop();
-            rain_drop.pattern_count++;
-            if(rain_drop.pattenr_data.Count == rain_drop.pattern_count)
+            if (!rain_storm.pattern_ending && rain_storm.rain_trans.Count != 0 && rain_storm.pattern_starting)
             {
-                rain_drop.pattern_ending = true;
+                switch (rain_storm.pattenr_data[rain_storm.pattern_count].action_num)
+                {
+                    case 0:         //가운데(바람 빨아들이는 애니메이션)
+                        if(rain_storm.pos_x_critaria != 0)
+                        {
+                            rain_storm.pos_x_critaria = 0;
+                        }
+                        if (rain_storm.rain_trans[rain_storm.rain_trans.Count - 1].rotation.eulerAngles.z != 0)
+                        {
+                            rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.identity, rain_storm.rotation_speed * Time.fixedDeltaTime);
+                            foreach (var item in rain_storm.rain_trans)
+                            {
+                                item.rotation = rain_storm.criteria;
+                            }
+                        }
+                        break;
+                    case 1:         //왼쪽(왼쪽 방향으로 부는 애니메이션)
+                        if (rain_storm.pos_x_critaria != rain_storm.pos_x_criteria_option)
+                        {
+                            rain_storm.pos_x_critaria = -rain_storm.pos_x_criteria_option;
+                        }
+                        if (rain_storm.rain_trans[rain_storm.rain_trans.Count - 1].rotation.eulerAngles.z != 315)
+                        {
+
+                            rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.Euler(0, 0, 315), rain_storm.rotation_speed * Time.fixedDeltaTime);
+                            foreach (var item in rain_storm.rain_trans)
+                            {
+                                item.rotation = rain_storm.criteria;
+                            }
+                        }
+                        break;
+                    case 2:     //오른쪽(오른쪽으로 부는 애니메이션)
+                        if (rain_storm.pos_x_critaria != rain_storm.pos_x_criteria_option)
+                        {
+                            rain_storm.pos_x_critaria = rain_storm.pos_x_criteria_option;
+                        }
+                        if (rain_storm.rain_trans[rain_storm.rain_trans.Count - 1].rotation.eulerAngles.z != 45)
+                        {
+                            rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.Euler(0, 0, 45), rain_storm.rotation_speed * Time.fixedDeltaTime);
+                            foreach (var item in rain_storm.rain_trans)
+                            {
+                                item.rotation = rain_storm.criteria;
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
-        }*/
-        if (rain_storm.pattenr_data[rain_storm.pattern_count].time >= Managers.Sound.bgSound.time && !rain_storm.pattern_ending)
-        {
-            Rain_storm();
-            rain_storm.pattern_count++;
-            if (rain_storm.pattenr_data.Count == rain_storm.pattern_count)
+            /*rain_storm.time += Time.fixedDeltaTime;
+            if (rain_storm.time >= 0.375f)          //나중에 방향이 바뀌는 구간만 따로 명시하기
             {
-                rain_storm.pattern_ending = true;
+                rain_storm.time -= 0.375f;
+                Rain_storm();
+                if (Managers.Sound.bgSound.time == 17)
+                {
+                    rain_storm.pattern_ending = true;
+                }
+            }*/
+            if (rain_storm.pattenr_data[rain_storm.pattern_count].time <= Managers.Sound.bgSound.time)
+            {
+                if (!rain_storm.pattern_starting)
+                {
+                    rain_storm.pattern_starting = true;
+                }
+                Rain_storm();
+
+                if (rain_storm.pattenr_data.Count - 1 == rain_storm.pattern_count)
+                {
+
+                    rain_storm.pattern_ending = true;
+                    rain_storm.pattern_starting = false;
+                }
+                else
+                {
+                    rain_storm.pattern_count++;
+
+                }
             }
         }
-        if (lightning.pattenr_data[lightning.pattern_count].time >= Managers.Sound.bgSound.time && !lightning.pattern_ending)
+
+
+
+        /*if (lightning.pattenr_data[lightning.pattern_count].time >= Managers.Sound.bgSound.time && !lightning.pattern_ending)
         {
             lightning.pattern_count++;
             if (lightning.pattenr_data.Count == lightning.pattern_count)
             {
                 lightning.pattern_ending = true;
             }
-        }
-        if (rush_pattern.pattenr_data[rush_pattern.pattern_count].time >= Managers.Sound.bgSound.time && !rush_pattern.pattern_ending)
+        }*/
+        
+        if (rush_pattern.pattenr_data[rush_pattern.pattern_count].time <= Managers.Sound.bgSound.time && !rush_pattern.pattern_ending)
         {
+            rush_pattern.pattern_starting = true;
             Rush();
-            rush_pattern.pattern_count++;
-            if (rush_pattern.pattenr_data.Count == rush_pattern.pattern_count)
+           
+        }
+        if (rush_pattern.pattern_starting)
+        {
+            switch ((rush_pattern.pattenr_data[rush_pattern.pattern_count].action_num))
             {
-                rush_pattern.pattern_ending = true;
+                case 0:
+                    transform.Translate(new Vector3(0, rush_pattern.up_move_speed * Time.fixedDeltaTime, 0));
+                    if (rush_pattern.time >= 0.5f)
+                    {
+                        rush_pattern.time -= 0.5f;
+
+                        rush_pattern.pattern_count++;
+                        if (rush_pattern.pattenr_data.Count == rush_pattern.pattern_count)
+                        {
+                            rush_pattern.pattern_ending = true;
+                            rush_pattern.pattern_starting = false;
+                        }
+                    }
+                    rush_pattern.time += Time.fixedDeltaTime;
+                    break;
+                case 2:
+                    transform.Translate(new Vector3(rush_pattern.rush_speed * Time.fixedDeltaTime, 0, 0));
+                    if (rush_pattern.time >= 0.5f)
+                    {
+                        rush_pattern.time -= 0.5f;
+
+                        rush_pattern.pattern_count++;
+                        if (rush_pattern.pattenr_data.Count == rush_pattern.pattern_count)
+                        {
+                            rush_pattern.pattern_ending = true;
+                            rush_pattern.pattern_starting = false;
+                        }
+                    }
+                    rush_pattern.time += Time.fixedDeltaTime;
+                    break; 
+                default:
+                    break;
             }
+
         }
-        if (lightning.pattenr_data[lightning.pattern_count].time >= Managers.Sound.bgSound.time)
+        /*if (lightning.pattenr_data[lightning.pattern_count].time >= Managers.Sound.bgSound.time)
         {
 
         }
@@ -75,72 +194,52 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         if (lightning.pattenr_data[lightning.pattern_count].time >= Managers.Sound.bgSound.time)
         {
 
-        }
+        }*/
     }
-    /*public override void Simple_pattern()
-    {
-        base.Simple_pattern();
-        switch (Managers.GameManager.pattern_data[Managers.GameManager.pattern_num].simple_pattern_type)
-        {
-            case (sbyte)Cha_in_gureumi_hard_patterns.IDLE:
-                Idle();
-                break;
-            case (sbyte)Cha_in_gureumi_simple_patterns.RAINDROPS:
-                Rain_drop();
-                break;
-            case (sbyte)Cha_in_gureumi_simple_patterns.RAIN_STORM:
-                Rain_storm();
-                break;
-            case (sbyte)Cha_in_gureumi_simple_patterns.SHOWER:
-                Shower();
-                break;
-            case (sbyte)Cha_in_gureumi_simple_patterns.RUSH:
-                Rush();
-                break;
-            default:
-                break;
-        }
-    }
-    public override void Hard_pattern()
-    {
-        base.Hard_pattern();
-        switch (Managers.GameManager.pattern_data[Managers.GameManager.pattern_num].hard_pattern_type)
-        {
-            case (sbyte)Cha_in_gureumi_hard_patterns.IDLE:
-                Idle();
-                break;
-            case (sbyte)Cha_in_gureumi_hard_patterns.BROAD_LIGHTNING:
-                Broad_lightning();
-                break;
-            case (sbyte)Cha_in_gureumi_hard_patterns.LIGHTNING_BALL:
-                Lightning_ball();
-                break;
-            case (sbyte)Cha_in_gureumi_hard_patterns.SINGLE_LIGHTNING:
-                Single_lightning();
-                break;
-            default:
-                break;
-        }
-    }*/
    
     public void Idle()
     {
         Anim_state_machin(anim_state["simple_pattern0"]);
     }
-    /*public void Rain_drop()
-    {
-        Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Rain_drop")).transform.position = new Vector2(rain_drop.center_pos.position.x + Random.Range(-rain_drop.pos_x, rain_drop.pos_x), rain_drop.pos_y.position.y);
-        Anim_state_machin(anim_state["simple_pattern1"]);
-    }*/
     public void Rain_storm()
     {
-        if (!Managers.GameManager.pattern_data[Managers.GameManager.pattern_num].ready)
+        GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Rain_drop"));
+        temp.transform.position = new Vector3(rain_storm.pos_x[rain_storm.pos_x_count] + rain_storm.pos_x_critaria, rain_storm.pos_y, 0);
+        temp.transform.rotation = rain_storm.criteria;
+        switch (rain_storm.pattenr_data[rain_storm.pattern_count].action_num)
         {
-            Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Rain_drop")).transform.position = new Vector2(rain_storm.center_pos.position.x + Random.Range(-rain_storm.pos_x, rain_drop.pos_x), rain_storm.pos_y.position.y);
-            Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Rain_drop")).transform.position = new Vector2(rain_storm.center_pos.position.x + Random.Range(-rain_storm.pos_x, rain_drop.pos_x), rain_storm.pos_y.position.y);
+            case 0:         //가운데(바람 빨아들이는 애니메이션)
+                if (!rain_storm.rain_hash.Contains(temp.GetInstanceID().ToString()))
+                {
+                    rain_storm.rain_hash.Add(temp.GetInstanceID().ToString());
+                    rain_storm.rain_trans.Add(temp.transform);
+                }
+                break;
+            case 1:         //왼쪽(왼쪽 방향으로 부는 애니메이션)
+                if (!rain_storm.rain_hash.Contains(temp.GetInstanceID().ToString()))
+                {
+                    rain_storm.rain_hash.Add(temp.GetInstanceID().ToString());
+                    rain_storm.rain_trans.Add(temp.transform);
+                }
+                break;
+            case 2:     //오른쪽(오른쪽으로 부는 애니메이션)
+                if (!rain_storm.rain_hash.Contains(temp.GetInstanceID().ToString()))
+                {
+                    rain_storm.rain_hash.Add(temp.GetInstanceID().ToString());
+                    rain_storm.rain_trans.Add(temp.transform);
+                }
+                break;
+            default:
+                break;
         }
-        
-        
+        if(rain_storm.pos_x_count == rain_storm.pos_x.Length - 1)
+        {
+            rain_storm.pos_x_count = 0;
+        }
+        else
+        {
+            rain_storm.pos_x_count++;
+        }
     }
     public void Shower()
     {
@@ -150,39 +249,67 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     {
         switch ((rush_pattern.pattenr_data[rush_pattern.pattern_count].action_num))
         {
-            case 0:
-                transform.Translate(new Vector3(0, rush_pattern.up_move_speed * Time.fixedDeltaTime, 0));
-                break;
             case 1:
                 for (int i = 0; i < rush_pattern.rush_pos_deciding_count[rush_pattern.rush_pattern_num]; i++)
                 {
+                    Debug.Log(i);
                     rush_pattern.rush_height.Enqueue(rush_pattern.pos_y[rush_pattern.pos_y_count]);
-                    if(rush_pattern.pos_y_count != rush_pattern.pos_y.Length - 1)
+                    if (rush_pattern.pos_y_count != rush_pattern.pos_y.Length - 1)
                     {
                         rush_pattern.pos_y_count++;
                     }
                 }
-                if(rush_pattern.rush_pos_deciding_count.Length - 1 != rush_pattern.rush_pattern_num)
+                if (rush_pattern.rush_pos_deciding_count.Length - 1 != rush_pattern.rush_pattern_num)
                 {
                     rush_pattern.rush_pattern_num++;
                 }
-                rush_pattern.rush_start = false;
+                rush_pattern.pattern_count++;
+                if (rush_pattern.pattenr_data.Count == rush_pattern.pattern_count)
+                {
+                    rush_pattern.pattern_ending = true;
+                    rush_pattern.pattern_starting = false;
+                }
                 break;
             case 2:
-                if (!rush_pattern.rush_start)
-                {
-                    rush_pattern.rush_start = true;
-                    transform.position = new Vector3(rush_pattern.pos_x_dir[rush_pattern.rush_count], rush_pattern.rush_height.Dequeue(), 0);
-                    rush_pattern.rush_speed = rush_pattern.rush_speed_option * rush_pattern.pos_x_dir[rush_pattern.rush_count];
-                    if (rush_pattern.rush_count != rush_pattern.pos_x_dir.Length - 1)
-                    {
-                        rush_pattern.rush_count++;
-                    }
-                }
-                transform.Translate(new Vector3(0,rush_pattern.rush_speed * Time.fixedDeltaTime, 0 ));
+                Debug.Log(rush_pattern.rush_height.Count);
+                transform.position = new Vector3( rush_pattern.pos_x * rush_pattern.pos_x_dir[rush_pattern.rush_count], rush_pattern.rush_height.Dequeue(), 0);
+                rush_pattern.rush_speed = rush_pattern.rush_speed_option * rush_pattern.pos_x_dir[rush_pattern.rush_count];
                 break;
             default:
                 break;
+                /*case 0:
+                    transform.Translate(new Vector3(0, rush_pattern.up_move_speed * Time.fixedDeltaTime, 0));
+                    break;
+                case 1:
+                    for (int i = 0; i < rush_pattern.rush_pos_deciding_count[rush_pattern.rush_pattern_num]; i++)
+                    {
+                        rush_pattern.rush_height.Enqueue(rush_pattern.pos_y[rush_pattern.pos_y_count]);
+                        if(rush_pattern.pos_y_count != rush_pattern.pos_y.Length - 1)
+                        {
+                            rush_pattern.pos_y_count++;
+                        }
+                    }
+                    if(rush_pattern.rush_pos_deciding_count.Length - 1 != rush_pattern.rush_pattern_num)
+                    {
+                        rush_pattern.rush_pattern_num++;
+                    }
+                    rush_pattern.rush_start = false;
+                    break;
+                case 2:
+                    if (!rush_pattern.rush_start)
+                    {
+                        rush_pattern.rush_start = true;
+                        transform.position = new Vector3(rush_pattern.pos_x_dir[rush_pattern.rush_count], rush_pattern.rush_height.Dequeue(), 0);
+                        rush_pattern.rush_speed = rush_pattern.rush_speed_option * rush_pattern.pos_x_dir[rush_pattern.rush_count];
+                        if (rush_pattern.rush_count != rush_pattern.pos_x_dir.Length - 1)
+                        {
+                            rush_pattern.rush_count++;
+                        }
+                    }
+                    transform.Translate(new Vector3(0,rush_pattern.rush_speed * Time.fixedDeltaTime, 0 ));
+                    break;
+                default:
+                    break;*/
         }
     }
     public void Broad_lightning()
@@ -252,8 +379,8 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         [HideInInspector]
         public int pos_select_range;
     }
-    [Serializable]
-    /*public class Rain_drop_pattern : Pattern_base_data
+    /*[Serializable]
+    public class Rain_drop_pattern : Pattern_base_data
     {
         [Header("생성되는 높이")]
         public Transform pos_y;
@@ -265,10 +392,25 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     public class Rain_storm_pattern : Pattern_base_data
     {
         [Header("생성되는 높이")]
-        public Transform pos_y;
-        [Header("생성되는 x축 양의 범위")]
-        public float pos_x;
-        public Transform center_pos;
+        public float pos_y;
+        [Header("생성되는 x축 위치들")]
+        public float[] pos_x;
+        [Header("회전하는 속도")]
+        public float rotation_speed;
+        [Header("바람 방향이 바뀔 때 생성해야되는 위치가 원점으로 부터 몇이나 떨어져야되는지 할당")]
+        public float pos_x_criteria_option;
+        [HideInInspector]
+        public sbyte pos_x_count;
+        [HideInInspector]
+        public List<Transform> rain_trans = new List<Transform>();
+        [HideInInspector]
+        public HashSet<string> rain_hash = new HashSet<string>();
+        [HideInInspector]
+        public Quaternion criteria;
+        [HideInInspector]
+        public float pos_x_critaria;
+        [HideInInspector]
+        public float time;
     }
     [Serializable]
     public class Rush_pattern : Pattern_base_data
@@ -295,8 +437,9 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         public sbyte rush_pattern_num;      //돌진패턴이 한번 끝날 때마다 증가하는 변수
         [HideInInspector]
         public sbyte rush_count;              //실질적으로 돌진한 횟수
-        [HideInInspector]
-        public bool rush_start = false;
+        public float time;
+        /*[HideInInspector]
+        public bool rush_start = false;*/
 
     }
 }

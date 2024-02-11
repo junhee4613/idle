@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour        //여기서 비트를 관리
     public List<Pattern_state> pattern_data = new List<Pattern_state>();
     PlayerController player;
     public string scene_name;
+    public GameObject player_obj;
+    public GameObject player_box;
 
     public PlayerController Player 
     { 
@@ -30,11 +32,15 @@ public class GameManager : MonoBehaviour        //여기서 비트를 관리
     public bool player_die = false;
     public Action gameover;
     public float beat;
-    public float bmg_length;        //음악 진행 시간
+    public float bgm_length;        //음악 진행 시간
     public bool game_start = false;
     public sbyte pattern_num;
     public bool game_stop = false;
-
+    public void Init()
+    {
+        player_obj = Managers.Resource.Load<GameObject>("Player");
+        player_box = Managers.Resource.Load<GameObject>("Player_box");
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -53,6 +59,7 @@ public class GameManager : MonoBehaviour        //여기서 비트를 관리
     public void Next_sceneLoaded(Scene scene, LoadSceneMode mode)
     {
         scene_name = scene.name;
+        Managers.Pool.Clear();
         switch (scene_name)
         {
             case "Stage1":
@@ -61,19 +68,13 @@ public class GameManager : MonoBehaviour        //여기서 비트를 관리
             default:
                 break;
         }
-        Managers.UI_jun.option_window_on = false;
+        if (scene_name.Contains("Stage"))
+        {
+        }
+        Managers.UI_jun.option_window_on = false;           //FIX : 이거 왜 있는지 모르겠음 
     }
     public void Stage1()
     {
-        TextAsset temp = Managers.Resource._resources["Stage1_data"] as TextAsset;
-        if(temp == null)
-        {
-            Debug.Log("널ㅇ이ㅑ");
-        }
-        else
-        {
-            Debug.Log(temp.text);
-        }
-        pattern_data = JsonConvert.DeserializeObject<List<Pattern_state>>(temp.text);
+        
     }
 }

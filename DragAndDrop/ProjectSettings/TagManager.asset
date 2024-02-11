@@ -58,6 +58,9 @@ TagManager:
   - name: Front_effect
     uniqueID: 2662981551
     locked: 0
+  - name: Timer
+    uniqueID: 3979424725
+    locked: 0
   - name: Player_box
     uniqueID: 1647982771
     locked: 0

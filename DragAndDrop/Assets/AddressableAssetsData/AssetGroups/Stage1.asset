@@ -29,14 +29,44 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2a5bdc111079f3d4fa78dc8aa88ea6ca
-    m_Address: Stage1_data
+  - m_GUID: 56c974da73615bb47b3bde41ba8758d7
+    m_Address: Cloud_rush_data
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 279382c77ce4d6849b8248f51d149490
     m_Address: Rain_drop
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 314e31365641f0b4aa2744a66fe01f6f
+    m_Address: Rain_storm_data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f054acdf6f51f484bb3b7536e528f45f
+    m_Address: Player
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a27b213100c439548a1c05c934f4d0b4
+    m_Address: Player_box
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0f21184c6c896b64e99509398f648c51
+    m_Address: Timer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5aa0ec3fa64d7cd4082c90615aa4f593
+    m_Address: Timer_canvas
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad

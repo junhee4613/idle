@@ -35,9 +35,22 @@ public class SoundManager : MonoBehaviour
     {
         bgSound.clip = clip;
         bgSound.outputAudioMixerGroup = mixer.FindMatchingGroups("BGM_sound_volume")[0];
-        bgSound.loop = true;
-        bgSound.Play();
         Managers.GameManager.game_start = true;
+        if (Managers.GameManager.scene_name.Contains("Stage"))
+        {
+            bgSound.loop = false;
+            Managers.GameManager.bgm_length = clip.length;
+            Managers.UI_jun.timer.maxValue = clip.length;
+            Managers.UI_jun.timer = GameObject.Find("Timer").GetComponent<Slider>();
+            Managers.UI_jun.timer.maxValue = clip.length;
+            Managers.UI_jun.timer.value = clip.length;
+        }
+        else
+        {
+            bgSound.loop = true;
+        }
+        bgSound.Play();
+
     }
     public void SFXSound(string name, AudioClip clip)           //나중에 오브젝트 풀링으로 관리하고 음악 클립은 어드레서블로 불러오기
     {
@@ -51,7 +64,10 @@ public class SoundManager : MonoBehaviour
         Destroy(go, clip.length);
     }
 
-
+    public void Game_over_sound()
+    {
+        bgSound.Stop();
+    }
 
     public void SetBGMVolume(float volume)
     {

@@ -47,11 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d3d7560a9957a246b8f4b1eba5027c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotation_z: 50
-  shoot_power: 3
-  simple_pattern_2_rotation: 45
-  rotation_zero_speed: 90
-  temp_gravity: 1
+  gravity_value: 4
   push_time: 5
 --- !u!58 &-3196022432943524645
 CircleCollider2D:
