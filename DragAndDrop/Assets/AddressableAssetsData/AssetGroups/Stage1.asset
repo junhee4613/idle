@@ -35,13 +35,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 279382c77ce4d6849b8248f51d149490
-    m_Address: Rain_drop
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 314e31365641f0b4aa2744a66fe01f6f
+  - m_GUID: b5d81ae0dff6346489630dc75768ffe2
     m_Address: Rain_storm_data
     m_ReadOnly: 0
     m_SerializedLabels:
@@ -67,6 +61,18 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5aa0ec3fa64d7cd4082c90615aa4f593
     m_Address: Timer_canvas
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 279382c77ce4d6849b8248f51d149490
+    m_Address: Rain_drop
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a8790122f76f17e4db8dfc1843e62021
+    m_Address: Shower_data
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad

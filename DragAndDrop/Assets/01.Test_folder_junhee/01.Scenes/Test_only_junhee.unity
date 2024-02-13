@@ -2311,21 +2311,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 407f10983950c014c98fe663ba310bce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rush_pattern:
-    pattern_count: 0
-    pattern_ending: 0
-    pattern_starting: 0
-    up_move_speed: 0
-    pos_y: []
-    rush_pos_deciding_count: 
-    pos_x_dir: 
-    pos_x: 0
-    rush_speed_option: 47.94
-    rush_speed: 0
-    pos_y_count: 0
-    rush_pattern_num: 0
-    rush_count: 0
-    time: 0
 --- !u!61 &1306143914
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2514,6 +2499,7 @@ MonoBehaviour:
     pattern_setting: 0
     lightning: {fileID: 0}
     pos_select_range: 0
+  camera_obj: {fileID: 0}
 --- !u!212 &1356917697
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2974,29 +2960,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 407f10983950c014c98fe663ba310bce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rush_pattern:
-    pattern_count: 0
-    pattern_ending: 0
-    pattern_starting: 0
-    up_move_speed: 5
-    pos_y:
-    - 1
-    - 3
-    - 1
-    - 3
-    - 1
-    - 3
-    - 1
-    - 3
-    rush_pos_deciding_count: 0202020101
-    pos_x_dir: 01ff01ff01ff01ff
-    pos_x: 13
-    rush_speed_option: 47.94
-    rush_speed: 0
-    pos_y_count: 0
-    rush_pattern_num: 0
-    rush_count: 0
-    time: 0
 --- !u!212 &1616388023
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4027,21 +3990,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 407f10983950c014c98fe663ba310bce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rush_pattern:
-    pattern_count: 0
-    pattern_ending: 0
-    pattern_starting: 0
-    up_move_speed: 0
-    pos_y: []
-    rush_pos_deciding_count: 
-    pos_x_dir: 
-    pos_x: 0
-    rush_speed_option: 47.94
-    rush_speed: 0
-    pos_y_count: 0
-    rush_pattern_num: 0
-    rush_count: 0
-    time: 0
 --- !u!4 &1822996915
 Transform:
   m_ObjectHideFlags: 0

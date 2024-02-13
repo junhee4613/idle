@@ -6,6 +6,7 @@ public abstract class BossController : Stage_base_controller
 {
     public sbyte gimmick_num = 4;
     protected sbyte boss_hp = 5;
+    public SpriteRenderer boss_image;
     //public Animator an;
     protected override void Awake()
     {
@@ -54,16 +55,18 @@ public abstract class BossController : Stage_base_controller
     {
 
     }*/
-    /*public void Anim_state_machin(string clip_name)
+    public void Anim_state_machin(string clip_name)
     {
-        if(an.GetCurrentAnimatorStateInfo(0). != clip_name)
+        /*if (an.GetCurrentAnimatorStateInfo(0). != clip_name)
         {
 
-        }
+        }*/
+        Debug.Log("동작");
         if (an.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
         {
+            Debug.Log("동작");
             an.Play(clip_name);
         }
 
-    }*/
+    }
 }
