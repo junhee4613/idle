@@ -73,16 +73,18 @@ interface IInteraction_obj
 [System.Serializable]
 public class Pattern_base_data
 {
-    public List<Pattern_state_date> pattenr_data = new List<Pattern_state_date>();
+    public List<Pattern_state_date> pattern_data = new List<Pattern_state_date>();
     [HideInInspector]
     public sbyte pattern_count = 0;
     public bool pattern_ending = false;
-    public bool pattern_starting = false;
+    [HideInInspector]
+    public float duration;
 }
 public class Pattern_state_date 
 {
     public float time;
     public sbyte action_num;
+    public float duration;
 }
 
 [System.Serializable]
@@ -109,6 +111,22 @@ public abstract class Anim_stage_state
 }
 namespace Stage_FSM
 {
+    public class Idle : Anim_stage_state
+    {
+        public override void On_state_enter()
+        {
+            an.Play("idle");
+        }
+
+        public override void On_state_exit()
+        {
+        }
+
+        public override void On_state_update(sbyte loop_num)
+        {
+        }
+    }
+
     public class Simple_pattern : Anim_stage_state
     {
         public Simple_pattern(string anim_name, Animator temp_an)

@@ -15,6 +15,8 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     public Rain_drop_pattern rain_drop;*/
     [Header("비바람 패턴")]
     public Rain_storm_pattern rain_storm;
+    [Header("소나기 패턴")]
+    public Shower_pattern shower;
     [Header("돌진 패턴")]
     public Rush_pattern rush_pattern;
     [Header("단일 번개 패턴")]
@@ -23,13 +25,15 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     protected override void Awake()
     {
         base.Awake();
-        rain_storm.pattenr_data = JsonConvert.DeserializeObject<List<Pattern_state_date>>(Managers.Resource.Load<TextAsset>("Rain_storm_data").text);
-        rush_pattern.pattenr_data = JsonConvert.DeserializeObject<List<Pattern_state_date>>(Managers.Resource.Load<TextAsset>("Cloud_rush_data").text);
+        rain_storm.pattern_data = JsonConvert.DeserializeObject<List<Pattern_state_date>>(Managers.Resource.Load<TextAsset>("Rain_storm_data").text);
+        rush_pattern.pattern_data = JsonConvert.DeserializeObject<List<Pattern_state_date>>(Managers.Resource.Load<TextAsset>("Cloud_rush_data").text);
+        shower.pattern_data = JsonConvert.DeserializeObject<List<Pattern_state_date>>(Managers.Resource.Load<TextAsset>("Shower_data").text);
 
     }
     public void Start()
     {
         StartCoroutine(Temp_method());
+        Anim_state_machin("idle");
     }
     IEnumerator Temp_method()
     {
@@ -43,69 +47,57 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     public override void Pattern_processing()
     {
         base.Pattern_processing();
-        /* if (rain_drop.pattenr_data[rain_drop.pattern_count].time >= Managers.Sound.bgSound.time && !rain_drop.pattern_ending)
-         {
-             Rain_drop();
-             rain_drop.pattern_count++;
-             if(rain_drop.pattenr_data.Count == rain_drop.pattern_count)
-             {
-                 rain_drop.pattern_ending = true;
-             }
-         }*/
-        if (!rain_storm.pattern_ending)
+        if((rain_storm.pattern_data[rain_storm.pattern_count].time <= Managers.Sound.bgSound.time || rain_storm.duration != 0) && !rain_storm.pattern_ending)
         {
-            if (!rain_storm.pattern_ending && rain_storm.rain_trans.Count != 0 && rain_storm.pattern_starting)
+            if(rain_storm.duration == 0)
             {
-                switch (rain_storm.pattenr_data[rain_storm.pattern_count].action_num)
+                rain_storm.duration = rain_storm.pattern_data[rain_storm.pattern_count].duration;
+            }
+            rain_storm.time -= Time.fixedDeltaTime;
+            if (rain_storm.time <= 0)          //나중에 방향이 바뀌는 구간만 따로 명시하기
+            {
+                rain_storm.time += 0.375f;
+                Rain_storm();
+            }
+            Rain_storm_rotation();
+            rain_storm.duration = Mathf.Clamp(rain_storm.duration - Time.fixedDeltaTime, 0, rain_storm.pattern_data[rain_storm.pattern_count].duration);
+            if (rain_storm.duration == 0)
+            {
+                rain_storm.pattern_count++;
+                if(rain_storm.pattern_data.Count == rain_storm.pattern_count)
                 {
-                    case 0:         //가운데(바람 빨아들이는 애니메이션)
-                        if(rain_storm.pos_x_critaria != 0)
-                        {
-                            rain_storm.pos_x_critaria = 0;
-                        }
-                        if (rain_storm.rain_trans[rain_storm.rain_trans.Count - 1].rotation.eulerAngles.z != 0)
-                        {
-                            rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.identity, rain_storm.rotation_speed * Time.fixedDeltaTime);
-                            foreach (var item in rain_storm.rain_trans)
-                            {
-                                item.rotation = rain_storm.criteria;
-                            }
-                        }
-                        break;
-                    case 1:         //왼쪽(왼쪽 방향으로 부는 애니메이션)
-                        if (rain_storm.pos_x_critaria != rain_storm.pos_x_criteria_option)
-                        {
-                            rain_storm.pos_x_critaria = -rain_storm.pos_x_criteria_option;
-                        }
-                        if (rain_storm.rain_trans[rain_storm.rain_trans.Count - 1].rotation.eulerAngles.z != 315)
-                        {
-
-                            rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.Euler(0, 0, 315), rain_storm.rotation_speed * Time.fixedDeltaTime);
-                            foreach (var item in rain_storm.rain_trans)
-                            {
-                                item.rotation = rain_storm.criteria;
-                            }
-                        }
-                        break;
-                    case 2:     //오른쪽(오른쪽으로 부는 애니메이션)
-                        if (rain_storm.pos_x_critaria != rain_storm.pos_x_criteria_option)
-                        {
-                            rain_storm.pos_x_critaria = rain_storm.pos_x_criteria_option;
-                        }
-                        if (rain_storm.rain_trans[rain_storm.rain_trans.Count - 1].rotation.eulerAngles.z != 45)
-                        {
-                            rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.Euler(0, 0, 45), rain_storm.rotation_speed * Time.fixedDeltaTime);
-                            foreach (var item in rain_storm.rain_trans)
-                            {
-                                item.rotation = rain_storm.criteria;
-                            }
-                        }
-                        break;
-                    default:
-                        break;
+                    rain_storm.pattern_ending = true;
                 }
             }
-            /*rain_storm.time += Time.fixedDeltaTime;
+        }
+        if (!shower.pattern_ending)
+        {
+            if ((shower.pattern_data[shower.pattern_count].time <= Managers.Sound.bgSound.time || shower.duration != 0))
+            {
+                if (shower.duration == 0)
+                {
+                    shower.duration = shower.pattern_data[shower.pattern_count].duration;
+                }
+                Shower();
+                shower.duration = Mathf.Clamp(shower.duration - Time.fixedDeltaTime, 0, shower.pattern_data[shower.pattern_count].duration);
+                if (shower.duration == 0)
+                {
+                    shower.pattern_count++;
+                    if (shower.pattern_data.Count == shower.pattern_count)
+                    {
+                        Anim_state_machin("idle");
+                        //아이들 애니메이션
+                        shower.shower_obj.SetActive(false);
+                        shower.pattern_ending = true;
+                        //boss_image.flipX = false;
+                    }
+                }
+            } 
+        }
+        /*if (!rain_storm.pattern_ending)
+        {
+            
+            *//*rain_storm.time += Time.fixedDeltaTime;
             if (rain_storm.time >= 0.375f)          //나중에 방향이 바뀌는 구간만 따로 명시하기
             {
                 rain_storm.time -= 0.375f;
@@ -114,7 +106,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 {
                     rain_storm.pattern_ending = true;
                 }
-            }*/
+            }*//*
             if (rain_storm.pattenr_data[rain_storm.pattern_count].time <= Managers.Sound.bgSound.time)
             {
                 if (!rain_storm.pattern_starting)
@@ -135,7 +127,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
 
                 }
             }
-        }
+        }*/
 
 
 
@@ -147,8 +139,8 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 lightning.pattern_ending = true;
             }
         }*/
-        
-        if (rush_pattern.pattenr_data[rush_pattern.pattern_count].time <= Managers.Sound.bgSound.time && !rush_pattern.pattern_ending)
+
+        /*if (rush_pattern.pattenr_data[rush_pattern.pattern_count].time <= Managers.Sound.bgSound.time && !rush_pattern.pattern_ending)
         {
             rush_pattern.pattern_starting = true;
             Rush();
@@ -192,7 +184,8 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                     break;
             }
 
-        }
+        }*/
+
         /*if (lightning.pattenr_data[lightning.pattern_count].time >= Managers.Sound.bgSound.time)
         {
 
@@ -210,6 +203,57 @@ public class ChaInGureumi : BossController          //비트는 80dlek
 
         }*/
     }
+    public void Rain_storm_rotation()
+    {
+        switch (rain_storm.pattern_data[rain_storm.pattern_count].action_num)
+        {
+            case 0:         //가운데(바람 빨아들이는 애니메이션)
+                if (rain_storm.pos_x_critaria != 0)
+                {
+                    rain_storm.pos_x_critaria = 0;
+                }
+                if (rain_storm.rain_trans[rain_storm.rain_trans.Count - 1].rotation.eulerAngles.z != 0)
+                {
+                    rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.identity, rain_storm.rotation_speed * Time.fixedDeltaTime);
+                    foreach (var item in rain_storm.rain_trans)
+                    {
+                        item.rotation = rain_storm.criteria;
+                    }
+                }
+                break;
+            case 1:         //왼쪽(왼쪽 방향으로 부는 애니메이션)
+                if (rain_storm.pos_x_critaria != rain_storm.pos_x_criteria_option)
+                {
+                    rain_storm.pos_x_critaria = -rain_storm.pos_x_criteria_option;
+                }
+                if (rain_storm.rain_trans[rain_storm.rain_trans.Count - 1].rotation.eulerAngles.z != 315)
+                {
+
+                    rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.Euler(0, 0, 315), rain_storm.rotation_speed * Time.fixedDeltaTime);
+                    foreach (var item in rain_storm.rain_trans)
+                    {
+                        item.rotation = rain_storm.criteria;
+                    }
+                }
+                break;
+            case 2:     //오른쪽(오른쪽으로 부는 애니메이션)
+                if (rain_storm.pos_x_critaria != rain_storm.pos_x_criteria_option)
+                {
+                    rain_storm.pos_x_critaria = rain_storm.pos_x_criteria_option;
+                }
+                if (rain_storm.rain_trans[rain_storm.rain_trans.Count - 1].rotation.eulerAngles.z != 45)
+                {
+                    rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.Euler(0, 0, 45), rain_storm.rotation_speed * Time.fixedDeltaTime);
+                    foreach (var item in rain_storm.rain_trans)
+                    {
+                        item.rotation = rain_storm.criteria;
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
    
     public void Idle()
     {
@@ -220,7 +264,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Rain_drop"));
         temp.transform.position = new Vector3(rain_storm.pos_x[rain_storm.pos_x_count] + rain_storm.pos_x_critaria, rain_storm.pos_y, 0);
         temp.transform.rotation = rain_storm.criteria;
-        switch (rain_storm.pattenr_data[rain_storm.pattern_count].action_num)
+        switch (rain_storm.pattern_data[rain_storm.pattern_count].action_num)
         {
             case 0:         //가운데(바람 빨아들이는 애니메이션)
                 if (!rain_storm.rain_hash.Contains(temp.GetInstanceID().ToString()))
@@ -257,11 +301,32 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     }
     public void Shower()
     {
-
+        //2~-4.5
+        switch (shower.pattern_data[shower.pattern_count].action_num)
+        {
+            case 0:
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(4.75f, transform.position.y), 2 * Time.fixedDeltaTime);
+                Anim_state_machin("simple_pattern1");
+                if (!shower.shower_obj.activeSelf)
+                {
+                    shower.shower_obj.SetActive(true);
+                }
+                break;
+            case 1:
+                //우는 애니메이션
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(-1.75f, transform.position.y), 12 * Time.fixedDeltaTime);
+                if(!boss_image.flipX)
+                {
+                    boss_image.flipX = true;
+                }
+                break;
+            default:
+                break;
+        }
     }
     public void Rush()
     {
-        switch ((rush_pattern.pattenr_data[rush_pattern.pattern_count].action_num))
+        /*switch ((rush_pattern.pattenr_data[rush_pattern.pattern_count].action_num))
         {
             case 1:
                 for (int i = 0; i < rush_pattern.rush_pos_deciding_count[rush_pattern.rush_pattern_num]; i++)
@@ -291,7 +356,11 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 break;
             default:
                 break;
-                /*case 0:
+
+
+
+
+                *//*case 0:
                     transform.Translate(new Vector3(0, rush_pattern.up_move_speed * Time.fixedDeltaTime, 0));
                     break;
                 case 1:
@@ -323,8 +392,8 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                     transform.Translate(new Vector3(0,rush_pattern.rush_speed * Time.fixedDeltaTime, 0 ));
                     break;
                 default:
-                    break;*/
-        }
+                    break;*//*
+        }*/
     }
     public void Broad_lightning()
     {
@@ -425,6 +494,22 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         public float pos_x_critaria;
         [HideInInspector]
         public float time;
+        
+    }
+    [Serializable]
+    public class Shower_pattern : Pattern_base_data
+    {
+        [Header("이동 속도")]
+        public float speed;
+        [Header("우산 오브젝트")]
+        public GameObject umbrella;
+        [Header("우산 오브젝트 켜지는 시간")]
+        public float umbrella_on_time;
+        [Header("우산 지속시간")]
+        public float umbrella_duration_time;
+        [Header("소나기 오브젝트")]
+        public GameObject shower_obj;
+        
     }
     [Serializable]
     public class Rush_pattern : Pattern_base_data
