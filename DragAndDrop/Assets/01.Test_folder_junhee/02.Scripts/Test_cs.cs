@@ -5,9 +5,24 @@ using UnityEngine.UI;
 using Newtonsoft.Json;
 public class Test_cs : MonoBehaviour
 {
+    public Transform big_ring;
+    public Transform middle_ring;
+    public Transform small_ring;
+    public float big_speed;
+    public float middle_speed;
+    public float small_speed;
+
     private void Awake()
     {
-        Cursor.visible = false;
+    }
+    public void FixedUpdate()
+    {
+        if (Input.GetKey(KeyCode.S))
+        {
+            big_ring.Rotate(0, 0, big_speed * Time.deltaTime);
+            middle_ring.Rotate(0, 0, -middle_speed * Time.deltaTime);
+            small_ring.Rotate(0, 0, small_speed * Time.deltaTime);
+        }
     }
     /* public Rush_pattern rush_pattern;
      private void Awake()

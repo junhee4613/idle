@@ -18,7 +18,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     [Header("소나기 패턴")]
     public Shower_pattern shower;
     [Header("돌진 패턴")]
-    public Rush_pattern rush_pattern;
+    public Rush_pattern rush;
     [Header("단일 번개 패턴")]
     public Lightning_pattern lightning;
     public GameObject camera_obj;
@@ -26,7 +26,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     {
         base.Awake();
         rain_storm.pattern_data = JsonConvert.DeserializeObject<List<Pattern_state_date>>(Managers.Resource.Load<TextAsset>("Rain_storm_data").text);
-        rush_pattern.pattern_data = JsonConvert.DeserializeObject<List<Pattern_state_date>>(Managers.Resource.Load<TextAsset>("Cloud_rush_data").text);
+        rush.pattern_data = JsonConvert.DeserializeObject<List<Pattern_state_date>>(Managers.Resource.Load<TextAsset>("Cloud_rush_data").text);
         shower.pattern_data = JsonConvert.DeserializeObject<List<Pattern_state_date>>(Managers.Resource.Load<TextAsset>("Shower_data").text);
 
     }
@@ -94,97 +94,20 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 }
             } 
         }
-        /*if (!rain_storm.pattern_ending)
+        if (!rush.pattern_ending)
         {
-            
-            *//*rain_storm.time += Time.fixedDeltaTime;
-            if (rain_storm.time >= 0.375f)          //나중에 방향이 바뀌는 구간만 따로 명시하기
+            if(rush.pattern_data[rush.pattern_count].time <= Managers.Sound.bgSound.time || rush.duration != 0)
             {
-                rain_storm.time -= 0.375f;
-                Rain_storm();
-                if (Managers.Sound.bgSound.time == 17)
+                if (rush.duration == 0)
                 {
-                    rain_storm.pattern_ending = true;
+                    rush.duration = rush.pattern_data[rush.pattern_count].duration;
                 }
-            }*//*
-            if (rain_storm.pattenr_data[rain_storm.pattern_count].time <= Managers.Sound.bgSound.time)
-            {
-                if (!rain_storm.pattern_starting)
-                {
-                    rain_storm.pattern_starting = true;
-                }
-                Rain_storm();
-
-                if (rain_storm.pattenr_data.Count - 1 == rain_storm.pattern_count)
-                {
-
-                    rain_storm.pattern_ending = true;
-                    rain_storm.pattern_starting = false;
-                }
-                else
-                {
-                    rain_storm.pattern_count++;
-
-                }
+                Rush();
+                rush.duration = Mathf.Clamp(rush.duration - Time.fixedDeltaTime, 0, rush.pattern_data[rush.pattern_count].duration);
             }
-        }*/
-
-
-
-        /*if (lightning.pattenr_data[lightning.pattern_count].time >= Managers.Sound.bgSound.time && !lightning.pattern_ending)
-        {
-            lightning.pattern_count++;
-            if (lightning.pattenr_data.Count == lightning.pattern_count)
-            {
-                lightning.pattern_ending = true;
-            }
-        }*/
-
-        /*if (rush_pattern.pattenr_data[rush_pattern.pattern_count].time <= Managers.Sound.bgSound.time && !rush_pattern.pattern_ending)
-        {
-            rush_pattern.pattern_starting = true;
-            Rush();
-           
         }
-        if (rush_pattern.pattern_starting)
-        {
-            switch ((rush_pattern.pattenr_data[rush_pattern.pattern_count].action_num))
-            {
-                case 0:
-                    transform.Translate(new Vector3(0, rush_pattern.up_move_speed * Time.fixedDeltaTime, 0));
-                    if (rush_pattern.time >= 0.5f)
-                    {
-                        rush_pattern.time -= 0.5f;
 
-                        rush_pattern.pattern_count++;
-                        if (rush_pattern.pattenr_data.Count == rush_pattern.pattern_count)
-                        {
-                            rush_pattern.pattern_ending = true;
-                            rush_pattern.pattern_starting = false;
-                        }
-                    }
-                    rush_pattern.time += Time.fixedDeltaTime;
-                    break;
-                case 2:
-                    transform.Translate(new Vector3(rush_pattern.rush_speed * Time.fixedDeltaTime, 0, 0));
-                    if (rush_pattern.time >= 0.5f)
-                    {
-                        rush_pattern.time -= 0.5f;
-
-                        rush_pattern.pattern_count++;
-                        if (rush_pattern.pattenr_data.Count == rush_pattern.pattern_count)
-                        {
-                            rush_pattern.pattern_ending = true;
-                            rush_pattern.pattern_starting = false;
-                        }
-                    }
-                    rush_pattern.time += Time.fixedDeltaTime;
-                    break; 
-                default:
-                    break;
-            }
-
-        }*/
+        
 
         /*if (lightning.pattenr_data[lightning.pattern_count].time >= Managers.Sound.bgSound.time)
         {
@@ -326,6 +249,23 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     }
     public void Rush()
     {
+        switch (rush.pattern_data[rush.pattern_count].action_num)
+        {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            default:
+                break;
+        }
         /*switch ((rush_pattern.pattenr_data[rush_pattern.pattern_count].action_num))
         {
             case 1:
