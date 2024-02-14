@@ -47,28 +47,31 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     public override void Pattern_processing()
     {
         base.Pattern_processing();
-        if((rain_storm.pattern_data[rain_storm.pattern_count].time <= Managers.Sound.bgSound.time || rain_storm.duration != 0) && !rain_storm.pattern_ending)
+        if (!rain_storm.pattern_ending)
         {
-            if(rain_storm.duration == 0)
+            if ((rain_storm.pattern_data[rain_storm.pattern_count].time <= Managers.Sound.bgSound.time || rain_storm.duration != 0))
             {
-                rain_storm.duration = rain_storm.pattern_data[rain_storm.pattern_count].duration;
-            }
-            rain_storm.time -= Time.fixedDeltaTime;
-            if (rain_storm.time <= 0)          //나중에 방향이 바뀌는 구간만 따로 명시하기
-            {
-                rain_storm.time += 0.375f;
-                Rain_storm();
-            }
-            Rain_storm_rotation();
-            rain_storm.duration = Mathf.Clamp(rain_storm.duration - Time.fixedDeltaTime, 0, rain_storm.pattern_data[rain_storm.pattern_count].duration);
-            if (rain_storm.duration == 0)
-            {
-                rain_storm.pattern_count++;
-                if(rain_storm.pattern_data.Count == rain_storm.pattern_count)
+                if (rain_storm.duration == 0)
                 {
-                    rain_storm.pattern_ending = true;
+                    rain_storm.duration = rain_storm.pattern_data[rain_storm.pattern_count].duration;
                 }
-            }
+                rain_storm.time -= Time.fixedDeltaTime;
+                if (rain_storm.time <= 0)          //나중에 방향이 바뀌는 구간만 따로 명시하기
+                {
+                    rain_storm.time += 0.375f;
+                    Rain_storm();
+                }
+                Rain_storm_rotation();
+                rain_storm.duration = Mathf.Clamp(rain_storm.duration - Time.fixedDeltaTime, 0, rain_storm.pattern_data[rain_storm.pattern_count].duration);
+                if (rain_storm.duration == 0)
+                {
+                    rain_storm.pattern_count++;
+                    if (rain_storm.pattern_data.Count == rain_storm.pattern_count)
+                    {
+                        rain_storm.pattern_ending = true;
+                    }
+                }
+            } 
         }
         if (!shower.pattern_ending)
         {
@@ -185,11 +188,11 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     public void Rain_storm()
     {
         GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Rain_drop"));
-        temp.transform.position = new Vector3(rain_storm.pos_x[rain_storm.pos_x_count] + rain_storm.pos_x_critaria, rain_storm.pos_y, 0);
         temp.transform.rotation = rain_storm.criteria;
         switch (rain_storm.pattern_data[rain_storm.pattern_count].action_num)
         {
             case 0:         //가운데(바람 빨아들이는 애니메이션)
+                temp.transform.position = new Vector3(rain_storm.pos_x[rain_storm.pos_x_count] + rain_storm.pos_x_critaria, rain_storm.pos_y, 0);
                 if (!rain_storm.rain_hash.Contains(temp.GetInstanceID().ToString()))
                 {
                     rain_storm.rain_hash.Add(temp.GetInstanceID().ToString());
@@ -197,6 +200,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 }
                 break;
             case 1:         //왼쪽(왼쪽 방향으로 부는 애니메이션)
+                temp.transform.position = new Vector3(rain_storm.pos_x[rain_storm.pos_x_count] + rain_storm.pos_x_critaria + 2, rain_storm.pos_y, 0);
                 if (!rain_storm.rain_hash.Contains(temp.GetInstanceID().ToString()))
                 {
                     rain_storm.rain_hash.Add(temp.GetInstanceID().ToString());
@@ -204,6 +208,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 }
                 break;
             case 2:     //오른쪽(오른쪽으로 부는 애니메이션)
+                temp.transform.position = new Vector3(rain_storm.pos_x[rain_storm.pos_x_count] + rain_storm.pos_x_critaria - 2, rain_storm.pos_y, 0);
                 if (!rain_storm.rain_hash.Contains(temp.GetInstanceID().ToString()))
                 {
                     rain_storm.rain_hash.Add(temp.GetInstanceID().ToString());

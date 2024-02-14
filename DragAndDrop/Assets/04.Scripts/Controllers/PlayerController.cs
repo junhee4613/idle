@@ -20,8 +20,10 @@ public class PlayerController : playerData
     public GameObject player;
     [Header("플레이어 사이즈")]
     public float player_size;
-    [Header("플레이어 사이즈 배율 1이 기본 값")]
+    [Header("플레이어 사이즈 배율(1이 기본 값)")]
     public float player_size_magnification;
+    [Header("드래그 할 때의 속도 및 크기 배율(1이 기본값)")]
+    public float drag_dis_magnification = 1;
     #region 클래스 안에서 해결할것들
     sbyte break_num = 0;
     Vector2 mouse_pos;
@@ -157,7 +159,7 @@ public class PlayerController : playerData
     {
         if (ray_hit.collider != null)
         {
-            drag_dis = new Vector3(player_pos.x - mouse_pos.x, player_pos.y - mouse_pos.y, 0);
+            drag_dis = new Vector3(player_pos.x - mouse_pos.x, player_pos.y - mouse_pos.y, 0) * drag_dis_magnification;
             player_rotation_z = Mathf.Atan2(drag_dis.normalized.y, drag_dis.normalized.x) * Mathf.Rad2Deg;
             player.transform.rotation = Quaternion.Euler(0, 0, player_rotation_z - 90);
             player.transform.localScale = new Vector3(player.transform.localScale.x, Mathf.Clamp(player_size + (drag_dis.magnitude / player_size_magnification), player_size, player_size + (shoot_speed / player_size_magnification)));

@@ -49,7 +49,7 @@ AnimatorStateMachine:
     m_Position: {x: 440, y: 30, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7123051308332342852}
-    m_Position: {x: 522.44336, y: 190.88736, z: 0}
+    m_Position: {x: 420, y: 190, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -93,7 +93,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: idle
+  m_Name: 1_phase_idle
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -141,7 +141,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Charging_idle
+  m_Name: 2_phase_idle
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []

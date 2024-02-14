@@ -6,51 +6,48 @@ using DG.Tweening;
 public class Single_lightning : MonoBehaviour
 {
     //경고판은 a가 0부터 시작
-    [Header("깜빡이는 횟수")]
-    public sbyte fade_num;
-    [Header("a값이 목표치까지 변하는 시간")]
-    public float fade_time;
-    [Header("최소 a값")]
-    public float min_a;
     bool pattern_start = false;
     public SpriteRenderer warning_sprite;
-    public GameObject lightning;
-    bool warning_end = false;
+    public SpriteRenderer lightning_image;
+    public GameObject lightning_obj;
+    public GameObject warring_obj;
     float time;
     private void FixedUpdate()
     {
-        if (!warning_end)
+        if (warring_obj.activeSelf)
         {
             if (!pattern_start)
             {
 
                 pattern_start = true;
-                warning_sprite.DOFade(min_a, fade_time).SetLoops(fade_num, LoopType.Yoyo).OnComplete(() =>
+                warning_sprite.DOFade(0, 0.25f).SetLoops(3, LoopType.Yoyo).OnComplete(() =>
                 {
-                    warning_end = true;
+                    warring_obj.SetActive(false);
                 });
             }
         }
         else
         {
-            if (time < 1)
+            if (!lightning_obj.activeSelf)
             {
-                time += Time.fixedDeltaTime;
-                if (!lightning.activeSelf)
-                {
-                    lightning.SetActive(true);
-                }
-                else
-                {
-                    //FIX : 번개 좌우 반전 로직
-                }
+                lightning_obj.SetActive(true);
             }
-            else
+            time += Time.fixedDeltaTime;
+            if (time < 0.2f)
             {
-                time = 0;
-                lightning.SetActive(false);
-                gameObject.SetActive(false);
+                lightning_obj.transform.localScale = new Vector3(lightning_obj.transform.localScale.x * -1, lightning_obj.transform.localScale.y, 0);
             }
+            lightning_image.DOFade(0, 0.4f).SetLoops(1, LoopType.Yoyo).OnComplete(() =>
+            {
+                lightning_obj.SetActive(false);
+                Managers.Pool.Push(this.gameObject);
+            });
         }
     }
+    private void OnEnable()
+    {
+        time = 0;
+        warring_obj.SetActive(true);
+    }
+
 }

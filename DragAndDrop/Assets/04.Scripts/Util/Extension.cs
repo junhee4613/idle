@@ -61,7 +61,8 @@ public static class Extension //¿·¿¡´Â Á¤Àû Å¬·¡½ºÀÌ´Ù. ¾Æ·¡¿¡ ÀÖ´Â ¸Þ¼­µåµéÀº È
             Debug.LogError("¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ¾ø¾î");
         }
         Animator temp = anim;
-        dic.Add("idle", new Idle());
+        dic.Add("1_phase_idle", new Phase1_idle());
+        dic.Add("2_phase_idle", new Phase2_idle());
         for (int i = 0; i < simplae_pattern_num; i++)
         {
             dic.Add($"simple_pattern{i}", new Simple_pattern($"simple_pattern{i}", anim));

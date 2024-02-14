@@ -111,11 +111,26 @@ public abstract class Anim_stage_state
 }
 namespace Stage_FSM
 {
-    public class Idle : Anim_stage_state
+    public class Phase1_idle : Anim_stage_state
     {
         public override void On_state_enter()
         {
-            an.Play("idle");
+            an.Play("1_phase_idle");
+        }
+
+        public override void On_state_exit()
+        {
+        }
+
+        public override void On_state_update(sbyte loop_num)
+        {
+        }
+    }
+    public class Phase2_idle : Anim_stage_state
+    {
+        public override void On_state_enter()
+        {
+            an.Play("2_phase_idle");
         }
 
         public override void On_state_exit()

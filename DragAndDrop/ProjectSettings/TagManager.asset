@@ -64,8 +64,14 @@ TagManager:
   - name: Player_box
     uniqueID: 1647982771
     locked: 0
-  - name: Pattern
+  - name: Back_pattern
+    uniqueID: 704105179
+    locked: 0
+  - name: Middle_pattern
     uniqueID: 1041099229
+    locked: 0
+  - name: Front_pattern
+    uniqueID: 1767122327
     locked: 0
   - name: Boss
     uniqueID: 2767242371

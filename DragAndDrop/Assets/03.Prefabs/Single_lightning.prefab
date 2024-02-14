@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6368289922478967934
 Transform:
   m_ObjectHideFlags: 0
@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 451304230915753271}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.22, y: -7.56, z: 0}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
   m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -71,11 +71,11 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1041099229
-  m_SortingLayer: 7
+  m_SortingLayer: 8
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: f35c198847defef42b21bffacc8b6b74, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1, y: 1}
@@ -100,7 +100,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5349305980104257191
 Transform:
   m_ObjectHideFlags: 0
@@ -110,8 +110,8 @@ Transform:
   m_GameObject: {fileID: 6755131946231125802}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -5.5, z: 0}
-  m_LocalScale: {x: 1, y: 9.99, z: 1}
+  m_LocalPosition: {x: 0, y: -2.5, z: 0}
+  m_LocalScale: {x: 0.75, y: 4.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7925573517613243707}
@@ -155,7 +155,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1041099229
-  m_SortingLayer: 7
+  m_SortingLayer: 8
   m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 0.07738851, b: 0, a: 1}
@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 5200370314294066406}
   - component: {fileID: -6297849617223180713}
   m_Layer: 0
-  m_Name: Lightning
+  m_Name: Single_lightning
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -241,8 +241,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1041099229
-  m_SortingLayer: 7
+  m_SortingLayerID: 1767122327
+  m_SortingLayer: 9
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -267,8 +267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baa8f7081f0579f4e8ea5c585c493826, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fade_num: 3
-  fade_time: 1
-  min_a: 0
   warning_sprite: {fileID: 6306111481355834790}
-  lightning: {fileID: 451304230915753271}
+  lightning_image: {fileID: 4361357576664332737}
+  lightning_obj: {fileID: 451304230915753271}
+  warring_obj: {fileID: 6755131946231125802}
