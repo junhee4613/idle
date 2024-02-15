@@ -109,7 +109,10 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 rush.duration = Mathf.Clamp(rush.duration - Time.fixedDeltaTime, 0, rush.pattern_data[rush.pattern_count].duration);
             }
         }
+        if (!lightning.pattern_ending)
+        {
 
+        }
         
 
         /*if (lightning.pattenr_data[lightning.pattern_count].time >= Managers.Sound.bgSound.time)
@@ -348,74 +351,16 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     {
 
     }
-    public void Single_lightning()
+    public void Lightning()
     {
-        /*if (!lightning.pattern_setting)
-        {
-            lightning.pos_select_range = lightning.pos_min_x.Length - 1;
-            lightning.pattern_setting = true;
-            lightning.pattern_count = lightning.pattern_num;
-            for (int i = lightning.pos_min_x.Length - 1; i >= 0; i--)
-            {
-                lightning.temp_x.Add(lightning.pos_min_x[i]);
-            }
-
-            for (int i = 0; i < lightning.pattern_num; i++)
-            {
-                int num = Random.Range(0, lightning.pos_select_range);
-                lightning.pos_x.Push(lightning.temp_x[num]);
-                lightning.temp_x.RemoveAt(num);
-                lightning.pos_select_range--;
-            }
-        }
-
-        if (0 < lightning.pattern_count)
-        {
-            lightning.pos = new Vector2(lightning.pos_x.Pop(), lightning.pos_y);
-            GameObject obj = Instantiate(lightning.lightning);
-            obj.transform.position = lightning.pos;
-            lightning.pattern_count--;
-            if (lightning.pattern_count <= 0)
-            {
-                lightning.temp_x.Clear();
-                lightning.pos_x.Clear();
-                lightning.pattern_setting = false;
-            }
-        }*/
+       
     }
     [Serializable]
     public class Lightning_pattern : Pattern_base_data
     {
-        [Header("패턴이 등장하는 위치(높이)")]
-        public float pos_y;
-        [Header("패턴이 등장하는 x축 위치들")]
-        public float[] pos_min_x;
-        [Header("패턴이 등장하는 횟수")]
-        public sbyte pattern_num;
-        [HideInInspector]
-        public Stack<float> pos_x = new Stack<float>();
-        [HideInInspector]
-        public List<float> temp_x = new List<float>();
-        /*[HideInInspector]
-        public sbyte pattern_count;*/
-        [HideInInspector]
-        public Vector2 pos;
-        [HideInInspector]
-        public bool pattern_setting = false;
-        [Header("번개 오브젝트 할당")]
-        public GameObject lightning;
-        [HideInInspector]
-        public int pos_select_range;
+        
     }
-    /*[Serializable]
-    public class Rain_drop_pattern : Pattern_base_data
-    {
-        [Header("생성되는 높이")]
-        public Transform pos_y;
-        [Header("생성되는 x축 양의 범위")]
-        public float[] pos_x = new float[8];
-        public Transform center_pos;
-    }*/
+    
     [Serializable]
     public class Rain_storm_pattern : Pattern_base_data
     {

@@ -24,7 +24,7 @@ MonoBehaviour:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 983b7098a3b7ae84ea21f0fca33da855
-    m_Address: Lightning
+    m_Address: Single_lightning
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
@@ -73,6 +73,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a8790122f76f17e4db8dfc1843e62021
     m_Address: Shower_data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 79ebcdae67d5d864186c8b6cb26cdb69
+    m_Address: Broad_lightning
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
