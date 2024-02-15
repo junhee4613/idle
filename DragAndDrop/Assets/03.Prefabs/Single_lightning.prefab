@@ -271,4 +271,4 @@ MonoBehaviour:
   lightning_image: {fileID: 4361357576664332737}
   lightning_obj: {fileID: 451304230915753271}
   warring_obj: {fileID: 6755131946231125802}
-  fade_set_time: 0
+  fade_set_time: 0.25

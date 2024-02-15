@@ -28,7 +28,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         rain_storm.pattern_data = JsonConvert.DeserializeObject<List<Pattern_state_date>>(Managers.Resource.Load<TextAsset>("Rain_storm_data").text);
         rush.pattern_data = JsonConvert.DeserializeObject<List<Pattern_state_date>>(Managers.Resource.Load<TextAsset>("Cloud_rush_data").text);
         shower.pattern_data = JsonConvert.DeserializeObject<List<Pattern_state_date>>(Managers.Resource.Load<TextAsset>("Shower_data").text);
-
+        lightning.pattern_data = JsonConvert.DeserializeObject<List<Pattern_state_date>>(Managers.Resource.Load<TextAsset>("Lightning_data").text);
     }
     public void Start()
     {
@@ -111,7 +111,10 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         }
         if (!lightning.pattern_ending)
         {
-
+            if(lightning.pattern_data[lightning.pattern_count].time <= Managers.Sound.bgSound.time)
+            {
+                Lightning();
+            }
         }
         
 
@@ -353,14 +356,46 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     }
     public void Lightning()
     {
-       
+        switch (lightning.pattern_data[lightning.pattern_count].action_num)
+        {
+            case 0:
+                GameObject single_lightning = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Single_lightning"));
+                single_lightning.transform.position = new Vector3(lightning.single_pos_x[lightning.single_count], 0.5f, 0);
+                if(lightning.single_count != lightning.single_pos_x.Length - 1)
+                {
+                    lightning.single_count++;
+                }
+                break;
+            case 1:
+                GameObject board_lightning = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Broad_lightning"));
+                board_lightning.transform.position = new Vector3(lightning.board_pos_x[lightning.board_count], 0.5f, 0);
+                if (lightning.board_count != lightning.board_pos_x.Length - 1)
+                {
+                    lightning.board_count++;
+                }
+                break;
+            default:
+                break;
+        }
+        lightning.pattern_count++;
+        if(lightning.pattern_data.Count == lightning.pattern_count)
+        {
+            lightning.pattern_ending = true;
+        }
     }
     [Serializable]
     public class Lightning_pattern : Pattern_base_data
     {
-        
+        [Header("단일 번개 x 값 순서대로 할당")]
+        public float[] single_pos_x;
+        [Header("광범위 번개 x 값 순서대로 할당")]
+        public float[] board_pos_x;
+        [HideInInspector]
+        public sbyte single_count;
+        [HideInInspector]
+        public sbyte board_count;
     }
-    
+
     [Serializable]
     public class Rain_storm_pattern : Pattern_base_data
     {

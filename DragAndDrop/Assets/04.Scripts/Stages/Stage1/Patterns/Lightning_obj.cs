@@ -12,14 +12,24 @@ public class Lightning_obj : MonoBehaviour
     public GameObject lightning_obj;
     public GameObject warring_obj;
     public float fade_set_time;
+    bool lightning_fade_out;
     float time;
+    private void OnEnable()
+    {
+        pattern_start = false;
+        time = 0;
+        lightning_image.color = new Color(1f, 1f, 1f, 1f);
+        warning_sprite.color = new Color(1f, 0.078f, 0f, 1f);
+        warring_obj.SetActive(true);
+        lightning_fade_out = false;
+    }
     private void FixedUpdate()
     {
         if (warring_obj.activeSelf)
         {
             if (!pattern_start)
             {
-                
+
                 pattern_start = true;
                 warning_sprite.DOFade(0, fade_set_time).SetLoops(3, LoopType.Yoyo).OnComplete(() =>
                 {
@@ -38,24 +48,15 @@ public class Lightning_obj : MonoBehaviour
             {
                 lightning_obj.transform.localScale = new Vector3(lightning_obj.transform.localScale.x * -1, lightning_obj.transform.localScale.y, 0);
             }
-            lightning_image.DOFade(0, 0.4f).SetLoops(1, LoopType.Yoyo).OnComplete(() =>
+            if (!lightning_fade_out)
             {
-                lightning_obj.SetActive(false);
-                Managers.Pool.Push(this.gameObject);
-            });
+                lightning_fade_out = true;
+                lightning_image.DOFade(0, 0.4f).SetLoops(1, LoopType.Yoyo).OnComplete(() =>
+                    {
+                        lightning_obj.SetActive(false);
+                        Managers.Pool.Push(this.gameObject);
+                    }); 
+            }
         }
     }
-    private void OnEnable()
-    {
-        pattern_start = false;
-        time = 0;
-        lightning_image.color = new Color(1f, 1f, 1f, 1f);
-        warning_sprite.color = new Color(1f, 0.078f, 0f, 1f);
-        warring_obj.SetActive(true);
-    }
-    private void OnDisable()
-    {
-       
-    }
-
 }
