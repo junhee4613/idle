@@ -51,6 +51,7 @@ public class Lightning_obj : MonoBehaviour
             if (!lightning_fade_out)
             {
                 lightning_fade_out = true;
+                Managers.Main_camera.Moving();
                 lightning_image.DOFade(0, 0.4f).SetLoops(1, LoopType.Yoyo).OnComplete(() =>
                     {
                         lightning_obj.SetActive(false);

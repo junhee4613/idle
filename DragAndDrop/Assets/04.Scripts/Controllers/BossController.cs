@@ -61,10 +61,8 @@ public abstract class BossController : Stage_base_controller
         {
 
         }*/
-        Debug.Log("동작");
         if (an.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
         {
-            Debug.Log("동작");
             an.Play(clip_name);
         }
 

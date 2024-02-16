@@ -39,6 +39,8 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
                 Init();
             }*/
         });
+        Main_camera.main_camera = FindObjectOfType<Camera>();
+        DontDestroyOnLoad(Main_camera.main_camera);
     }
     private void Start()
     {
@@ -105,11 +107,13 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
     public static GameManager GameManager { get { return instance?._game; } }
     public static ResourceManager Resource { get { return instance?._resources; } }
     public static PoolManager Pool { get { return instance?._pool; } }
+    public static Camera_manager Main_camera { get { return instance?._camera; } }
 
     SoundManager _sound = new SoundManager();
     UIManager_jun _ui = new UIManager_jun();
     //UIManager _ui_base = new UIManager();
     ResourceManager _resources = new ResourceManager();
+    Camera_manager _camera = new Camera_manager();
     GameManager _game = new GameManager();
     PoolManager _pool = new PoolManager();
 }

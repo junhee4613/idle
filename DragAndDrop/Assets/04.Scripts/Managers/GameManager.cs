@@ -5,7 +5,7 @@ using System;
 using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 
-public class GameManager : MonoBehaviour        //여기서 비트를 관리
+public class GameManager       //여기서 비트를 관리
 {
     public List<Pattern_state> pattern_data = new List<Pattern_state>();
     PlayerController player;

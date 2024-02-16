@@ -4,8 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
 using UnityEngine.UI;
-
-public class SoundManager : MonoBehaviour
+public class SoundManager
 {
     public AudioSource bgSound;
     public AudioMixer mixer;
@@ -60,7 +59,7 @@ public class SoundManager : MonoBehaviour
         audioSource.outputAudioMixerGroup = mixer.FindMatchingGroups("SFX_sound_volume")[0];
         audioSource.Play();
 
-        Destroy(go, clip.length);
+        UnityEngine.MonoBehaviour.Destroy(go, clip.length);
     }
 
     public void Game_over_sound()

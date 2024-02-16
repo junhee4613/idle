@@ -21,7 +21,6 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     public Rush_pattern rush;
     [Header("단일 번개 패턴")]
     public Lightning_pattern lightning;
-    public GameObject camera_obj;
     protected override void Awake()
     {
         base.Awake();
@@ -32,20 +31,21 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     }
     public void Start()
     {
-        StartCoroutine(Temp_method());
-        Anim_state_machin("idle");
-    }
-    IEnumerator Temp_method()
-    {
-        while (camera_obj.transform.position.y != 0)
-        {
-            camera_obj.transform.position = new Vector3(camera_obj.transform.position.x, Mathf.Clamp(camera_obj.transform.position.y + Time.deltaTime * 5, -11, 0), camera_obj.transform.position.z);
-            yield return null;
-        }
+        Anim_state_machin("1_phase_idle");
         Managers.GameManager.game_start = true;
     }
+    /* IEnumerator Temp_method()
+     {
+         while (Managers.Main_camera.transform.position.y != 0)
+         {
+             Managers.Main_camera.transform.position = new Vector3(Managers.Main_camera.transform.position.x, Mathf.Clamp(Managers.Main_camera.transform.position.y + Time.deltaTime * 5, -11, 0), Managers.Main_camera.transform.position.z);
+             yield return null;
+         }
+        Managers.GameManager.game_start = true;
+     } */
     public override void Pattern_processing()
     {
+        Debug.Log("동작");
         base.Pattern_processing();
         if (!rain_storm.pattern_ending)
         {
@@ -88,7 +88,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                     shower.pattern_count++;
                     if (shower.pattern_data.Count == shower.pattern_count)
                     {
-                        Anim_state_machin("idle");
+                        Anim_state_machin("1_phase_idle");
                         //아이들 애니메이션
                         shower.shower_obj.SetActive(false);
                         shower.pattern_ending = true;
@@ -113,6 +113,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         {
             if(lightning.pattern_data[lightning.pattern_count].time <= Managers.Sound.bgSound.time)
             {
+                Anim_state_machin("2_phase_idle");
                 Lightning();
             }
         }
@@ -206,7 +207,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 }
                 break;
             case 1:         //왼쪽(왼쪽 방향으로 부는 애니메이션)
-                temp.transform.position = new Vector3(rain_storm.pos_x[rain_storm.pos_x_count] + rain_storm.pos_x_critaria + 3.5f, rain_storm.pos_y, 0);
+                temp.transform.position = new Vector3(rain_storm.pos_x[rain_storm.pos_x_count] + rain_storm.pos_x_critaria + 4f, rain_storm.pos_y, 0);
                 if (!rain_storm.rain_hash.Contains(temp.GetInstanceID().ToString()))
                 {
                     rain_storm.rain_hash.Add(temp.GetInstanceID().ToString());
@@ -214,7 +215,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 }
                 break;
             case 2:     //오른쪽(오른쪽으로 부는 애니메이션)
-                temp.transform.position = new Vector3(rain_storm.pos_x[rain_storm.pos_x_count] + rain_storm.pos_x_critaria - 3.5f, rain_storm.pos_y, 0);
+                temp.transform.position = new Vector3(rain_storm.pos_x[rain_storm.pos_x_count] + rain_storm.pos_x_critaria - 4f, rain_storm.pos_y, 0);
                 if (!rain_storm.rain_hash.Contains(temp.GetInstanceID().ToString()))
                 {
                     rain_storm.rain_hash.Add(temp.GetInstanceID().ToString());

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class UIManager_jun : MonoBehaviour
+public class UIManager_jun
 {
     public Stack<GameObject> UI_window_off = new Stack<GameObject>();
     public bool option_window_on;
@@ -31,7 +31,7 @@ public class UIManager_jun : MonoBehaviour
                 temp = Managers.Resource.Instantiate("EventSystem", null);
             }
             event_system = temp;
-            DontDestroyOnLoad(event_system);
+            UnityEngine.MonoBehaviour.DontDestroyOnLoad(event_system);
         }
         if (canvas == null)
         {
@@ -41,7 +41,7 @@ public class UIManager_jun : MonoBehaviour
                 temp = Managers.Resource.Instantiate("Canvas", null);
             }
             canvas = temp;
-            DontDestroyOnLoad(canvas);
+            UnityEngine.MonoBehaviour.DontDestroyOnLoad(canvas);
         }
         for (int i = 0; i < canvas.transform.childCount; i++)
         {
