@@ -371,13 +371,13 @@ MonoBehaviour:
     pos_y: 5.5
     pos_x:
     - 5.5
-    - 1.5
     - -3.5
-    - -7.5
     - -1.5
+    - -7.5
     - 7.5
-    - -5.5
+    - 1.5
     - 3.5
+    - -5.5
     rotation_speed: 90
     pos_x_criteria_option: 2
     pos_x_count: 0

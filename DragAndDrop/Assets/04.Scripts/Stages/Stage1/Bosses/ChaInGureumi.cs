@@ -206,7 +206,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 }
                 break;
             case 1:         //왼쪽(왼쪽 방향으로 부는 애니메이션)
-                temp.transform.position = new Vector3(rain_storm.pos_x[rain_storm.pos_x_count] + rain_storm.pos_x_critaria + 2, rain_storm.pos_y, 0);
+                temp.transform.position = new Vector3(rain_storm.pos_x[rain_storm.pos_x_count] + rain_storm.pos_x_critaria + 3.5f, rain_storm.pos_y, 0);
                 if (!rain_storm.rain_hash.Contains(temp.GetInstanceID().ToString()))
                 {
                     rain_storm.rain_hash.Add(temp.GetInstanceID().ToString());
@@ -214,7 +214,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 }
                 break;
             case 2:     //오른쪽(오른쪽으로 부는 애니메이션)
-                temp.transform.position = new Vector3(rain_storm.pos_x[rain_storm.pos_x_count] + rain_storm.pos_x_critaria - 2, rain_storm.pos_y, 0);
+                temp.transform.position = new Vector3(rain_storm.pos_x[rain_storm.pos_x_count] + rain_storm.pos_x_critaria - 3.5f, rain_storm.pos_y, 0);
                 if (!rain_storm.rain_hash.Contains(temp.GetInstanceID().ToString()))
                 {
                     rain_storm.rain_hash.Add(temp.GetInstanceID().ToString());
