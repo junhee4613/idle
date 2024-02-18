@@ -73,14 +73,14 @@ interface IInteraction_obj
 [System.Serializable]
 public class Pattern_base_data
 {
-    public List<Pattern_state_date> pattern_data = new List<Pattern_state_date>();
+    public List<Pattern_json_date> pattern_data = new List<Pattern_json_date>();
     [HideInInspector]
     public sbyte pattern_count = 0;
     public bool pattern_ending = false;
     [HideInInspector]
     public float duration;
 }
-public class Pattern_state_date 
+public class Pattern_json_date 
 {
     public float time;
     public sbyte action_num;

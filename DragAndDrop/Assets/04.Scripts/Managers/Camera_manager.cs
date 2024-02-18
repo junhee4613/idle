@@ -6,7 +6,17 @@ using DG.Tweening;
 public class Camera_manager
 {
     float time;
-    public Camera main_camera;
+    Camera main_camera;
+    public Camera Main_camera { 
+        get 
+        {
+            if (main_camera == null)
+            {
+                main_camera = GameObject.FindObjectOfType<Camera>();
+            }
+            return main_camera; 
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -20,13 +30,6 @@ public class Camera_manager
     }
     public void Moving()
     {
-        if (main_camera != null)
-        {
-            main_camera.transform.DOShakePosition(0.5f, 0.5f, 1, 90, false, true);
-        }
-        else
-        {
-            Debug.Log("Ä«¸Þ¶ó°¡ ºö");
-        }
+        Main_camera.transform.DOShakePosition(0.3f, 0.3f, 5, 90, false, true);
     }
 }

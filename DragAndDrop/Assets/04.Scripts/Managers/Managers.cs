@@ -39,8 +39,6 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
                 Init();
             }*/
         });
-        Main_camera.main_camera = FindObjectOfType<Camera>();
-        DontDestroyOnLoad(Main_camera.main_camera);
     }
     private void Start()
     {

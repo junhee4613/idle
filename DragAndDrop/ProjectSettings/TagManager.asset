@@ -49,6 +49,9 @@ TagManager:
   - name: Base_back_ground
     uniqueID: 4268383523
     locked: 0
+  - name: Back_effect
+    uniqueID: 793770171
+    locked: 0
   - name: Middle_effect
     uniqueID: 790437641
     locked: 0

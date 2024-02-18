@@ -21,13 +21,16 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     public Rush_pattern rush;
     [Header("단일 번개 패턴")]
     public Lightning_pattern lightning;
+    [Header("2페이즈 시작")]
+    public Phase_2_pattern phase_2;
     protected override void Awake()
     {
         base.Awake();
-        rain_storm.pattern_data = JsonConvert.DeserializeObject<List<Pattern_state_date>>(Managers.Resource.Load<TextAsset>("Rain_storm_data").text);
-        rush.pattern_data = JsonConvert.DeserializeObject<List<Pattern_state_date>>(Managers.Resource.Load<TextAsset>("Cloud_rush_data").text);
-        shower.pattern_data = JsonConvert.DeserializeObject<List<Pattern_state_date>>(Managers.Resource.Load<TextAsset>("Shower_data").text);
-        lightning.pattern_data = JsonConvert.DeserializeObject<List<Pattern_state_date>>(Managers.Resource.Load<TextAsset>("Lightning_data").text);
+        rain_storm.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Rain_storm_data").text);
+        rush.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Cloud_rush_data").text);
+        shower.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Shower_data").text);
+        lightning.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Lightning_data").text);
+        phase_2.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage_1_2_phase_start").text);
     }
     public void Start()
     {
@@ -45,7 +48,6 @@ public class ChaInGureumi : BossController          //비트는 80dlek
      } */
     public override void Pattern_processing()
     {
-        Debug.Log("동작");
         base.Pattern_processing();
         if (!rain_storm.pattern_ending)
         {
@@ -117,7 +119,28 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 Lightning();
             }
         }
-        
+        if (!phase_2.pattern_ending)
+        {
+            if ((phase_2.pattern_data[phase_2.pattern_count].time <= Managers.Sound.bgSound.time || phase_2.duration != 0))
+            {
+                if (phase_2.duration == 0)
+                {
+                    phase_2.duration = phase_2.pattern_data[phase_2.pattern_count].duration;
+                }
+                Phase_2();
+                phase_2.duration = Mathf.Clamp(phase_2.duration - Time.fixedDeltaTime, 0, phase_2.pattern_data[phase_2.pattern_count].duration);
+                if (phase_2.duration == 0)
+                {
+                    phase_2.pattern_count++;
+                    if (phase_2.pattern_data.Count == phase_2.pattern_count)
+                    {
+                        //아이들 애니메이션
+                        phase_2.pattern_ending = true;
+                    }
+                }
+            }
+                
+        }
 
         /*if (lightning.pattenr_data[lightning.pattern_count].time >= Managers.Sound.bgSound.time)
         {
@@ -384,6 +407,26 @@ public class ChaInGureumi : BossController          //비트는 80dlek
             lightning.pattern_ending = true;
         }
     }
+    public void Phase_2()
+    {
+        switch (phase_2.pattern_data[phase_2.pattern_count].action_num)
+        {
+            case 0:
+                transform.position = new Vector3(1.5f, 8, 0);
+                break;
+            case 1:
+                transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y - Time.fixedDeltaTime * phase_2.speed, 2.7f, 8), 0);
+                break;
+            case 2:
+                Anim_state_machin("hard_pattern1");
+                break;
+            case 3:
+                Anim_state_machin("2_phase_idle");
+                break;
+            default:
+                break;
+        }
+    }
     [Serializable]
     public class Lightning_pattern : Pattern_base_data
     {
@@ -465,6 +508,23 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         public float time;
         /*[HideInInspector]
         public bool rush_start = false;*/
+
+    }
+    [Serializable]
+    public class Phase_2_pattern : Pattern_base_data
+    {
+        public float speed = 2;
+    }
+    public class Lightning_ball : Pattern_base_data
+    {
+        public GameObject lightning_ball;
+    }
+    public class Electric_bullet : Pattern_base_data
+    {
+
+    }
+    public class Electric_line : Pattern_base_data
+    {
 
     }
 }
