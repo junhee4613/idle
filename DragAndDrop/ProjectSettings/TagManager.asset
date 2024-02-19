@@ -76,6 +76,9 @@ TagManager:
   - name: Boss
     uniqueID: 2767242371
     locked: 0
+  - name: Middle_front_pattern
+    uniqueID: 2692405197
+    locked: 0
   - name: Front_pattern
     uniqueID: 1767122327
     locked: 0

@@ -5,6 +5,7 @@ using System;
 using Random = UnityEngine.Random;
 using Cha_in_gureumi;
 using Newtonsoft.Json;
+using DG.Tweening;
 
 
 public class ChaInGureumi : BossController          //비트는 80dlek
@@ -23,6 +24,10 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     public Lightning_pattern lightning;
     [Header("2페이즈 시작")]
     public Phase_2_pattern phase_2;
+    [Header("전기 구체")]
+    public Lightning_ball_controller lightning_ball_controller;
+    [Header("전기 탄환")]
+    public Electric_bullet_controller electric_bullet_controller;
     protected override void Awake()
     {
         base.Awake();
@@ -31,6 +36,8 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         shower.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Shower_data").text);
         lightning.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Lightning_data").text);
         phase_2.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage_1_2_phase_start").text);
+        lightning_ball_controller.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Lightning_ball_controller_data").text);
+        electric_bullet_controller.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Electric_bullet_data").text);
     }
     public void Start()
     {
@@ -141,23 +148,43 @@ public class ChaInGureumi : BossController          //비트는 80dlek
             }
                 
         }
-
-        /*if (lightning.pattenr_data[lightning.pattern_count].time >= Managers.Sound.bgSound.time)
+        if (!lightning_ball_controller.pattern_ending)
         {
+            if ((lightning_ball_controller.pattern_data[lightning_ball_controller.pattern_count].time <= Managers.Sound.bgSound.time || lightning_ball_controller.duration != 0))
+            {
+                if (lightning_ball_controller.duration == 0)
+                {
+                    lightning_ball_controller.duration = lightning_ball_controller.pattern_data[lightning_ball_controller.pattern_count].duration;
+                }
+                Lightning_ball();
+                lightning_ball_controller.duration = Mathf.Clamp(lightning_ball_controller.duration - Time.fixedDeltaTime, 0, lightning_ball_controller.pattern_data[lightning_ball_controller.pattern_count].duration);
+                if (lightning_ball_controller.duration == 0)
+                {
+                    lightning_ball_controller.pattern_count++;
+                    if (lightning_ball_controller.pattern_data.Count == lightning_ball_controller.pattern_count)
+                    {
+                        //아이들 애니메이션
+                        lightning_ball_controller.pattern_ending = true;
+                    }
+                }
+            }
 
         }
-        if (lightning.pattenr_data[lightning.pattern_count].time >= Managers.Sound.bgSound.time)
+        if (!electric_bullet_controller.pattern_ending)
         {
+            if ((electric_bullet_controller.pattern_data[electric_bullet_controller.pattern_count].time <= Managers.Sound.bgSound.time))
+            {
+
+                Electric_bullet();
+                electric_bullet_controller.pattern_count++;
+                if (electric_bullet_controller.pattern_data.Count == electric_bullet_controller.pattern_count)
+                {
+                    electric_bullet_controller.pattern_ending = true;
+                }
+            }
 
         }
-        if (lightning.pattenr_data[lightning.pattern_count].time >= Managers.Sound.bgSound.time)
-        {
-
-        }
-        if (lightning.pattenr_data[lightning.pattern_count].time >= Managers.Sound.bgSound.time)
-        {
-
-        }*/
+        
     }
     public void Rain_storm_rotation()
     {
@@ -301,82 +328,29 @@ public class ChaInGureumi : BossController          //비트는 80dlek
             default:
                 break;
         }
-        /*switch ((rush_pattern.pattenr_data[rush_pattern.pattern_count].action_num))
-        {
-            case 1:
-                for (int i = 0; i < rush_pattern.rush_pos_deciding_count[rush_pattern.rush_pattern_num]; i++)
-                {
-                    Debug.Log(i);
-                    rush_pattern.rush_height.Enqueue(rush_pattern.pos_y[rush_pattern.pos_y_count]);
-                    if (rush_pattern.pos_y_count != rush_pattern.pos_y.Length - 1)
-                    {
-                        rush_pattern.pos_y_count++;
-                    }
-                }
-                if (rush_pattern.rush_pos_deciding_count.Length - 1 != rush_pattern.rush_pattern_num)
-                {
-                    rush_pattern.rush_pattern_num++;
-                }
-                rush_pattern.pattern_count++;
-                if (rush_pattern.pattenr_data.Count == rush_pattern.pattern_count)
-                {
-                    rush_pattern.pattern_ending = true;
-                    rush_pattern.pattern_starting = false;
-                }
-                break;
-            case 2:
-                Debug.Log(rush_pattern.rush_height.Count);
-                transform.position = new Vector3( rush_pattern.pos_x * rush_pattern.pos_x_dir[rush_pattern.rush_count], rush_pattern.rush_height.Dequeue(), 0);
-                rush_pattern.rush_speed = rush_pattern.rush_speed_option * rush_pattern.pos_x_dir[rush_pattern.rush_count];
-                break;
-            default:
-                break;
-
-
-
-
-                *//*case 0:
-                    transform.Translate(new Vector3(0, rush_pattern.up_move_speed * Time.fixedDeltaTime, 0));
-                    break;
-                case 1:
-                    for (int i = 0; i < rush_pattern.rush_pos_deciding_count[rush_pattern.rush_pattern_num]; i++)
-                    {
-                        rush_pattern.rush_height.Enqueue(rush_pattern.pos_y[rush_pattern.pos_y_count]);
-                        if(rush_pattern.pos_y_count != rush_pattern.pos_y.Length - 1)
-                        {
-                            rush_pattern.pos_y_count++;
-                        }
-                    }
-                    if(rush_pattern.rush_pos_deciding_count.Length - 1 != rush_pattern.rush_pattern_num)
-                    {
-                        rush_pattern.rush_pattern_num++;
-                    }
-                    rush_pattern.rush_start = false;
-                    break;
-                case 2:
-                    if (!rush_pattern.rush_start)
-                    {
-                        rush_pattern.rush_start = true;
-                        transform.position = new Vector3(rush_pattern.pos_x_dir[rush_pattern.rush_count], rush_pattern.rush_height.Dequeue(), 0);
-                        rush_pattern.rush_speed = rush_pattern.rush_speed_option * rush_pattern.pos_x_dir[rush_pattern.rush_count];
-                        if (rush_pattern.rush_count != rush_pattern.pos_x_dir.Length - 1)
-                        {
-                            rush_pattern.rush_count++;
-                        }
-                    }
-                    transform.Translate(new Vector3(0,rush_pattern.rush_speed * Time.fixedDeltaTime, 0 ));
-                    break;
-                default:
-                    break;*//*
-        }*/
-    }
-    public void Broad_lightning()
-    {
-
     }
     public void Lightning_ball()
     {
-
+        switch (lightning_ball_controller.pattern_data[lightning_ball_controller.pattern_count].action_num)
+        {
+            case 0:
+                lightning_ball_controller.lightning_ball.SetActive(true);
+                Sequence sequence = DOTween.Sequence();
+                sequence.Append(lightning_ball_controller.lightning_ball.transform.DOScale(Vector3.one * 1.5f, 0.5f));
+                sequence.Append(lightning_ball_controller.lightning_ball.transform.DOScale(Vector3.one, 0.5f));
+                break;
+            case 1:
+                lightning_ball_controller.lightning_ball.transform.Rotate(0, 0, lightning_ball_controller.electric_bullet_rotation_speed *Time.fixedDeltaTime);
+                break;
+            case 2:
+                lightning_ball_controller.lightning_ball.transform.Rotate(0, 0, lightning_ball_controller.electric_bullet_reverse_rotation_speed * Time.fixedDeltaTime);
+                break;
+            case 3:
+                //지속시간 0.5초
+                break;
+            default:
+                break;
+        }
     }
     public void Lightning()
     {
@@ -425,6 +399,17 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 break;
             default:
                 break;
+        }
+    }
+    public void Electric_bullet()
+    {
+        foreach (var item in electric_bullet_controller.muzzles)
+        {
+            GameObject bullet = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Electric_bullet"));
+            bullet.GetOrAddComponent<Electric_bullet_obj>().bullet_push_time = electric_bullet_controller.push_time;
+            bullet.GetOrAddComponent<Electric_bullet_obj>().bullet_speed = electric_bullet_controller.speed;
+            bullet.transform.position = item.position;
+            bullet.transform.rotation = item.rotation;
         }
     }
     [Serializable]
@@ -515,15 +500,26 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     {
         public float speed = 2;
     }
-    public class Lightning_ball : Pattern_base_data
+    [Serializable]
+    public class Lightning_ball_controller : Pattern_base_data
     {
         public GameObject lightning_ball;
+        [Header("전기탄 나갈 때의 시계반향 속도")]
+        public float electric_bullet_rotation_speed;
+        [Header("전기탄 나갈 때의 반시계반향 속도")]
+        public float electric_bullet_reverse_rotation_speed;
+        [Header("전깃줄일 때 돌아가는 회전 속도")]
+        public float electric_line_rotation_speed;
     }
-    public class Electric_bullet : Pattern_base_data
+    [Serializable]
+    public class Electric_bullet_controller : Pattern_base_data
     {
-
+        public Transform[] muzzles;
+        public float speed;
+        public float push_time;
     }
-    public class Electric_line : Pattern_base_data
+    [Serializable]
+    public class Electric_line_controller : Pattern_base_data
     {
 
     }
