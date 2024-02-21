@@ -18,6 +18,7 @@ public class PlayerController : playerData
     public float obj_size;
     public AudioClip bounce_sound;
     public GameObject player;
+    public Transform character;
     [Header("플레이어 사이즈")]
     public float player_size;
     [Header("플레이어 사이즈 배율(1이 기본 값)")]
@@ -26,8 +27,8 @@ public class PlayerController : playerData
     public float drag_dis_magnification = 1;
     #region 클래스 안에서 해결할것들
     sbyte break_num = 0;
-    Vector2 mouse_pos;
-    Vector2 player_pos;
+    public Vector2 mouse_pos;
+    public Vector2 player_pos;
     Vector2 drag_dis;
     public bool hit_statu = false;
     float time;
@@ -39,8 +40,6 @@ public class PlayerController : playerData
     //public Collider2D[] walls_sence;
     Managers Managers => Managers.instance;                 //지금 드래그 상태일 때 발사가 안되는 버그 있음
     [SerializeField]
-    RaycastHit2D ray_hit;
-    Ray mouse_pos_ray_pos;
     public Player_statu player_statu = Player_statu.IDLE;
     public Collider2D[] interation_obj;
     #endregion
@@ -134,14 +133,9 @@ public class PlayerController : playerData
         
         if (Input.GetMouseButtonDown(0))    //순서 1번
         {
-            mouse_pos_ray_pos = Camera.main.ScreenPointToRay(Input.mousePosition);
-            ray_hit = Physics2D.Raycast(mouse_pos_ray_pos.origin, mouse_pos_ray_pos.direction, 1, 1 << 6);
-            if (ray_hit.collider != null)
-            {
-                shoot_dir_image.SetActive(true);
-                player_pos = ray_hit.collider.gameObject.transform.position;
-                Mouse_button_down();
-            }
+            shoot_dir_image.SetActive(true);
+            player_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Mouse_button_down();
         }
         if (Input.GetKeyDown(KeyCode.Space) && break_num == 1)
         {
@@ -157,34 +151,31 @@ public class PlayerController : playerData
     }
     public void Drag()
     {
-        if (ray_hit.collider != null)
+        drag_dis = new Vector3(player_pos.x - mouse_pos.x, player_pos.y - mouse_pos.y, 0) * drag_dis_magnification;
+        player_rotation_z = Mathf.Atan2(drag_dis.normalized.y, drag_dis.normalized.x) * Mathf.Rad2Deg;
+        player.transform.rotation = Quaternion.Euler(0, 0, player_rotation_z - 90);
+        character.transform.localScale = new Vector3(character.transform.localScale.x, Mathf.Clamp(player_size + (drag_dis.magnitude / player_size_magnification), player_size, player_size + (shoot_speed / player_size_magnification)));
+        if (Input.GetMouseButtonUp(0))
         {
-            drag_dis = new Vector3(player_pos.x - mouse_pos.x, player_pos.y - mouse_pos.y, 0) * drag_dis_magnification;
-            player_rotation_z = Mathf.Atan2(drag_dis.normalized.y, drag_dis.normalized.x) * Mathf.Rad2Deg;
-            player.transform.rotation = Quaternion.Euler(0, 0, player_rotation_z - 90);
-            player.transform.localScale = new Vector3(player.transform.localScale.x, Mathf.Clamp(player_size + (drag_dis.magnitude / player_size_magnification), player_size, player_size + (shoot_speed / player_size_magnification)));
-            if (Input.GetMouseButtonUp(0))      //여기에 누르는 동안 시간이 흘러가고 너무 많이 흐르면 피해를 입는 로직으로 일단 추가
+            if (break_num == 0)
             {
-                if (break_num == 0)
-                {
-                    break_num = 1;
-                }
-                shoot_dir_image.SetActive(false);
-                shoot_power_range = Mathf.Clamp(drag_dis.magnitude, Mathf.Abs(slow_speed), Mathf.Abs(shoot_speed));
-                transform.rotation = arrow_rotation_base.rotation;
-                rb.velocity = Vector2.zero;
-                StopCoroutine(Pingpong_effect());
-                StartCoroutine(Pingpong_effect());
-                //player.transform.localScale = Vector3.one * player_size;
-                Drag_shoot();
+                break_num = 1;
             }
+            shoot_dir_image.SetActive(false);
+            shoot_power_range = Mathf.Clamp(drag_dis.magnitude, Mathf.Abs(slow_speed), Mathf.Abs(shoot_speed));
+            transform.rotation = arrow_rotation_base.rotation;
+            rb.velocity = Vector2.zero;
+            StopCoroutine(Pingpong_effect());
+            StartCoroutine(Pingpong_effect());
+            //player.transform.localScale = Vector3.one * player_size;
+            Drag_shoot();
         }
     }
     IEnumerator Pingpong_effect()
     {
-        while (player.transform.localScale.y != player_size)
+        while (character.transform.localScale.y != player_size)
         {
-            player.transform.localScale = new Vector3(transform.localScale.x, Mathf.Clamp(transform.localScale.y - Time.fixedDeltaTime * 50, player_size, player_size + (shoot_speed / player_size_magnification)), transform.localScale.z);
+            character.transform.localScale = new Vector3(character.transform.localScale.x, Mathf.Clamp(character.transform.localScale.y - Time.fixedDeltaTime * 50, player_size, player_size + (shoot_speed / player_size_magnification)), character.transform.localScale.z);
             yield return null;
         }
         //player.transform.DOPunchScale(Vector3.one * 0.2f, 0.2f);

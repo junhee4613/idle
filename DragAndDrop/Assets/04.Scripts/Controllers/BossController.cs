@@ -47,24 +47,4 @@ public abstract class BossController : Stage_base_controller
             }
         }*/
     }
-    /*public virtual void Simple_pattern()
-    {
-
-    }
-    public virtual void Hard_pattern()
-    {
-
-    }*/
-    public void Anim_state_machin(string clip_name)
-    {
-        /*if (an.GetCurrentAnimatorStateInfo(0). != clip_name)
-        {
-
-        }*/
-        if (an.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
-        {
-            an.Play(clip_name);
-        }
-
-    }
 }

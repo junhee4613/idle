@@ -101,6 +101,7 @@ public class Stage_setting
     public float beat;
     public float bgm_length;
 }
+[System.Serializable]
 public abstract class Anim_stage_state
 {
     public Animator an;
@@ -113,6 +114,10 @@ namespace Stage_FSM
 {
     public class Phase1_idle : Anim_stage_state
     {
+        public Phase1_idle(Animator temp_an)
+        {
+            this.an = temp_an;
+        }
         public override void On_state_enter()
         {
             an.Play("1_phase_idle");
@@ -128,6 +133,10 @@ namespace Stage_FSM
     }
     public class Phase2_idle : Anim_stage_state
     {
+        public Phase2_idle(Animator temp_an)
+        {
+            this.an = temp_an;
+        }
         public override void On_state_enter()
         {
             an.Play("2_phase_idle");

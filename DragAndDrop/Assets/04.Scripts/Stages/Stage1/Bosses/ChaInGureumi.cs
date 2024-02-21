@@ -12,6 +12,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
 {
     public Cha_in_gureumi_simple_patterns simple_pattern;
     public Cha_in_gureumi_hard_patterns hard_pattern;
+    public Transform boss_trans;
     /*[Header("비 패턴")]
     public Rain_drop_pattern rain_drop;*/
     [Header("비바람 패턴")]
@@ -24,35 +25,28 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     public Lightning_pattern lightning;
     [Header("2페이즈 시작")]
     public Phase_2_pattern phase_2;
-    [Header("전기 구체")]
-    public Lightning_ball_controller lightning_ball_controller;
-    [Header("전기 탄환")]
-    public Electric_bullet_controller electric_bullet_controller;
+    [Header("전기 구체 패턴")]
+    public Electric_ball_pattern electric_ball_pattern;
+    [Header("전기 구체 회전")]
+    public Electric_ball_rotation_pattern electric_ball_rotation_pattern;
+    
     protected override void Awake()
     {
         base.Awake();
-        rain_storm.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Rain_storm_data").text);
+        rain_storm.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage1_rain_storm_data").text);
         rush.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Cloud_rush_data").text);
-        shower.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Shower_data").text);
-        lightning.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Lightning_data").text);
-        phase_2.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage_1_2_phase_start").text);
-        lightning_ball_controller.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Lightning_ball_controller_data").text);
-        electric_bullet_controller.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Electric_bullet_data").text);
+        shower.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage1_shower_data").text);
+        lightning.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage1_lightning_data").text);
+        phase_2.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage_1_2_phase_start_data").text);
+        electric_ball_rotation_pattern.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage1_electric_ball_rotation_data").text);
+        electric_ball_pattern.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage1_Electric_ball_pattern_data").text);
+        
     }
     public void Start()
     {
-        Anim_state_machin("1_phase_idle");
+        Anim_state_machin(anim_state["1_phase_idle"]);
         Managers.GameManager.game_start = true;
     }
-    /* IEnumerator Temp_method()
-     {
-         while (Managers.Main_camera.transform.position.y != 0)
-         {
-             Managers.Main_camera.transform.position = new Vector3(Managers.Main_camera.transform.position.x, Mathf.Clamp(Managers.Main_camera.transform.position.y + Time.deltaTime * 5, -11, 0), Managers.Main_camera.transform.position.z);
-             yield return null;
-         }
-        Managers.GameManager.game_start = true;
-     } */
     public override void Pattern_processing()
     {
         base.Pattern_processing();
@@ -65,7 +59,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                     rain_storm.duration = rain_storm.pattern_data[rain_storm.pattern_count].duration;
                 }
                 rain_storm.time -= Time.fixedDeltaTime;
-                if (rain_storm.time <= 0)          //나중에 방향이 바뀌는 구간만 따로 명시하기
+                if (rain_storm.time <= 0)
                 {
                     rain_storm.time += 0.375f;
                     Rain_storm();
@@ -97,11 +91,9 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                     shower.pattern_count++;
                     if (shower.pattern_data.Count == shower.pattern_count)
                     {
-                        Anim_state_machin("1_phase_idle");
-                        //아이들 애니메이션
+                        Anim_state_machin(anim_state["1_phase_idle"]);
                         shower.shower_obj.SetActive(false);
                         shower.pattern_ending = true;
-                        //boss_image.flipX = false;
                     }
                 }
             } 
@@ -122,7 +114,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         {
             if(lightning.pattern_data[lightning.pattern_count].time <= Managers.Sound.bgSound.time)
             {
-                Anim_state_machin("2_phase_idle");
+                Anim_state_machin(anim_state["2_phase_idle"]);
                 Lightning();
             }
         }
@@ -148,49 +140,58 @@ public class ChaInGureumi : BossController          //비트는 80dlek
             }
                 
         }
-        if (!lightning_ball_controller.pattern_ending)
+        if (!electric_ball_pattern.pattern_ending)
         {
-            if ((lightning_ball_controller.pattern_data[lightning_ball_controller.pattern_count].time <= Managers.Sound.bgSound.time || lightning_ball_controller.duration != 0))
+            if ((electric_ball_pattern.pattern_data[electric_ball_pattern.pattern_count].time <= Managers.Sound.bgSound.time || electric_ball_pattern.duration != 0))
             {
-                if (lightning_ball_controller.duration == 0)
+                if (electric_ball_pattern.duration == 0)
                 {
-                    lightning_ball_controller.duration = lightning_ball_controller.pattern_data[lightning_ball_controller.pattern_count].duration;
+                    electric_ball_pattern.duration = electric_ball_pattern.pattern_data[electric_ball_pattern.pattern_count].duration;
                 }
-                Lightning_ball();
-                lightning_ball_controller.duration = Mathf.Clamp(lightning_ball_controller.duration - Time.fixedDeltaTime, 0, lightning_ball_controller.pattern_data[lightning_ball_controller.pattern_count].duration);
-                if (lightning_ball_controller.duration == 0)
+                Electric_ball();
+                electric_ball_pattern.duration = Mathf.Clamp(electric_ball_pattern.duration - Time.fixedDeltaTime, 0, electric_ball_pattern.pattern_data[electric_ball_pattern.pattern_count].duration);
+                if (electric_ball_pattern.duration == 0)
                 {
-                    lightning_ball_controller.pattern_count++;
-                    if (lightning_ball_controller.pattern_data.Count == lightning_ball_controller.pattern_count)
+                    electric_ball_pattern.pattern_count++;
+                    if (electric_ball_pattern.pattern_data.Count == electric_ball_pattern.pattern_count)
                     {
                         //아이들 애니메이션
-                        lightning_ball_controller.pattern_ending = true;
+                        electric_ball_pattern.pattern_ending = true;
                     }
                 }
             }
 
         }
-        if (!electric_bullet_controller.pattern_ending)
+        if (!electric_ball_rotation_pattern.pattern_ending)
         {
-            if ((electric_bullet_controller.pattern_data[electric_bullet_controller.pattern_count].time <= Managers.Sound.bgSound.time))
+            if ((electric_ball_rotation_pattern.pattern_data[electric_ball_rotation_pattern.pattern_count].time <= Managers.Sound.bgSound.time || electric_ball_rotation_pattern.duration != 0))
             {
-
-                Electric_bullet();
-                electric_bullet_controller.pattern_count++;
-                if (electric_bullet_controller.pattern_data.Count == electric_bullet_controller.pattern_count)
+                if (electric_ball_rotation_pattern.duration == 0)
                 {
-                    electric_bullet_controller.pattern_ending = true;
+                    electric_ball_rotation_pattern.duration = electric_ball_rotation_pattern.pattern_data[electric_ball_rotation_pattern.pattern_count].duration;
+                }
+                Electric_ball_rotation();
+                electric_ball_rotation_pattern.duration = Mathf.Clamp(electric_ball_rotation_pattern.duration - Time.fixedDeltaTime, 0, electric_ball_rotation_pattern.pattern_data[electric_ball_rotation_pattern.pattern_count].duration);
+                if (electric_ball_rotation_pattern.duration == 0)
+                {
+                    electric_ball_rotation_pattern.pattern_count++;
+                    if (electric_ball_rotation_pattern.pattern_data.Count == electric_ball_rotation_pattern.pattern_count)
+                    {
+                        //아이들 애니메이션
+                        electric_ball_rotation_pattern.pattern_ending = true;
+                    }
                 }
             }
 
         }
-        
+
     }
     public void Rain_storm_rotation()
     {
         switch (rain_storm.pattern_data[rain_storm.pattern_count].action_num)
         {
             case 0:         //가운데(바람 빨아들이는 애니메이션)
+                Anim_state_machin(anim_state["simple_pattern2"]);
                 if (rain_storm.pos_x_critaria != 0)
                 {
                     rain_storm.pos_x_critaria = 0;
@@ -205,6 +206,11 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 }
                 break;
             case 1:         //왼쪽(왼쪽 방향으로 부는 애니메이션)
+                Anim_state_machin(anim_state["simple_pattern3"]);
+                if (boss_trans.transform.localScale.x != -1)
+                {
+                    boss_trans.transform.localScale = new Vector3(-1f, 1f, 0f);
+                }
                 if (rain_storm.pos_x_critaria != rain_storm.pos_x_criteria_option)
                 {
                     rain_storm.pos_x_critaria = -rain_storm.pos_x_criteria_option;
@@ -220,6 +226,11 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 }
                 break;
             case 2:     //오른쪽(오른쪽으로 부는 애니메이션)
+                Anim_state_machin(anim_state["simple_pattern3"]);
+                if (boss_trans.transform.localScale.x != 1)
+                {
+                    boss_trans.transform.localScale = new Vector3(1f, 1f, 0f);
+                }
                 if (rain_storm.pos_x_critaria != rain_storm.pos_x_criteria_option)
                 {
                     rain_storm.pos_x_critaria = rain_storm.pos_x_criteria_option;
@@ -227,6 +238,36 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 if (rain_storm.rain_trans[rain_storm.rain_trans.Count - 1].rotation.eulerAngles.z != 45)
                 {
                     rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.Euler(0, 0, 45), rain_storm.rotation_speed * Time.fixedDeltaTime);
+                    foreach (var item in rain_storm.rain_trans)
+                    {
+                        item.rotation = rain_storm.criteria;
+                    }
+                }
+                break;
+            case 3:
+                Anim_state_machin(anim_state["simple_pattern3"]);
+                if (rain_storm.pos_x_critaria != 0)
+                {
+                    rain_storm.pos_x_critaria = 0;
+                }
+                if (rain_storm.rain_trans[rain_storm.rain_trans.Count - 1].rotation.eulerAngles.z != 0)
+                {
+                    rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.identity, rain_storm.rotation_speed * Time.fixedDeltaTime);
+                    foreach (var item in rain_storm.rain_trans)
+                    {
+                        item.rotation = rain_storm.criteria;
+                    }
+                }
+                break;
+            case 4:
+                Anim_state_machin(anim_state["2_phase_idle"]);
+                if (rain_storm.pos_x_critaria != 0)
+                {
+                    rain_storm.pos_x_critaria = 0;
+                }
+                if (rain_storm.rain_trans[rain_storm.rain_trans.Count - 1].rotation.eulerAngles.z != 0)
+                {
+                    rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.identity, rain_storm.rotation_speed * Time.fixedDeltaTime);
                     foreach (var item in rain_storm.rain_trans)
                     {
                         item.rotation = rain_storm.criteria;
@@ -272,6 +313,22 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                     rain_storm.rain_trans.Add(temp.transform);
                 }
                 break;
+            case 3:
+                temp.transform.position = new Vector3(rain_storm.pos_x[rain_storm.pos_x_count] + rain_storm.pos_x_critaria, rain_storm.pos_y, 0);
+                if (!rain_storm.rain_hash.Contains(temp.GetInstanceID().ToString()))
+                {
+                    rain_storm.rain_hash.Add(temp.GetInstanceID().ToString());
+                    rain_storm.rain_trans.Add(temp.transform);
+                }
+                break;
+            case 4:
+                temp.transform.position = new Vector3(rain_storm.pos_x[rain_storm.pos_x_count] + rain_storm.pos_x_critaria, rain_storm.pos_y, 0);
+                if (!rain_storm.rain_hash.Contains(temp.GetInstanceID().ToString()))
+                {
+                    rain_storm.rain_hash.Add(temp.GetInstanceID().ToString());
+                    rain_storm.rain_trans.Add(temp.transform);
+                }
+                break;
             default:
                 break;
         }
@@ -284,26 +341,40 @@ public class ChaInGureumi : BossController          //비트는 80dlek
             rain_storm.pos_x_count++;
         }
     }
+    public void Warning_box(Vector3 size, Vector3 pos, sbyte count, float minute)
+    {
+        GameObject warning_box = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
+        warning_box.transform.position = pos;
+        warning_box.transform.localScale = size;
+        warning_box.GetComponent<SpriteRenderer>().DOFade(0, minute).SetLoops(count, LoopType.Yoyo);
+    }
     public void Shower()
     {
         //2~-4.5
         switch (shower.pattern_data[shower.pattern_count].action_num)
         {
             case 0:
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(4.75f, transform.position.y), 2 * Time.fixedDeltaTime);
-                Anim_state_machin("simple_pattern1");
-                if (!shower.shower_obj.activeSelf)
+                //빨간 박스 생김
+                Anim_state_machin(anim_state["simple_pattern1"]);
+                Warning_box(new Vector3(7, 4, 0), new Vector3(0.5f, -2, 0), 3, 0.25f);
+                break;
+            case 1:
+                //울면서 플레이어 박스 끝쪽으로 이동
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(3.9f, transform.position.y), 2.5f * Time.fixedDeltaTime);
+                Anim_state_machin(anim_state["simple_pattern1"]);
+                if (!shower.shower_obj.activeSelf && transform.position.x == 3.9f)
                 {
                     shower.shower_obj.SetActive(true);
                 }
                 break;
-            case 1:
-                //우는 애니메이션
+            case 2:
+                Anim_state_machin(anim_state["simple_pattern0"]);
                 transform.position = Vector3.MoveTowards(transform.position, new Vector3(-1.75f, transform.position.y), 12 * Time.fixedDeltaTime);
-                if(!boss_image.flipX)
+                if (!boss_image.flipX)
                 {
                     boss_image.flipX = true;
                 }
+                //지정한 위치까지 돌진 후 소나기 사라짐
                 break;
             default:
                 break;
@@ -329,24 +400,85 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 break;
         }
     }
-    public void Lightning_ball()
+    public void Electric_ball_rotation()
     {
-        switch (lightning_ball_controller.pattern_data[lightning_ball_controller.pattern_count].action_num)
+        switch (electric_ball_rotation_pattern.pattern_data[electric_ball_rotation_pattern.pattern_count].action_num)
         {
             case 0:
-                lightning_ball_controller.lightning_ball.SetActive(true);
-                Sequence sequence = DOTween.Sequence();
-                sequence.Append(lightning_ball_controller.lightning_ball.transform.DOScale(Vector3.one * 1.5f, 0.5f));
-                sequence.Append(lightning_ball_controller.lightning_ball.transform.DOScale(Vector3.one, 0.5f));
+                electric_ball_rotation_pattern.lightning_ball.Rotate(0, 0, electric_ball_rotation_pattern.electric_bullet_rotation_speed * Time.fixedDeltaTime);
                 break;
             case 1:
-                lightning_ball_controller.lightning_ball.transform.Rotate(0, 0, lightning_ball_controller.electric_bullet_rotation_speed *Time.fixedDeltaTime);
+                electric_ball_rotation_pattern.lightning_ball.Rotate(0, 0, electric_ball_rotation_pattern.electric_bullet_reverse_rotation_speed * Time.fixedDeltaTime);
                 break;
             case 2:
-                lightning_ball_controller.lightning_ball.transform.Rotate(0, 0, lightning_ball_controller.electric_bullet_reverse_rotation_speed * Time.fixedDeltaTime);
+                electric_ball_rotation_pattern.lightning_ball.Rotate(0, 0, -electric_ball_rotation_pattern.electric_bullet_rotation_speed * Time.fixedDeltaTime);
+                break;
+            default:
+                break;
+        }
+    }
+    public void Electric_ball()
+    {
+        
+
+        switch (electric_ball_pattern.pattern_data[electric_ball_pattern.pattern_count].action_num)
+        {
+            case 0:
+                Sequence sequence = DOTween.Sequence();
+                electric_ball_pattern.electric_ball_obj.SetActive(true);
+                sequence.Append(electric_ball_pattern.electric_ball_obj.transform.DOScale(Vector3.one * 1.5f, 0.5f));
+                sequence.Append(electric_ball_pattern.electric_ball_obj.transform.DOScale(Vector3.one, 0.5f));
+                break;
+            case 1:
+                Sequence sequence1 = DOTween.Sequence();
+                sequence1.Append(electric_ball_pattern.electric_ball_obj.transform.DOScale(Vector3.one * 0.5f, 0.1f));
+                sequence1.Append(electric_ball_pattern.electric_ball_obj.transform.DOScale(Vector3.one, 0.1f)).OnComplete(() => 
+                {
+                    electric_ball_pattern.muzzle.SetActive(true);
+                });
+                break;
+            case 2:
+                foreach (var item in electric_ball_pattern.muzzles_trans)
+                {
+                    GameObject bullet = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Electric_bullet"));
+                    Electric_bullet_obj electric_bullet = bullet.GetComponent<Electric_bullet_obj>();
+                    if (electric_bullet == null)
+                    {
+                        electric_bullet = bullet.AddComponent<Electric_bullet_obj>();
+                        electric_bullet.bullet_speed = electric_ball_pattern.speed;
+                        electric_bullet.bullet_push_time = electric_ball_pattern.push_time;
+
+                    }
+                    bullet.transform.position = item.position;
+                    bullet.transform.rotation = item.rotation;
+                }
                 break;
             case 3:
+                Sequence sequence2 = DOTween.Sequence();
+
+                sequence2.Append(electric_ball_pattern.electric_ball_obj.transform.DOScale(Vector3.one * 0.5f, 0.1f)).OnComplete(() =>
+                {
+                    electric_ball_pattern.muzzle.SetActive(false);
+                }); ;
+                sequence2.Append(electric_ball_pattern.electric_ball_obj.transform.DOScale(Vector3.one, 0.1f));
                 //지속시간 0.5초
+                break;
+            case 4:
+                electric_ball_pattern.electric_line.SetActive(true);
+
+                /*sequence.Append(electric_ball_pattern.electric_line.transform.DOScale(Vector3.one * 0.5f, 0.1f)).OnComplete(() =>
+                {
+                }); ;
+                sequence.Append(electric_ball_pattern.electric_ball_obj.transform.DOScale(Vector3.one, 0.1f));*/
+                break;
+            case 5:
+                electric_ball_pattern.ball.DOScale(transform.localScale + Vector3.one * 0.1f, 0.2f);
+                break;
+            case 6:
+                electric_ball_pattern.electric_line.SetActive(false);
+                break;
+            case 7:
+                electric_ball_pattern.electric_ball_obj.SetActive(false);
                 break;
             default:
                 break;
@@ -392,24 +524,14 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y - Time.fixedDeltaTime * phase_2.speed, 2.7f, 8), 0);
                 break;
             case 2:
-                Anim_state_machin("hard_pattern1");
+            Anim_state_machin(anim_state["hard_pattern1"]);
                 break;
             case 3:
-                Anim_state_machin("2_phase_idle");
+            Anim_state_machin(anim_state["2_phase_idle"]);
+                Managers.Main_camera.Moving();
                 break;
             default:
                 break;
-        }
-    }
-    public void Electric_bullet()
-    {
-        foreach (var item in electric_bullet_controller.muzzles)
-        {
-            GameObject bullet = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Electric_bullet"));
-            bullet.GetOrAddComponent<Electric_bullet_obj>().bullet_push_time = electric_bullet_controller.push_time;
-            bullet.GetOrAddComponent<Electric_bullet_obj>().bullet_speed = electric_bullet_controller.speed;
-            bullet.transform.position = item.position;
-            bullet.transform.rotation = item.rotation;
         }
     }
     [Serializable]
@@ -501,22 +623,25 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         public float speed = 2;
     }
     [Serializable]
-    public class Lightning_ball_controller : Pattern_base_data
+    public class Electric_ball_pattern : Pattern_base_data
     {
-        public GameObject lightning_ball;
+        public GameObject electric_ball_obj;
+        public Transform ball;
+        public GameObject muzzle;
+        public GameObject electric_line;
+        public Transform[] muzzles_trans;
+        public float speed;
+        public float push_time;
+    }
+    [Serializable]
+    public class Electric_ball_rotation_pattern : Pattern_base_data
+    {
+        
+        public Transform lightning_ball;
         [Header("전기탄 나갈 때의 시계반향 속도")]
         public float electric_bullet_rotation_speed;
         [Header("전기탄 나갈 때의 반시계반향 속도")]
         public float electric_bullet_reverse_rotation_speed;
-        [Header("전깃줄일 때 돌아가는 회전 속도")]
-        public float electric_line_rotation_speed;
-    }
-    [Serializable]
-    public class Electric_bullet_controller : Pattern_base_data
-    {
-        public Transform[] muzzles;
-        public float speed;
-        public float push_time;
     }
     [Serializable]
     public class Electric_line_controller : Pattern_base_data

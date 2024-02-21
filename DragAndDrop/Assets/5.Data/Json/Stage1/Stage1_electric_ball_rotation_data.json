@@ -1,0 +1,102 @@
+﻿[
+    {
+        "time": "82.5",
+        "action_num": "0",
+        "duration": "4.5"
+    },
+    {
+        "time": "87",
+        "action_num": "1",
+        "duration": "0.2"
+    },
+    {
+        "time": "87.4",
+        "action_num": "1",
+        "duration": "0.2"
+    },
+    {
+        "time": "87.8",
+        "action_num": "1",
+        "duration": "0.2"
+    },
+    {
+        "time": "88.5",
+        "action_num": "0",
+        "duration": "4.5"
+    },
+    {
+        "time": "93",
+        "action_num": "1",
+        "duration": "0.2"
+    },
+    {
+        "time": "93.4",
+        "action_num": "1",
+        "duration": "0.2"
+    },
+    {
+        "time": "94.5",
+        "action_num": "0",
+        "duration": "4.5"
+    },
+    {
+        "time": "99",
+        "action_num": "2",
+        "duration": "3"
+    },
+    {
+        "time": "102",
+        "action_num": "0",
+        "duration": "2.5"
+    },
+    {
+        "time": "106.5",
+        "action_num": "0",
+        "duration": "4.5"
+    },
+    {
+        "time": "111",
+        "action_num": "1",
+        "duration": "0.2"
+    },
+    {
+        "time": "111.4",
+        "action_num": "1",
+        "duration": "0.2"
+    },
+    {
+        "time": "111.8",
+        "action_num": "1",
+        "duration": "0.2"
+    },
+    {
+        "time": "112.5",
+        "action_num": "0",
+        "duration": "4.5"
+    },
+    {
+        "time": "117",
+        "action_num": "1",
+        "duration": "0.2"
+    },
+    {
+        "time": "117.4",
+        "action_num": "1",
+        "duration": "0.2"
+    },
+    {
+        "time": "118.5",
+        "action_num": "0",
+        "duration": "4.5"
+    },
+    {
+        "time": "123",
+        "action_num": "2",
+        "duration": "3"
+    },
+    {
+        "time": "126",
+        "action_num": "0",
+        "duration": "2.5"
+    }
+]

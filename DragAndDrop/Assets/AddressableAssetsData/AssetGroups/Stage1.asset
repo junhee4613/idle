@@ -36,7 +36,7 @@ MonoBehaviour:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b5d81ae0dff6346489630dc75768ffe2
-    m_Address: Rain_storm_data
+    m_Address: Stage1_rain_storm_data
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
@@ -72,7 +72,7 @@ MonoBehaviour:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a8790122f76f17e4db8dfc1843e62021
-    m_Address: Shower_data
+    m_Address: Stage1_shower_data
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
@@ -84,7 +84,7 @@ MonoBehaviour:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7bdd9beb82bc6e5408f66d62faf336f1
-    m_Address: Lightning_data
+    m_Address: Stage1_lightning_data
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
@@ -96,13 +96,13 @@ MonoBehaviour:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2e9fda74b4eeb5a4182c51e5de6a1897
-    m_Address: Stage_1_2_phase_start
+    m_Address: Stage_1_2_phase_start_data
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fbbc9fd07e0bf8f4a861f58afe2dbc72
-    m_Address: Lightning_ball_controller_data
+  - m_GUID: 04875ea0c96fa1a428d7500c1bbae5a0
+    m_Address: Stage1_electric_ball_rotation_data
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
@@ -113,8 +113,14 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 933813d8032efa44da07fccf016f85fe
-    m_Address: Electric_bullet_data
+  - m_GUID: 8975b5c598a63404dbbf981996869ec1
+    m_Address: Stage1_Electric_ball_pattern_data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bcce12c541265774b828891b5a33702c
+    m_Address: Warning_box
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad

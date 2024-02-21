@@ -30,6 +30,6 @@ public class Camera_manager
     }
     public void Moving()
     {
-        Main_camera.transform.DOShakePosition(0.3f, 0.3f, 5, 90, false, true);
+        Main_camera.transform.DOShakePosition(0.3f, 0.3f, 100, 90, false, true);
     }
 }
