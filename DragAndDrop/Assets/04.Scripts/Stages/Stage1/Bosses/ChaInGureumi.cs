@@ -356,25 +356,28 @@ public class ChaInGureumi : BossController          //비트는 80dlek
             case 0:
                 //빨간 박스 생김
                 Anim_state_machin(anim_state["simple_pattern1"]);
-                Warning_box(new Vector3(7, 4, 0), new Vector3(0.5f, -2, 0), 3, 0.25f);
+                Warning_box(new Vector3(6.5f, 4, 0), new Vector3(0.75f, -2, 0), 3, 0.25f);
                 break;
             case 1:
                 //울면서 플레이어 박스 끝쪽으로 이동
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(3.9f, transform.position.y), 2.5f * Time.fixedDeltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(4, transform.position.y), 2.5f * Time.fixedDeltaTime);
                 Anim_state_machin(anim_state["simple_pattern1"]);
-                if (!shower.shower_obj.activeSelf && transform.position.x == 3.9f)
+                if (!shower.shower_obj.activeSelf && transform.position.x == 4f)
                 {
                     shower.shower_obj.SetActive(true);
                 }
                 break;
             case 2:
                 Anim_state_machin(anim_state["simple_pattern0"]);
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(-1.75f, transform.position.y), 12 * Time.fixedDeltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(0.75f, transform.position.y), 12 * Time.fixedDeltaTime);
                 if (!boss_image.flipX)
                 {
                     boss_image.flipX = true;
                 }
                 //지정한 위치까지 돌진 후 소나기 사라짐
+                break;
+            case 3:
+                transform.Translate(Vector3.up * Time.fixedDeltaTime * 12);
                 break;
             default:
                 break;
@@ -382,6 +385,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     }
     public void Rush()
     {
+        
         switch (rush.pattern_data[rush.pattern_count].action_num)
         {
             case 0:
@@ -577,12 +581,6 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     {
         [Header("이동 속도")]
         public float speed;
-        [Header("우산 오브젝트")]
-        public GameObject umbrella;
-        [Header("우산 오브젝트 켜지는 시간")]
-        public float umbrella_on_time;
-        [Header("우산 지속시간")]
-        public float umbrella_duration_time;
         [Header("소나기 오브젝트")]
         public GameObject shower_obj;
         
@@ -591,30 +589,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     public class Rush_pattern : Pattern_base_data
     {
         [HideInInspector]
-        public Queue<float> rush_height = new Queue<float>();
-        [Header("처음 위로 이동하는 속도")]
-        public float up_move_speed;
-        [Header("돌진하는 높이들 전부 다 적기")]
-        public float[] pos_y;
-        [Header("돌진 패턴을 한번 동작할 때 정해지는 위치 설정 횟수")]
-        public sbyte[] rush_pos_deciding_count;
-        [Header("돌진하는 방향(오른쪽 = -1, 왼쪽은 = 1)")]
-        public sbyte[] pos_x_dir;
-        [Header("돌진 출발 점(양수로 쓰면 됨)")]
-        public float pos_x;
-        [Header("돌진 속도")]
-        public float rush_speed_option = 47.94f;
-        [HideInInspector]
-        public float rush_speed;
-        [HideInInspector]
-        public sbyte pos_y_count;
-        [HideInInspector]
-        public sbyte rush_pattern_num;      //돌진패턴이 한번 끝날 때마다 증가하는 변수
-        [HideInInspector]
-        public sbyte rush_count;              //실질적으로 돌진한 횟수
-        public float time;
-        /*[HideInInspector]
-        public bool rush_start = false;*/
+        public float pos_y;
 
     }
     [Serializable]
@@ -642,10 +617,5 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         public float electric_bullet_rotation_speed;
         [Header("전기탄 나갈 때의 반시계반향 속도")]
         public float electric_bullet_reverse_rotation_speed;
-    }
-    [Serializable]
-    public class Electric_line_controller : Pattern_base_data
-    {
-
     }
 }

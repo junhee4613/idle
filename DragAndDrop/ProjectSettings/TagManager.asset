@@ -9,6 +9,7 @@ TagManager:
   - Virtical
   - Horizontal
   - UI_sub
+  - Boss
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - Wall
   - Slow_obstacle
   - Nomal_obstacle
-  - 
+  - Boss
   - 
   - 
   - 
