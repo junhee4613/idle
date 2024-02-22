@@ -29,12 +29,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 56c974da73615bb47b3bde41ba8758d7
-    m_Address: Cloud_rush_data
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b5d81ae0dff6346489630dc75768ffe2
     m_Address: Stage1_rain_storm_data
     m_ReadOnly: 0
@@ -121,6 +115,18 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bcce12c541265774b828891b5a33702c
     m_Address: Warning_box
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 623d9a9996daa904098a68327029a8b1
+    m_Address: Stage1_rush_pattern_data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 147f8d66594953d42b4771b669f0616b
+    m_Address: Rain_bullet
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
