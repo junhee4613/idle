@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class Rain_bullet_controller : MonoBehaviour
 {
-    public float rotation;
     public float speed;
     public float push_time;
+    public int dir;
     float time;
     // Start is called before the first frame update
     void Start()
     {
-        transform.Rotate(new Vector3(0, 0, rotation));
     }
 
     // Update is called once per frame
@@ -21,7 +20,7 @@ public class Rain_bullet_controller : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        transform.Translate(transform.up * speed * Time.fixedDeltaTime);
+        transform.Translate(transform.right * -1);
         time += Time.fixedDeltaTime;
         if (time > push_time)
         {
@@ -29,8 +28,8 @@ public class Rain_bullet_controller : MonoBehaviour
             time = 0;
         }
     }
-    private void OnEnable()
+    private void OnDisable()
     {
-        transform.Rotate(new Vector3(0, 0, rotation));
+
     }
 }

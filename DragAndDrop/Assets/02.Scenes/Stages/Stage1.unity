@@ -527,12 +527,14 @@ MonoBehaviour:
     dir: 1
     target_pos_x: -8
     init_pos_x: -12.5
-    target_rush_pos_x: 12.5
+    target_rush_pos_x: 18
     bullet_speed: 20
     bullet_roataion: -90
     rush_start: 0
     bullet_push_time: 5
     rain_muzzle: {fileID: 663563852}
+    bullets: []
+    temp2: 0
   lightning:
     pattern_count: 0
     pattern_ending: 0
@@ -985,7 +987,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &787926609
 Transform:
   m_ObjectHideFlags: 0
