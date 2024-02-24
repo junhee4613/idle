@@ -6,7 +6,7 @@ public class Rain_bullet_controller : MonoBehaviour
 {
     public float speed;
     public float push_time;
-    public int dir;
+    public float rotation;
     float time;
     // Start is called before the first frame update
     void Start()
@@ -20,16 +20,12 @@ public class Rain_bullet_controller : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        transform.Translate(transform.right * -1);
+        transform.Translate(new Vector3(0, -speed, 0) * Time.fixedDeltaTime);
         time += Time.fixedDeltaTime;
         if (time > push_time)
         {
             Managers.Pool.Push(this.gameObject);
             time = 0;
         }
-    }
-    private void OnDisable()
-    {
-
     }
 }

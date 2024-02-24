@@ -406,7 +406,9 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         switch (rush.pattern_data[rush.pattern_count].action_num)
         {
             case 0:
+                //Warning_box(new Vector3(8, Mathf.Abs(4 - (Mathf.Abs(Mathf.Abs(rush.pos_y) - 2) * 2)), 0), new Vector3(0, rush.pos_y, 0), 3, 0.25f);
                 //여기 수정해야됨 
+                Warning_box(new Vector3(8, Mathf.Abs(4 - (Mathf.Abs(rush.pos_y) - 2)), 0), new Vector3(0, (rush.pos_y / 2f - 1), 0), 3, 0.25f);
                 //Warning_box(new Vector3(8, Mathf.Abs(4 - (Mathf.Abs(Mathf.Abs(rush.pos_y) - 2))), 0), new Vector3(0, rush.pos_y + Mathf.Abs(rush.pos_y / 2f - 1), 0), 3, 0.25f);
                 break;
             case 1:
@@ -449,7 +451,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 //탄환
                 GameObject bullet = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Rain_bullet"));
                 bullet.transform.position = rush.rain_muzzle.position;
-                bullet.transform.Rotate(new Vector3(0, 0, rush.bullet_roataion * rush.dir));
+                bullet.transform.rotation = Quaternion.Euler(new Vector3(0, 0, rush.bullet_roataion * rush.dir));
                 Rain_bullet_controller temp = bullet.GetComponent<Rain_bullet_controller>();
                 if(temp == null)
                 {
@@ -502,6 +504,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 }
                 //여기 수정해야됨 
                 //Warning_box(new Vector3(8, Mathf.Abs(4 - (Mathf.Abs(rush.pos_y) - 2)), 0), new Vector3(0, rush.pos_y - (rush.pos_y / 2f -1), 0), 3, 0.25f);
+                Warning_box(new Vector3(8, Mathf.Abs(4 - Mathf.Abs(rush.pos_y + 2)), 0), new Vector3(0, (rush.pos_y / 2f - 1), 0), 3, 0.25f);
                 break;
             case 9:
                 transform.DOMoveX(rush.target_rush_pos_x * rush.dir, 0.4f);
