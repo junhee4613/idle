@@ -42,6 +42,8 @@ public class PlayerController : playerData
     [SerializeField]
     public Player_statu player_statu = Player_statu.IDLE;
     public Collider2D[] interation_obj;
+    public ParticleSystem test_particle;
+    public ParticleSystem test_particle2;
     #endregion
     #region 테스트용
     //[Header("테스트용")]
@@ -67,9 +69,11 @@ public class PlayerController : playerData
     void Update()
     {
         //Drag_statu_walls_collider();
-        
-        Interaction_obj();
-        Key_operate();
+        if (!Managers.GameManager.ui_on)
+        {
+            Interaction_obj();
+            Key_operate();
+        }
         #region 여기부턴 개발자용 
         /*if (Managers.developer_mode)
         {
@@ -165,6 +169,8 @@ public class PlayerController : playerData
             shoot_power_range = Mathf.Clamp(drag_dis.magnitude, Mathf.Abs(slow_speed), Mathf.Abs(shoot_speed));
             transform.rotation = arrow_rotation_base.rotation;
             rb.velocity = Vector2.zero;
+            test_particle.Play();
+            test_particle2.Play();
             StopCoroutine(Pingpong_effect());
             StartCoroutine(Pingpong_effect());
             //player.transform.localScale = Vector3.one * player_size;
@@ -238,9 +244,14 @@ public class PlayerController : playerData
 
             foreach (var item in interation_obj)
             {
-                if (item.TryGetComponent<IInteraction_obj>(out IInteraction_obj interaction))
+                IInteraction_obj obj = item.GetComponent<IInteraction_obj>();
+                if (obj != null)
                 {
-                    interaction.practice();
+                    obj.practice();
+                }
+                else
+                {
+                    Hit();
                 }
             }
         }

@@ -47,6 +47,40 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         Anim_state_machin(anim_state["1_phase_idle"]);
         Managers.GameManager.game_start = true;
     }
+    
+    public void Test_pattern(List<Pattern_json_date> pattern_json_data, bool pattern_ending, float pattern_duration, sbyte pattern_count, float pattern_time, bool pattern_duration_obj_enable = false, Action tewatasfd = null)
+    {
+        if (!pattern_ending)
+        {
+            if ((pattern_json_data[pattern_count].time <= Managers.Sound.bgSound.time || pattern_duration != 0))
+            {
+                if (pattern_duration == 0)
+                {
+                    pattern_duration = pattern_json_data[pattern_count].duration;
+                }
+                pattern_time -= Time.fixedDeltaTime;
+                if (pattern_duration_obj_enable)
+                {
+                    if (pattern_time <= 0)
+                    {
+                        pattern_time += 0.375f;
+                        Rain_storm();
+                    }
+                }
+                
+                Rain_storm_rotation();
+                pattern_duration = Mathf.Clamp(pattern_duration - Time.fixedDeltaTime, 0, pattern_json_data[pattern_count].duration);
+                if (pattern_duration == 0)
+                {
+                    pattern_count++;
+                    if (pattern_json_data.Count == pattern_count)
+                    {
+                        pattern_ending = true;
+                    }
+                }
+            }
+        }
+    }
     public override void Pattern_processing()
     {
         base.Pattern_processing();
@@ -593,7 +627,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 sequence.Append(electric_ball_pattern.electric_ball_obj.transform.DOScale(Vector3.one, 0.1f));*/
                 break;
             case 5:
-                electric_ball_pattern.ball.DOScale(transform.localScale + Vector3.one * 0.1f, 0.2f);
+                electric_ball_pattern.ball.DOScale(new Vector3(electric_ball_pattern.ball.localScale.x + 0.1f, electric_ball_pattern.ball.localScale.y + 0.1f, electric_ball_pattern.ball.localScale.z), 0.2f);
                 break;
             case 6:
                 electric_ball_pattern.electric_line.SetActive(false);

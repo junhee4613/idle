@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rain_drop : MonoBehaviour, IInteraction_obj
+public class Rain_drop : MonoBehaviour
 {
     [Header("떨어지는 속도")]
     public float gravity_value;
@@ -23,12 +23,7 @@ public class Rain_drop : MonoBehaviour, IInteraction_obj
     {
         time = 0;
     }
-    public void practice()
-    {
-        //time = 0;
-        Managers.GameManager.Player.Hit();
-        Managers.Pool.Push(this.gameObject);
-    }
+    
 }
 /*[Header("처음에 날아가는 최대 각도")]
     public float rotation_z;
