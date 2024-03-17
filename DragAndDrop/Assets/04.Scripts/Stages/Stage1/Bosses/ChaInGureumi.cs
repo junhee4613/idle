@@ -10,8 +10,6 @@ using DG.Tweening;
 
 public class ChaInGureumi : BossController          //비트는 80dlek
 {
-    public Cha_in_gureumi_simple_patterns simple_pattern;
-    public Cha_in_gureumi_hard_patterns hard_pattern;
     public Transform boss_trans;
     /*[Header("비 패턴")]
     public Rain_drop_pattern rain_drop;*/
@@ -46,40 +44,6 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     {
         Anim_state_machin(anim_state["1_phase_idle"]);
         Managers.GameManager.game_start = true;
-    }
-    
-    public void Test_pattern(List<Pattern_json_date> pattern_json_data, bool pattern_ending, float pattern_duration, sbyte pattern_count, float pattern_time, bool pattern_duration_obj_enable = false, Action tewatasfd = null)
-    {
-        if (!pattern_ending)
-        {
-            if ((pattern_json_data[pattern_count].time <= Managers.Sound.bgSound.time || pattern_duration != 0))
-            {
-                if (pattern_duration == 0)
-                {
-                    pattern_duration = pattern_json_data[pattern_count].duration;
-                }
-                pattern_time -= Time.fixedDeltaTime;
-                if (pattern_duration_obj_enable)
-                {
-                    if (pattern_time <= 0)
-                    {
-                        pattern_time += 0.375f;
-                        Rain_storm();
-                    }
-                }
-                
-                Rain_storm_rotation();
-                pattern_duration = Mathf.Clamp(pattern_duration - Time.fixedDeltaTime, 0, pattern_json_data[pattern_count].duration);
-                if (pattern_duration == 0)
-                {
-                    pattern_count++;
-                    if (pattern_json_data.Count == pattern_count)
-                    {
-                        pattern_ending = true;
-                    }
-                }
-            }
-        }
     }
     public override void Pattern_processing()
     {

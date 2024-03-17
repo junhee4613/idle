@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public abstract class BossController : Stage_base_controller
 {
     public sbyte gimmick_num = 4;
     protected sbyte boss_hp = 5;
     public SpriteRenderer boss_image;
+    public Action patterns;
     //public Animator an;
     protected override void Awake()
     {
@@ -28,23 +30,43 @@ public abstract class BossController : Stage_base_controller
             }
         }
     }
+    public void Pattern_function(List<Pattern_json_date> pattern_json_data, bool pattern_ending, float pattern_duration_time, sbyte pattern_count, 
+         Action not_duration_pattern, bool pattern_duration_obj_enable = false, float pattern_time = 0f, float time = 0f, Action duration_pattern = null)
+    {
+        if (!pattern_ending)
+        {
+            if ((pattern_json_data[pattern_count].time <= Managers.Sound.bgSound.time || pattern_duration_time != 0))
+            {
+                if (pattern_duration_time == 0)
+                {
+                    pattern_duration_time = pattern_json_data[pattern_count].duration;
+                }
+                
+                if (pattern_duration_obj_enable)
+                {
+                    pattern_time -= Time.fixedDeltaTime;
+                    if (pattern_time <= 0)
+                    {
+                        pattern_time += time;
+                        duration_pattern();
+                    }
+                }
+                not_duration_pattern();
+                pattern_duration_time = Mathf.Clamp(pattern_duration_time - Time.fixedDeltaTime, 0, pattern_json_data[pattern_count].duration);
+                if (pattern_duration_time == 0)
+                {
+                    pattern_count++;
+                    if (pattern_json_data.Count == pattern_count)
+                    {
+                        pattern_ending = true;
+                    }
+                }
+            }
+        }
+    }
     public virtual void Pattern_processing()
     {
 
-        /*if (Managers.GameManager.pattern_data[Managers.GameManager.pattern_num].time <= Managers.Sound.bgSound.time)
-        {
-            if (boss_hp > 3)
-            {
-                Simple_pattern();
-            }
-            else
-            {
-                Hard_pattern();
-            }
-            if(Managers.GameManager.pattern_data.Count - 1 > Managers.GameManager.pattern_num)
-            {
-                Managers.GameManager.pattern_num++;
-            }
-        }*/
+        
     }
 }
