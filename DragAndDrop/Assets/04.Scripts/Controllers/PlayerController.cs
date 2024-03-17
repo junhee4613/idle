@@ -25,6 +25,7 @@ public class PlayerController : playerData
     public float player_size_magnification;
     [Header("드래그 할 때의 속도 및 크기 배율(1이 기본값)")]
     public float drag_dis_magnification = 1;
+    public Animator animator;
     #region 클래스 안에서 해결할것들
     sbyte break_num = 0;
     public Vector2 mouse_pos;
@@ -36,6 +37,7 @@ public class PlayerController : playerData
     float shoot_power_range;
     Vector2 spacebar_dir;
     float spacebar_mag;
+    
     //string wall_name;
     //public Collider2D[] walls_sence;
     Managers Managers => Managers.instance;                 //지금 드래그 상태일 때 발사가 안되는 버그 있음
@@ -158,9 +160,11 @@ public class PlayerController : playerData
         drag_dis = new Vector3(player_pos.x - mouse_pos.x, player_pos.y - mouse_pos.y, 0) * drag_dis_magnification;
         player_rotation_z = Mathf.Atan2(drag_dis.normalized.y, drag_dis.normalized.x) * Mathf.Rad2Deg;
         player.transform.rotation = Quaternion.Euler(0, 0, player_rotation_z - 90);
-        character.transform.localScale = new Vector3(character.transform.localScale.x, Mathf.Clamp(player_size + (drag_dis.magnitude / player_size_magnification), player_size, player_size + (shoot_speed / player_size_magnification)));
+        animator.SetBool("Drag", true);
+        //character.transform.localScale = new Vector3(character.transform.localScale.x, Mathf.Clamp(player_size + (drag_dis.magnitude / player_size_magnification), player_size, player_size + (shoot_speed / player_size_magnification)));
         if (Input.GetMouseButtonUp(0))
         {
+            animator.SetBool("Drag", false);
             if (break_num == 0)
             {
                 break_num = 1;
@@ -171,8 +175,8 @@ public class PlayerController : playerData
             rb.velocity = Vector2.zero;
             test_particle.Play();
             test_particle2.Play();
-            StopCoroutine(Pingpong_effect());
-            StartCoroutine(Pingpong_effect());
+            //StopCoroutine(Pingpong_effect());
+            //StartCoroutine(Pingpong_effect());
             //player.transform.localScale = Vector3.one * player_size;
             Drag_shoot();
         }
