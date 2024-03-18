@@ -159,12 +159,13 @@ public class PlayerController : playerData
     {
         drag_dis = new Vector3(player_pos.x - mouse_pos.x, player_pos.y - mouse_pos.y, 0) * drag_dis_magnification;
         player_rotation_z = Mathf.Atan2(drag_dis.normalized.y, drag_dis.normalized.x) * Mathf.Rad2Deg;
-        player.transform.rotation = Quaternion.Euler(0, 0, player_rotation_z - 90);
+        transform.rotation = Quaternion.Euler(0, 0, player_rotation_z - 90);
         animator.SetBool("Drag", true);
         //character.transform.localScale = new Vector3(character.transform.localScale.x, Mathf.Clamp(player_size + (drag_dis.magnitude / player_size_magnification), player_size, player_size + (shoot_speed / player_size_magnification)));
         if (Input.GetMouseButtonUp(0))
         {
             animator.SetBool("Drag", false);
+            animator.SetTrigger("Shoot");
             if (break_num == 0)
             {
                 break_num = 1;
@@ -175,20 +176,8 @@ public class PlayerController : playerData
             rb.velocity = Vector2.zero;
             test_particle.Play();
             test_particle2.Play();
-            //StopCoroutine(Pingpong_effect());
-            //StartCoroutine(Pingpong_effect());
-            //player.transform.localScale = Vector3.one * player_size;
             Drag_shoot();
         }
-    }
-    IEnumerator Pingpong_effect()
-    {
-        while (character.transform.localScale.y != player_size)
-        {
-            character.transform.localScale = new Vector3(character.transform.localScale.x, Mathf.Clamp(character.transform.localScale.y - Time.fixedDeltaTime * 50, player_size, player_size + (shoot_speed / player_size_magnification)), character.transform.localScale.z);
-            yield return null;
-        }
-        //player.transform.DOPunchScale(Vector3.one * 0.2f, 0.2f);
     }
     public void Drag_shoot()
     {
