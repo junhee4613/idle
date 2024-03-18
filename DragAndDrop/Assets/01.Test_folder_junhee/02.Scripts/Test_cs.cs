@@ -5,8 +5,20 @@ using UnityEngine.UI;
 using Newtonsoft.Json;
 public class Test_cs : MonoBehaviour
 {
-    public ParticleSystem test_particle;
-
+    public Transform test_target;
+    float test_float = 0f;
+    float Test_float
+    {
+        get { return test_float; }
+        set 
+        {
+            if(test_float > 360)
+            {
+                test_float -= 360f;
+            }
+            test_float = value;
+        }
+    }
     private void Awake()
     {
     }
@@ -17,10 +29,10 @@ public class Test_cs : MonoBehaviour
     }
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            test_particle.Play();
-        }
+        test_float += Time.deltaTime * 15f;
+
+        transform.position = new Vector3(test_target.position.x, test_target.position.y, test_target.position.z).normalized * 5f;
+        transform.position = new Vector3(transform.position.x, transform.position.y + Mathf.Sin(test_float) * 5f, transform.position.z);
     }
 
 }

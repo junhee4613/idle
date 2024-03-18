@@ -48,16 +48,16 @@ public class The_most_angry_gunman : BossController
                 }
                 break;
             case 1:
-                gun_shoot.aim_trajectory += Time.fixedDeltaTime;
+                gun_shoot.Aim_trajectory += Time.fixedDeltaTime * 60;
                 if (gun_shoot.aims[0].activeSelf)
                 {
                     gun_shoot.aims[0].transform.Translate(Managers.GameManager.player_obj.transform.position * gun_shoot.aim_speed);
-                    gun_shoot.aims[0].transform.position = new Vector3(gun_shoot.aims[0].transform.position.x, gun_shoot.aims[0].transform.position.y, gun_shoot.aims[0].transform.position.z);
+                    gun_shoot.aims[0].transform.position = new Vector3(gun_shoot.aims[0].transform.position.x, gun_shoot.aims[0].transform.position.y + Mathf.Sin(gun_shoot.Aim_trajectory), gun_shoot.aims[0].transform.position.z);
                 }
                 if (gun_shoot.aims[1].activeSelf)
                 {
                     gun_shoot.aims[1].transform.Translate(Managers.GameManager.player_obj.transform.position * gun_shoot.aim_speed);
-                    gun_shoot.aims[1].transform.position = new Vector3(gun_shoot.aims[1].transform.position.x, gun_shoot.aims[1].transform.position.y, gun_shoot.aims[1].transform.position.z);
+                    gun_shoot.aims[1].transform.position = new Vector3(gun_shoot.aims[1].transform.position.x, gun_shoot.aims[1].transform.position.y + Mathf.Sin(gun_shoot.Aim_trajectory), gun_shoot.aims[1].transform.position.z);
                 }
                 break;
             case 2:
@@ -72,6 +72,24 @@ public class The_most_angry_gunman : BossController
     {
         public GameObject[] aims;
         public float aim_speed = 5f;
-        public float aim_trajectory = 0f;
+        float aim_trajectory = 0f;
+        public float Aim_trajectory 
+        { 
+            get 
+            { 
+                return aim_trajectory; 
+            }
+            set 
+            {
+                if(aim_trajectory >= 1)
+                {
+                    aim_trajectory -= 1;
+                }
+                aim_trajectory = value;
+                
+            }
+        }
     }
+
 }
+    
