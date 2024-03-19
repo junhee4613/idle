@@ -28,12 +28,13 @@ public class PlayerController : playerData
     public Animator animator;
     #region 클래스 안에서 해결할것들
     sbyte break_num = 0;
-    public Vector2 mouse_pos;
-    public Vector2 player_pos;
+    public Vector2 mouse_current_pos;
+    public Vector2 mouse_click_pos;
     Vector2 drag_dis;
+    Vector2 drag_min_shoot_dir;
     public bool hit_statu = false;
     float time;
-    float player_rotation_z;
+    public float player_rotation_z;
     float shoot_power_range;
     Vector2 spacebar_dir;
     float spacebar_mag;
@@ -44,8 +45,10 @@ public class PlayerController : playerData
     [SerializeField]
     public Player_statu player_statu = Player_statu.IDLE;
     public Collider2D[] interation_obj;
-    public ParticleSystem test_particle;
-    public ParticleSystem test_particle2;
+    public ParticleSystem move_fragments;
+    public ParticleSystem move_wave;
+    public Particle_figure move_fragments_figurel;
+    public Particle_figure move_wave_figurel;
     #endregion
     #region 테스트용
     //[Header("테스트용")]
@@ -54,6 +57,8 @@ public class PlayerController : playerData
     private void Awake()
     {
         Managers.GameManager.gameover += Player_die_setActive;
+        move_fragments_figurel.module = move_fragments.main;
+        move_wave_figurel.module = move_wave.main;
     }
     public void Player_slow_skill_down()
     {
@@ -108,7 +113,8 @@ public class PlayerController : playerData
             case Player_statu.IDLE:
                 break;
             case Player_statu.DRAG:
-                mouse_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                mouse_current_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
                 Drag();
                 
                 break;
@@ -140,19 +146,23 @@ public class PlayerController : playerData
         if (Input.GetMouseButtonDown(0))    //순서 1번
         {
             shoot_dir_image.SetActive(true);
-            player_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mouse_click_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //rb.velocity = Vector3.zero;
+            animator.Play("Drag_statu");
             Mouse_button_down();
         }
         if (Input.GetKeyDown(KeyCode.Space) && break_num == 1)
         {
             break_num = 0;
-            spacebar_dir = rb.velocity.normalized;
-            spacebar_mag = rb.velocity.magnitude;
-            rb.velocity = spacebar_dir * Mathf.Clamp(spacebar_mag - speed_break, 0, shoot_speed);
+            rb.velocity = Vector2.zero;
+            //spacebar_dir = rb.velocity.normalized;
+            //spacebar_mag = rb.velocity.magnitude;
+            //rb.velocity = spacebar_dir * Mathf.Clamp(spacebar_mag - speed_break, 0, shoot_speed);
             
         }
         if (rb.velocity == Vector2.zero && player_statu == Player_statu.RUN)
         {
+            animator.Play("Idle");
             player_statu = Player_statu.IDLE;
         }
         if(player_statu != Player_statu.RUN)
@@ -162,8 +172,16 @@ public class PlayerController : playerData
     }
     public void Drag()
     {
-        drag_dis = new Vector3(player_pos.x - mouse_pos.x, player_pos.y - mouse_pos.y, 0) * drag_dis_magnification;
-        player_rotation_z = Mathf.Atan2(drag_dis.normalized.y, drag_dis.normalized.x) * Mathf.Rad2Deg;
+        drag_dis = new Vector3(mouse_click_pos.x - mouse_current_pos.x, mouse_click_pos.y - mouse_current_pos.y, 0) * drag_dis_magnification;
+        if(drag_dis != Vector2.zero)
+        {
+            player_rotation_z = Mathf.Atan2(drag_dis.normalized.y, drag_dis.normalized.x) * Mathf.Rad2Deg;
+        }
+        else
+        {
+            drag_min_shoot_dir = new Vector2(mouse_click_pos.x - transform.position.x, mouse_click_pos.y - transform.position.y).normalized;
+            player_rotation_z = Mathf.Atan2(drag_min_shoot_dir.y, drag_min_shoot_dir.x) * Mathf.Rad2Deg;
+        }
         transform.rotation = Quaternion.Euler(0, 0, player_rotation_z - 90);
         animator.SetBool("Drag", true);
         //character.transform.localScale = new Vector3(character.transform.localScale.x, Mathf.Clamp(player_size + (drag_dis.magnitude / player_size_magnification), player_size, player_size + (shoot_speed / player_size_magnification)));
@@ -180,8 +198,10 @@ public class PlayerController : playerData
             animator.speed = 5f / shoot_power_range;
             transform.rotation = arrow_rotation_base.rotation;
             rb.velocity = Vector2.zero;
-            test_particle.Play();
-            test_particle2.Play();
+            move_fragments.Play();
+            move_fragments.transform.localScale = Vector2.one * (shoot_power_range / Mathf.Abs(shoot_speed));
+            move_wave.Play();
+            move_wave.transform.localScale = Vector2.one * (shoot_power_range / Mathf.Abs(shoot_speed));
             Drag_shoot();
             /*if (drag_dis.magnitude == 0)
             {
@@ -278,5 +298,14 @@ public class PlayerController : playerData
                 }
             }
         }
+    }
+    [System.Serializable]
+    public class Particle_figure 
+    {
+        public ParticleSystem.MainModule module;
+        public float origin_min_speed;
+        public float origin_max_speed;
+        public float origin_start_size;
+        public float origin_life_time;
     }
 }
