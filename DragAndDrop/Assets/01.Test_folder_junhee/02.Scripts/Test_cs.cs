@@ -36,6 +36,8 @@ public class Test_cs : MonoBehaviour
     public void Update()
     {
         test_float += Time.deltaTime;
+        //Mathf.Clamp(transform.position.x + (test_target.position - transform.position).normalized.x, )
+        transform.position += (test_target.position - transform.position).normalized * Time.deltaTime;
         //transform.position = new Vector3()
         //transform.position = new Vector3(test_target.position - transform.position).normalized
         //if(target_diretion)
