@@ -149,10 +149,15 @@ public class PlayerController : playerData
             spacebar_dir = rb.velocity.normalized;
             spacebar_mag = rb.velocity.magnitude;
             rb.velocity = spacebar_dir * Mathf.Clamp(spacebar_mag - speed_break, 0, shoot_speed);
-            if (rb.velocity == Vector2.zero)
-            {
-                player_statu = Player_statu.IDLE;
-            }
+            
+        }
+        if (rb.velocity == Vector2.zero && player_statu == Player_statu.RUN)
+        {
+            player_statu = Player_statu.IDLE;
+        }
+        if(player_statu != Player_statu.RUN)
+        {
+            animator.speed = 1;
         }
     }
     public void Drag()
@@ -164,19 +169,44 @@ public class PlayerController : playerData
         //character.transform.localScale = new Vector3(character.transform.localScale.x, Mathf.Clamp(player_size + (drag_dis.magnitude / player_size_magnification), player_size, player_size + (shoot_speed / player_size_magnification)));
         if (Input.GetMouseButtonUp(0))
         {
-            animator.SetBool("Drag", false);
             animator.SetTrigger("Shoot");
+            animator.SetBool("Drag", false);
             if (break_num == 0)
             {
                 break_num = 1;
             }
             shoot_dir_image.SetActive(false);
             shoot_power_range = Mathf.Clamp(drag_dis.magnitude, Mathf.Abs(slow_speed), Mathf.Abs(shoot_speed));
+            animator.speed = 5f / shoot_power_range;
             transform.rotation = arrow_rotation_base.rotation;
             rb.velocity = Vector2.zero;
             test_particle.Play();
             test_particle2.Play();
             Drag_shoot();
+            /*if (drag_dis.magnitude == 0)
+            {
+                animator.SetBool("Drag", false);
+                player_statu = Player_statu.RUN;
+                shoot_dir_image.SetActive(false);
+            }
+            else
+            {
+                animator.SetTrigger("Shoot");
+                animator.SetBool("Drag", false);
+                if (break_num == 0)
+                {
+                    break_num = 1;
+                }
+                shoot_dir_image.SetActive(false);
+                shoot_power_range = Mathf.Clamp(drag_dis.magnitude, Mathf.Abs(slow_speed), Mathf.Abs(shoot_speed));
+                animator.speed =  5f / shoot_power_range;
+                transform.rotation = arrow_rotation_base.rotation;
+                rb.velocity = Vector2.zero;
+                test_particle.Play();
+                test_particle2.Play();
+                Drag_shoot();
+            }*/
+            
         }
     }
     public void Drag_shoot()
@@ -248,39 +278,5 @@ public class PlayerController : playerData
                 }
             }
         }
-
-
     }
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-    }
-
-    /*public void Drag_statu_walls_collider()
-    {
-        walls_sence = Physics2D.OverlapCircleAll(transform.position, cc.radius, 1 << 9);
-        for (int i = 0; i < walls_sence.Length; i++)
-        {
-            switch (walls_sence[i].tag)
-            {
-                case "Virtical":
-                    if (wall_name != walls_sence[i].name)
-                    {
-                        rb.velocity = new Vector2(rb.velocity.x * -1, rb.velocity.y);
-                        wall_name = walls_sence[i].name;
-                    }
-                    break;
-                case "Horizontal":
-                    if (wall_name != walls_sence[i].name)
-                    {
-                        rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * -1);
-                        wall_name = walls_sence[i].name;
-                    }
-                    
-                    break;
-                default:
-                    break;
-            }
-        }
-    }*/
-
 }
