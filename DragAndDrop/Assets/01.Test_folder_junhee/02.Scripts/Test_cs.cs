@@ -44,7 +44,7 @@ public class Test_cs : MonoBehaviour
         //transform.Translate(new Vector3(test_target.position.x - transform.position.x, test_target.position.y - transform.position.y).normalized * Time.deltaTime);
         //transform.Translate(new Vector3(test_target.position.x - transform.position.x, test_target.position.y - transform.position.y).normalized * 2f * Time.deltaTime);
 
-        
+
         //transform.position = Target_diraction(transform.position, test_target.position);
 
     }
@@ -56,5 +56,26 @@ public class Test_cs : MonoBehaviour
     }*/
 
 }
+public class TTTTT 
+{
+    /*// ParticleSystem 변수 선언
+    public ParticleSystem particleSystem;
+
+    void Start()
+    {
+        // ParticleSystem의 Emission 모듈 가져오기
+        var emissionModule = particleSystem.emission;
+
+        // 현재 Emission 모듈의 Burst 리스트 가져오기
+        ParticleSystem.Burst[] bursts = emissionModule.bursts;
+
+        // 첫 번째 Burst의 count 값을 변경
+        bursts[0].count = 50; // 예시로 50으로 설정
+
+        // 변경된 bursts 리스트를 다시 Emission 모듈에 할당하여 적용
+        emissionModule.bursts = bursts;
+    }*/
+}
+
 
 

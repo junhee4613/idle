@@ -57,8 +57,8 @@ public class PlayerController : playerData
     private void Awake()
     {
         Managers.GameManager.gameover += Player_die_setActive;
-        move_fragments_figurel.module = move_fragments.main;
-        move_wave_figurel.module = move_wave.main;
+        //move_fragments_figurel.module = new ParticleSystem.Burst(0, 60, 60, 1, 0.010f);
+        move_fragments_figurel.module = move_fragments.emission;
     }
     public void Player_slow_skill_down()
     {
@@ -114,7 +114,6 @@ public class PlayerController : playerData
                 break;
             case Player_statu.DRAG:
                 mouse_current_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
                 Drag();
                 
                 break;
@@ -199,9 +198,14 @@ public class PlayerController : playerData
             transform.rotation = arrow_rotation_base.rotation;
             rb.velocity = Vector2.zero;
             move_fragments.Play();
-            move_fragments.transform.localScale = Vector2.one * (shoot_power_range / Mathf.Abs(shoot_speed));
+            //move_fragments_figurel.module.SetBurst(0, new ParticleSystem.Burst(0, 60 * (int)(shoot_power_range / Mathf.Abs(shoot_speed))));
+            move_fragments_figurel.module.SetBurst(0, new ParticleSystem.Burst(0, 60 * shoot_power_range / Mathf.Abs(shoot_speed)));
+            //Debug.Log(60 * (int)(shoot_power_range / Mathf.Abs(shoot_speed)));
+            //Debug.Log((shoot_power_range / Mathf.Abs(shoot_speed)));
+            //move_fragments_figurel.module.count = 60 * (int)(shoot_power_range / Mathf.Abs(shoot_speed));
+            //move_fragments.transform.localScale = Vector2.one * (shoot_power_range / Mathf.Abs(shoot_speed));
             move_wave.Play();
-            move_wave.transform.localScale = Vector2.one * (shoot_power_range / Mathf.Abs(shoot_speed));
+            //move_wave.transform.localScale = Vector2.one * (shoot_power_range / Mathf.Abs(shoot_speed));
             Drag_shoot();
             /*if (drag_dis.magnitude == 0)
             {
@@ -302,7 +306,7 @@ public class PlayerController : playerData
     [System.Serializable]
     public class Particle_figure 
     {
-        public ParticleSystem.MainModule module;
+        public ParticleSystem.EmissionModule module;
         public float origin_min_speed;
         public float origin_max_speed;
         public float origin_start_size;
