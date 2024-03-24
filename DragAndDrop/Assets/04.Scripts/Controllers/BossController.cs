@@ -30,7 +30,7 @@ public abstract class BossController : Stage_base_controller
             }
         }
     }
-    public void Pattern_function(List<Pattern_json_date> pattern_json_data, bool pattern_ending, float pattern_duration_time, sbyte pattern_count, 
+    public void Pattern_function(ref List<Pattern_json_date> pattern_json_data, ref bool pattern_ending, ref float pattern_duration_time, ref sbyte pattern_count, 
          Action not_duration_pattern, bool pattern_duration_obj_enable = false, float pattern_time = 0f, float time = 0f, Action duration_pattern = null)
     {
         if (!pattern_ending)

@@ -38,10 +38,10 @@ public class SoundManager
         {
             bgSound.loop = false;
             Managers.GameManager.bgm_length = clip.length;
-            Managers.UI_jun.timer.maxValue = clip.length;
+            /*Managers.UI_jun.timer.maxValue = clip.length;
             Managers.UI_jun.timer = GameObject.Find("Timer").GetComponent<Slider>();
             Managers.UI_jun.timer.maxValue = clip.length;
-            Managers.UI_jun.timer.value = clip.length;
+            Managers.UI_jun.timer.value = clip.length;*/
         }
         else
         {

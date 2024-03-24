@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 using UnityEngine.Audio;
+using System.Linq;
 public class Managers : MonoBehaviour           //µπˆ±Î «“ ∂ß ∏≈∞≥∫Øºˆø° ∞™¿Ã «“¥Áµ∆¥¬¡ˆø° ¥Î«— ø©∫Œ∏¶ ∫∏∑¡∏È ¡∂ªÁΩƒ1∞˙ »£√‚Ω∫≈√ √¢¿ª ø≠æÓ≥ı∞Ì ¡ﬂ¥‹¡°ø° ø‘¿ª ∂ß ±◊ ƒ⁄µÂ∏¶ «“¥Á Ω√ƒ—æﬂµ 
 {
-    public bool developer_mode = false;
     public bool invincibility = false;
     static Managers _instance;
     public static Managers instance { get { Init(); return _instance; } }
@@ -28,6 +28,10 @@ public class Managers : MonoBehaviour           //µπˆ±Î «“ ∂ß ∏≈∞≥∫Øºˆø° ∞™¿Ã «
                 GameManager.scene_name = SceneManager.GetActiveScene().name;
                 GameManager.gameover += Sound.Game_over_sound;
                 GameManager.gameover += UI_jun.Game_over_ui;
+                if(invincibility)
+                {
+                    Managers.GameManager.stage_clear.Values.All((value) => true);
+                }
 
             }
             //ø©±‚∫Œ≈Õ «œ∏È µ  

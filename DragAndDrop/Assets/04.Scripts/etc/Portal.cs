@@ -13,13 +13,13 @@ public class Portal : MonoBehaviour, IInteraction_obj
         {
             gameObject.AddComponent<BoxCollider2D>().isTrigger = true;
         }
-        if (gameObject.layer == 0)
+        if (gameObject.layer != 8)
         {
             gameObject.layer = 8;
         }
         if(barricade == null)
         {
-            barricade = GameObject.Find(this.name + "_barricade");
+            barricade = GameObject.Find(this.name + "_next_barricade");
         }
         if (Managers.GameManager.stage_clear[this.gameObject.name])
         {

@@ -14,7 +14,7 @@ public class GameManager       //여기서 비트를 관리
     public GameObject player_box;
     public bool ui_on = false;
     public Dictionary<string, bool> stage_clear = new Dictionary<string, bool>() 
-    { {"Stage1", true}, { "Stage2", false }, { "Stage3", false }, { "Stage4", false } };
+    { {"Stage1", false}, { "Stage2", false }, { "Stage3", false }, { "Stage4", false } };
 
     public PlayerController Player 
     { 
