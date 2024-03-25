@@ -32,7 +32,6 @@ public class The_most_angry_gunman : BossController
     }
     public void Gun_shoot_pattern()
     {
-        Debug.Log(gun_shoot.pattern_count);
         switch (gun_shoot.pattern_data[gun_shoot.pattern_count].action_num)
         {
             case 0:     //에임 생성
@@ -70,16 +69,9 @@ public class The_most_angry_gunman : BossController
             case 1:     //에임들이 바깥쪽에서 움직임
                 if (gun_shoot.aims[0].activeSelf)
                 {
-                    gun_shoot.aims[0].transform.position = Scope_side_move(gun_shoot.aims[0].transform.position, gun_shoot.aims_dir[0].criteria_dir_x, gun_shoot.aims_dir[0].criteria_dir_y
+                    Scope_side_move(ref gun_shoot.aims[0], ref gun_shoot.aims_dir[0].criteria_dir_x, ref gun_shoot.aims_dir[0].criteria_dir_y
                         , gun_shoot.criteria_x, gun_shoot.criteria_y, gun_shoot.pop_pos[0].x, gun_shoot.pop_pos[0].y, gun_shoot.aim_speed);
-                    if (gun_shoot.aims[0].transform.position.x == gun_shoot.pop_pos[0].x + gun_shoot.criteria_x || gun_shoot.aims[0].transform.position.x == gun_shoot.pop_pos[0].x - gun_shoot.criteria_x)
-                    {
-                        gun_shoot.aims_dir[0].criteria_dir_x = -gun_shoot.aims_dir[0].criteria_dir_x;
-                    }
-                    if (gun_shoot.aims[0].transform.localPosition.y == gun_shoot.pop_pos[0].y + gun_shoot.criteria_y || gun_shoot.aims[0].transform.localPosition.y == gun_shoot.pop_pos[0].y - gun_shoot.criteria_y)
-                    {
-                        gun_shoot.aims_dir[0].criteria_dir_y = -gun_shoot.aims_dir[0].criteria_dir_y;
-                    }
+                    
                 }
                 /*if (gun_shoot.aims[1] != null)
                 {
@@ -130,12 +122,18 @@ public class The_most_angry_gunman : BossController
         }
         
     }
-    public Vector3 Scope_side_move(Vector3 aim, float dir_x, float dir_y, float range_x, float range_y, float pop_pos_x , float pop_pos_y, float speed)
+    public void Scope_side_move(ref GameObject aim, ref float dir_x, ref float dir_y, float range_x, float range_y, float pop_pos_x , float pop_pos_y, float speed)
     {
-        aim = new Vector3(Mathf.Clamp(aim.x + Time.deltaTime * Mathf.Sin(45 * Mathf.Deg2Rad) * dir_x * speed, pop_pos_x - range_x, pop_pos_x + range_x),
-                    Mathf.Clamp(aim.y + Time.deltaTime * Mathf.Cos(315 * Mathf.Deg2Rad) * dir_y * speed, pop_pos_y - range_y, pop_pos_y + range_y));
-        return aim;
-        
+        aim.transform.position = new Vector3(Mathf.Clamp(aim.transform.position.x + Time.deltaTime * Mathf.Sin(45 * Mathf.Deg2Rad) * dir_x * speed, pop_pos_x - range_x, pop_pos_x + range_x),
+                    Mathf.Clamp(aim.transform.position.y + Time.deltaTime * Mathf.Cos(315 * Mathf.Deg2Rad) * dir_y * speed, pop_pos_y - range_y, pop_pos_y + range_y));
+        if (aim.transform.position.x == pop_pos_x + range_x || aim.transform.position.x == pop_pos_x - range_x)
+        {
+            dir_x = -dir_x;
+        }
+        if (aim.transform.position.y == pop_pos_y + range_y || aim.transform.position.y == pop_pos_y - range_y)
+        {
+            dir_y = -dir_y;
+        }
     }
     [Serializable]
     public class Gun_shoot : Pattern_base_data
