@@ -29,98 +29,81 @@ public class The_most_angry_gunman : BossController
     {
         base.Pattern_processing();
         Pattern_function(ref gun_shoot.pattern_data, ref gun_shoot.pattern_ending, ref gun_shoot.duration,ref gun_shoot.pattern_count, Gun_shoot_pattern);
+        //활성화된 에임들이 바깥쪽에서 움직이는 코드
+        if (gun_shoot.aim_idle_state[0] && gun_shoot.aims[0] != null)
+        {
+            Scope_side_move(ref gun_shoot.aims[0], ref gun_shoot.aims_dir[0].criteria_dir_x, ref gun_shoot.aims_dir[0].criteria_dir_y
+                , gun_shoot.criteria_x, gun_shoot.criteria_y, gun_shoot.pop_pos[0].x, gun_shoot.pop_pos[0].y, gun_shoot.aim_speed);
+        }
+        if (gun_shoot.aim_idle_state[1] && gun_shoot.aims[1] != null)
+        {
+            Scope_side_move(ref gun_shoot.aims[1], ref gun_shoot.aims_dir[1].criteria_dir_x, ref gun_shoot.aims_dir[1].criteria_dir_y
+                , gun_shoot.criteria_x, gun_shoot.criteria_y, gun_shoot.pop_pos[1].x, gun_shoot.pop_pos[1].y, gun_shoot.aim_speed);
+        }
     }
     public void Gun_shoot_pattern()
-    {
+    {   
+        
+        //패턴별 행동들
         switch (gun_shoot.pattern_data[gun_shoot.pattern_count].action_num)
         {
             case 0:     //에임 생성
-                if(gun_shoot.aims[0] == null)
+                if(gun_shoot.aims[0] == null && gun_shoot.aims[1] == null)
                 {
-                    gun_shoot.aims[0] = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Scope"));
-                    gun_shoot.aims[0].transform.position = gun_shoot.pop_pos[0];
-                    gun_shoot.aims[0].SetActive(false);
+                    Scope_create(ref gun_shoot.aims[0], gun_shoot.pop_pos[0]);
+                    Scope_create(ref gun_shoot.aims[1], gun_shoot.pop_pos[1]);
                 }
-                else
-                {
-                    gun_shoot.aims[1] = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Scope"));
-                    gun_shoot.aims[1].transform.position = gun_shoot.pop_pos[1];
-                    gun_shoot.aims[1].SetActive(false);
-                }
-                if (!gun_shoot.aims[0].activeSelf)
-                {
-                    gun_shoot.aims[0].SetActive(true);
-                    Sequence sequence = DOTween.Sequence();
-                    sequence.Append(gun_shoot.aims[0].transform.DOScale(Vector3.one * 1.5f, 0.2f));
-                    sequence.Append(gun_shoot.aims[0].transform.DOScale(Vector3.one * 1f, 0.2f));
-                }
-                else if(!gun_shoot.aims[1].activeSelf)
-                {
-                    gun_shoot.aims[1].SetActive(true);
-                }
-                else
-                {
-                    foreach (var item in gun_shoot.aims)
-                    {
-                        item.SetActive(false);
-                    }
-                }
+                Scope_appearance(gun_shoot.aims[0], (value) => gun_shoot.aim_idle_state[0] = value);
                 break;
-            case 1:     //에임들이 바깥쪽에서 움직임
-                if (gun_shoot.aims[0].activeSelf)
-                {
-                    Scope_side_move(ref gun_shoot.aims[0], ref gun_shoot.aims_dir[0].criteria_dir_x, ref gun_shoot.aims_dir[0].criteria_dir_y
-                        , gun_shoot.criteria_x, gun_shoot.criteria_y, gun_shoot.pop_pos[0].x, gun_shoot.pop_pos[0].y, gun_shoot.aim_speed);
-                    
-                }
-                /*if (gun_shoot.aims[1] != null)
-                {
-                    gun_shoot.aims[1].transform.position = new Vector3(Mathf.Clamp(transform.position.x + Time.deltaTime * Mathf.Sin(45 * Mathf.Deg2Rad) * gun_shoot.aims_data[1].criteria_dir_x, -gun_shoot.criteria_x, gun_shoot.criteria_x),
-                    Mathf.Clamp(transform.position.y + Time.deltaTime * Mathf.Cos(315 * Mathf.Deg2Rad) * gun_shoot.aims_data[1].criteria_dir_y, -gun_shoot.criteria_y, gun_shoot.criteria_y));
-                    if (transform.localPosition.x == criteria_x || transform.localPosition.x == -criteria_x)
-                    {
-                        criteria_dir_x = -criteria_dir_x;
-                    }
-                    if (transform.localPosition.y == criteria_y || transform.localPosition.y == -criteria_y)
-                    {
-                        criteria_dir_y = -criteria_dir_y;
-                    }
-                }*/
-                break;
-            case 2:     //에임들이 플레이어 위치로 이동
-                if (gun_shoot.aims[1] == null)
+            case 1:     //에임들이 플레이어 위치로 이동
+                if (!gun_shoot.right_aim_chasing)
                 {
                     gun_shoot.move_befor_pos[0] = gun_shoot.aims[0].transform.position;
-                    gun_shoot.aims[0].transform.DOLocalMove(Managers.GameManager.Player.transform.position, 0.3f);
+                    gun_shoot.aims[0].transform.DOLocalMove(Managers.GameManager.Player_character.position, 0.3f);
+                    gun_shoot.aim_idle_state[0] = false;
                 }
                 else
                 {
-                    if (gun_shoot.right_aim_start)
-                    {
-                        gun_shoot.move_befor_pos[1] = gun_shoot.aims[1].transform.position;
-                        gun_shoot.aims[0].transform.DOLocalMove(Managers.GameManager.Player.transform.position, 0.3f);
-                    }
-                    else
-                    {
-                        gun_shoot.move_befor_pos[0] = gun_shoot.aims[0].transform.position;
-                        gun_shoot.aims[0].transform.DOLocalMove(Managers.GameManager.Player.transform.position, 0.3f);
-                    }
-                    
+                    gun_shoot.move_befor_pos[1] = gun_shoot.aims[1].transform.position;
+                    gun_shoot.aims[1].transform.DOLocalMove(Managers.GameManager.Player_character.position, 0.3f);
+                    gun_shoot.aim_idle_state[1] = false;
                 }
                 break;
-            case 3:     //해당 위치에서 쏜 후 0.3초 뒤에 출발 지점으로 돌아감
-                if (gun_shoot.aims[1] == null)
+            case 2:     //해당 위치에서 쏜 후 0.3초 뒤에 출발 지점으로 돌아감
+                if (!gun_shoot.right_aim_chasing)
                 {
-                    Debug.Log(gun_shoot.move_befor_pos[0]);
-                    Managers.Main_camera.Puch(4.8f, 5);
-                    gun_shoot.aims[0].transform.DOPunchScale(Vector3.one * 0.2f, 0.1f).OnComplete(() => gun_shoot.aims[0].transform.DOLocalMove(gun_shoot.move_befor_pos[0], 0.2f));
-                }
+                    Managers.Main_camera.Punch(4.8f, 5);
+                    gun_shoot.aims[0].transform.DOPunchScale(Vector3.one * 0.2f, 0.1f).OnComplete(() => 
+                    gun_shoot.aims[0].transform.DOLocalMove(gun_shoot.move_befor_pos[0], 0.2f).OnComplete(() => 
+                    gun_shoot.aim_idle_state[0] = true));
 
+                    if (gun_shoot.aims[1].activeSelf)
+                    {
+                        gun_shoot.right_aim_chasing = true;
+                    }
+                }
+                else
+                {
+                    Managers.Main_camera.Punch(4.8f, 5);
+                    gun_shoot.aims[1].transform.DOPunchScale(Vector3.one * 0.2f, 0.1f).OnComplete(() =>
+                    gun_shoot.aims[1].transform.DOLocalMove(gun_shoot.move_befor_pos[1], 0.2f).OnComplete(() => 
+                    gun_shoot.aim_idle_state[1] = true));
+                    gun_shoot.right_aim_chasing = false;
+                }
+                break;
+            case 3:     //공격하면서 또 하나의 에임 생성
+                Scope_appearance(gun_shoot.aims[1], (value) => gun_shoot.aim_idle_state[1] = value);
+                Managers.Main_camera.Punch(4.8f, 5);
+                gun_shoot.aims[0].transform.DOPunchScale(Vector3.one * 0.2f, 0.1f).OnComplete(() =>
+                gun_shoot.aims[0].transform.DOLocalMove(gun_shoot.move_befor_pos[0], 0.2f).OnComplete(() =>
+                gun_shoot.aim_idle_state[0] = true));
+                gun_shoot.right_aim_chasing = true;
+                break;
+            case 4:     //장전
                 break;
             default:
                 break;
         }
-        
     }
     public void Scope_side_move(ref GameObject aim, ref float dir_x, ref float dir_y, float range_x, float range_y, float pop_pos_x , float pop_pos_y, float speed)
     {
@@ -135,6 +118,19 @@ public class The_most_angry_gunman : BossController
             dir_y = -dir_y;
         }
     }
+    public void Scope_create(ref GameObject scope, Vector3 pop_pos)
+    {
+        scope = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Scope"));
+        scope.transform.position = pop_pos;
+        scope.SetActive(false);
+    }
+    public void Scope_appearance(GameObject scope, Action<bool> scope_action_end)
+    {
+        scope.SetActive(true);
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(scope.transform.DOScale(Vector3.one * 1.5f, 0.2f));
+        sequence.Append(scope.transform.DOScale(Vector3.one * 1f, 0.2f).OnComplete(() => scope_action_end(true)));
+    }
     [Serializable]
     public class Gun_shoot : Pattern_base_data
     {
@@ -142,11 +138,12 @@ public class The_most_angry_gunman : BossController
         public Vector3[] init_pos;     //에임들이 플레이어를 따라가기 전 마지막 위치
         public Vector3[] pop_pos;     //에임들이 플레이어를 따라가기 전 마지막 위치
         public Vector3[] move_befor_pos;     //에임들이 플레이어를 따라가기 전 마지막 위치
-        public float aim_speed = 5f;    //에임 스피드
         public Aims_dir[] aims_dir;    //에임들이 바깥 쪽에 위치할 때 이동하는 방향
+        public bool[] aim_idle_state = new bool[2]; //에임이 플레이어를 쫒아 공격까지 했는지
+        public float aim_speed = 5f;    //에임 스피드
         public float criteria_x;        //에임들의 움직이는 x축 범위 
         public float criteria_y;        //에임들의 움직이는 y축 범위
-        public bool right_aim_start = false;    //에임들이 공격할 때 오른쪽부터 공격을 시작하는지
+        public bool right_aim_chasing = false;    //에임들이 공격할 때 오른쪽부터 공격을 시작하는지
         [Serializable]
         public class Aims_dir
         {

@@ -9,9 +9,8 @@ public class GameManager       //여기서 비트를 관리
 {
     public List<Pattern_state> pattern_data = new List<Pattern_state>();
     PlayerController player;
+    Transform player_character;
     public string scene_name;
-    public GameObject player_obj;
-    public GameObject player_box;
     public bool ui_on = false;
     public Dictionary<string, bool> stage_clear = new Dictionary<string, bool>() 
     { {"Stage1", false}, { "Stage2", false }, { "Stage3", false }, { "Stage4", false } };
@@ -22,14 +21,26 @@ public class GameManager       //여기서 비트를 관리
             if (player == null)
             {
                 player = GameObject.FindObjectOfType<PlayerController>();
-                if(player == null)
+                /*if(player == null)
                 {
                     Managers.Resource.Load<GameObject>("Player");
-                }
+                }*/
             } 
             return player; 
         }
     }
+    public Transform Player_character
+    {
+        get
+        {
+            if(player_character == null)
+            {
+                player_character = GameObject.FindGameObjectWithTag("Player_character").transform;
+            }
+            return player_character;
+        }
+    }
+
     public GameObject boss;
     public bool boss_die = false;
     public bool player_die = false;
@@ -41,24 +52,8 @@ public class GameManager       //여기서 비트를 관리
     public bool game_stop = false;
     public void Init()
     {
-        player_obj = Managers.Resource.Load<GameObject>("Player");
-        player_box = Managers.Resource.Load<GameObject>("Player_box");
     }
     // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    private void FixedUpdate()
-    {
-
-    }
     public void Next_sceneLoaded(Scene scene, LoadSceneMode mode)
     {
         game_start = false;

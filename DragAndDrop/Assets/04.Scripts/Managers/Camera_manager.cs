@@ -32,16 +32,15 @@ public class Camera_manager
     {
         Main_camera.transform.DOShakePosition(0.3f, 0.3f, 100, 90, false, true);
     }
-    public void Move_y()
+    public void Move_y(float move_pos,float move_pos_time, float go_back_pos, float go_back_pos_time)
     {
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(Main_camera.transform.DOMoveY(0.3f, 0.1f));
-        sequence.Append(Main_camera.transform.DOMoveY(0, 0.1f));
+        sequence.Append(Main_camera.transform.DOMoveY(move_pos, move_pos_time));
+        sequence.Append(Main_camera.transform.DOMoveY(go_back_pos, go_back_pos_time));
     }
-    public void Puch(float expansion, float reduction)
+    public void Punch(float expansion, float reduction)
     {
         Sequence sequence = DOTween.Sequence();
-        
         sequence.Append(Main_camera.DOOrthoSize(expansion, 0.1f));
         sequence.Append(Main_camera.DOOrthoSize(reduction, 0.1f));
     }

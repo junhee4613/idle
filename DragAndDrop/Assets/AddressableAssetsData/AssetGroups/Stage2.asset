@@ -17,12 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: bee71c9301f0960419e23b95b01e7877
   m_SerializeEntries:
-  - m_GUID: 4fa6ab4243baf6d43a630c27b3b9db07
-    m_Address: Stage2_shoot_data
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 46bd5c95c8ad7b34ba630638b997e79b
     m_Address: Scope
     m_ReadOnly: 0
@@ -31,6 +25,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: eb50dcfdf0143494187e96f05b40a790
     m_Address: Stage2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4c755fbaafdd4384593b9d222b19d2f3
+    m_Address: Stage2_shoot_data
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
