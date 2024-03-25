@@ -280,7 +280,7 @@ MonoBehaviour:
     - {x: 0, y: 0, z: 0}
     - {x: 0, y: 0, z: 0}
     aim_speed: 5
-    aims_data:
+    aims_dir:
     - criteria_dir_x: 1
       criteria_dir_y: 1
     - criteria_dir_x: 1

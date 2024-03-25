@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using DG.Tweening;
 using Newtonsoft.Json;
+using System.Runtime.InteropServices;
 
 public class The_most_angry_gunman : BossController
 {
@@ -67,18 +68,17 @@ public class The_most_angry_gunman : BossController
                 }
                 break;
             case 1:     //에임들이 바깥쪽에서 움직임
-                Debug.Log("시작");
                 if (gun_shoot.aims[0].activeSelf)
                 {
-                    gun_shoot.aims[0].transform.position = new Vector3(Mathf.Clamp(transform.position.x + Time.deltaTime * Mathf.Sin(45 * Mathf.Deg2Rad) * gun_shoot.aims_data[0].criteria_dir_x, gun_shoot.pop_pos[0].x - gun_shoot.criteria_x, gun_shoot.init_pos[0].x + gun_shoot.criteria_x),
-                    Mathf.Clamp(transform.position.y + Time.deltaTime * Mathf.Cos(315 * Mathf.Deg2Rad) * gun_shoot.aims_data[0].criteria_dir_y, gun_shoot.pop_pos[0].y - gun_shoot.criteria_y, gun_shoot.pop_pos[0].y + gun_shoot.criteria_y));
+                    gun_shoot.aims[0].transform.position = Scope_side_move(gun_shoot.aims[0].transform.position, gun_shoot.aims_dir[0].criteria_dir_x, gun_shoot.aims_dir[0].criteria_dir_y
+                        , gun_shoot.criteria_x, gun_shoot.criteria_y, gun_shoot.pop_pos[0].x, gun_shoot.pop_pos[0].y, gun_shoot.aim_speed);
                     if (gun_shoot.aims[0].transform.position.x == gun_shoot.pop_pos[0].x + gun_shoot.criteria_x || gun_shoot.aims[0].transform.position.x == gun_shoot.pop_pos[0].x - gun_shoot.criteria_x)
                     {
-                        gun_shoot.aims_data[0].criteria_dir_x = -gun_shoot.aims_data[0].criteria_dir_x;
+                        gun_shoot.aims_dir[0].criteria_dir_x = -gun_shoot.aims_dir[0].criteria_dir_x;
                     }
-                    if (transform.localPosition.y == gun_shoot.pop_pos[0].y + gun_shoot.criteria_y || transform.localPosition.y == gun_shoot.pop_pos[0].y - gun_shoot.criteria_y)
+                    if (gun_shoot.aims[0].transform.localPosition.y == gun_shoot.pop_pos[0].y + gun_shoot.criteria_y || gun_shoot.aims[0].transform.localPosition.y == gun_shoot.pop_pos[0].y - gun_shoot.criteria_y)
                     {
-                        gun_shoot.aims_data[0].criteria_dir_y = -gun_shoot.aims_data[0].criteria_dir_y;
+                        gun_shoot.aims_dir[0].criteria_dir_y = -gun_shoot.aims_dir[0].criteria_dir_y;
                     }
                 }
                 /*if (gun_shoot.aims[1] != null)
@@ -99,19 +99,19 @@ public class The_most_angry_gunman : BossController
                 if (gun_shoot.aims[1] == null)
                 {
                     gun_shoot.move_befor_pos[0] = gun_shoot.aims[0].transform.position;
-                    transform.DOLocalMove(Managers.GameManager.Player.transform.position, 1);
+                    gun_shoot.aims[0].transform.DOLocalMove(Managers.GameManager.Player.transform.position, 0.3f);
                 }
                 else
                 {
                     if (gun_shoot.right_aim_start)
                     {
                         gun_shoot.move_befor_pos[1] = gun_shoot.aims[1].transform.position;
-                        transform.DOLocalMove(Managers.GameManager.Player.transform.position, 1);
+                        gun_shoot.aims[0].transform.DOLocalMove(Managers.GameManager.Player.transform.position, 0.3f);
                     }
                     else
                     {
                         gun_shoot.move_befor_pos[0] = gun_shoot.aims[0].transform.position;
-                        transform.DOLocalMove(Managers.GameManager.Player.transform.position, 1);
+                        gun_shoot.aims[0].transform.DOLocalMove(Managers.GameManager.Player.transform.position, 0.3f);
                     }
                     
                 }
@@ -119,13 +119,22 @@ public class The_most_angry_gunman : BossController
             case 3:     //해당 위치에서 쏜 후 0.3초 뒤에 출발 지점으로 돌아감
                 if (gun_shoot.aims[1] == null)
                 {
-                    gun_shoot.aims[0].transform.DOPunchScale(Vector3.one * 1.1f, 0.3f).OnComplete(() => gun_shoot.aims[0].transform.DOLocalMove(gun_shoot.move_befor_pos[0], 0.5f));
+                    Debug.Log(gun_shoot.move_befor_pos[0]);
+                    Managers.Main_camera.Puch(4.8f, 5);
+                    gun_shoot.aims[0].transform.DOPunchScale(Vector3.one * 0.2f, 0.1f).OnComplete(() => gun_shoot.aims[0].transform.DOLocalMove(gun_shoot.move_befor_pos[0], 0.2f));
                 }
 
                 break;
             default:
                 break;
         }
+        
+    }
+    public Vector3 Scope_side_move(Vector3 aim, float dir_x, float dir_y, float range_x, float range_y, float pop_pos_x , float pop_pos_y, float speed)
+    {
+        aim = new Vector3(Mathf.Clamp(aim.x + Time.deltaTime * Mathf.Sin(45 * Mathf.Deg2Rad) * dir_x * speed, pop_pos_x - range_x, pop_pos_x + range_x),
+                    Mathf.Clamp(aim.y + Time.deltaTime * Mathf.Cos(315 * Mathf.Deg2Rad) * dir_y * speed, pop_pos_y - range_y, pop_pos_y + range_y));
+        return aim;
         
     }
     [Serializable]
@@ -136,12 +145,12 @@ public class The_most_angry_gunman : BossController
         public Vector3[] pop_pos;     //에임들이 플레이어를 따라가기 전 마지막 위치
         public Vector3[] move_befor_pos;     //에임들이 플레이어를 따라가기 전 마지막 위치
         public float aim_speed = 5f;    //에임 스피드
-        public Aim_data[] aims_data;    //에임들이 바깥 쪽에 위치할 때 이동하는 방향
+        public Aims_dir[] aims_dir;    //에임들이 바깥 쪽에 위치할 때 이동하는 방향
         public float criteria_x;        //에임들의 움직이는 x축 범위 
         public float criteria_y;        //에임들의 움직이는 y축 범위
         public bool right_aim_start = false;    //에임들이 공격할 때 오른쪽부터 공격을 시작하는지
         [Serializable]
-        public class Aim_data
+        public class Aims_dir
         {
             public float criteria_dir_x = 1;
             public float criteria_dir_y = 1;

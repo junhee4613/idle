@@ -32,4 +32,17 @@ public class Camera_manager
     {
         Main_camera.transform.DOShakePosition(0.3f, 0.3f, 100, 90, false, true);
     }
+    public void Move_y()
+    {
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(Main_camera.transform.DOMoveY(0.3f, 0.1f));
+        sequence.Append(Main_camera.transform.DOMoveY(0, 0.1f));
+    }
+    public void Puch(float expansion, float reduction)
+    {
+        Sequence sequence = DOTween.Sequence();
+        
+        sequence.Append(Main_camera.DOOrthoSize(expansion, 0.1f));
+        sequence.Append(Main_camera.DOOrthoSize(reduction, 0.1f));
+    }
 }

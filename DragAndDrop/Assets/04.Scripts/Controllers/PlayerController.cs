@@ -47,6 +47,7 @@ public class PlayerController : playerData
     public Collider2D[] interation_obj;
     public ParticleSystem move_fragments;
     public ParticleSystem move_wave;
+    public ParticleSystem wavelength;
     public Particle_figure move_fragments_figurel;
     public Particle_figure move_wave_figurel;
     #endregion
@@ -114,10 +115,12 @@ public class PlayerController : playerData
                 break;
             case Player_statu.DRAG:
                 mouse_current_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                //wavelength.gameObject.SetActive(true);
                 Drag();
-                
+
                 break;
             case Player_statu.RUN:
+                wavelength.gameObject.SetActive(false);
                 break;
             case Player_statu.HIT:
                 break;
