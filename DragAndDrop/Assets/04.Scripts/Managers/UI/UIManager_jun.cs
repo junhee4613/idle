@@ -79,7 +79,6 @@ public class UIManager_jun
             {
                 case "BGM_Slider":
                     item.onValueChanged.AddListener((float value) => Managers.Sound.SetBGMVolume(value));
-                    Debug.Log("³ÖÀ½");
                     break;
                 case "SFX_Slider":
                     item.onValueChanged.AddListener((float value) => Managers.Sound.SetSFXVolume(value));

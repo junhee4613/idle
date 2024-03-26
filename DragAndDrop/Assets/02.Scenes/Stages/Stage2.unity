@@ -279,15 +279,17 @@ MonoBehaviour:
     move_befor_pos:
     - {x: 0, y: 0, z: 0}
     - {x: 0, y: 0, z: 0}
+    aims_data:
+    - criteria_dir_x: 1
+      criteria_dir_y: 1
+      attack_action: 0
+    - criteria_dir_x: 1
+      criteria_dir_y: 1
+      attack_action: 0
+    aim_idle_state: 0000
     aim_speed: 5
-    aims_dir:
-    - criteria_dir_x: 1
-      criteria_dir_y: 1
-    - criteria_dir_x: 1
-      criteria_dir_y: 1
     criteria_x: 1
     criteria_y: 2
-    right_aim_start: 0
 --- !u!212 &685879983
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -627,6 +629,10 @@ PrefabInstance:
     - target: {fileID: 2730576694993779675, guid: f054acdf6f51f484bb3b7536e528f45f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2800518270923384427, guid: f054acdf6f51f484bb3b7536e528f45f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

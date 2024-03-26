@@ -20,7 +20,6 @@ public class SoundManager
     public void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
         AudioClip temp = Managers.Resource.Load<AudioClip>(arg0.name);
-        Debug.Log(temp.name);
         if(temp != null)
         {
             if (arg0.name == temp.name)

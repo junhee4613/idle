@@ -29,7 +29,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4c755fbaafdd4384593b9d222b19d2f3
+  - m_GUID: 6fce8b02cc649374fbe9d7f8dc73626f
     m_Address: Stage2_shoot_data
     m_ReadOnly: 0
     m_SerializedLabels:
