@@ -85,17 +85,17 @@ public class The_most_angry_gunman : BossController
                 Shoot_after_init_pos(gun_shoot.aims[0], (value) => gun_shoot.aim_idle_state[0] = value, 0, ref gun_shoot.aims_data[0].attack_action);
                 break;
             case 4:     //4연발   0.15초 간격으로 총을 쏜다.
-                gun_shoot.aim_idle_state[0] = false;
-                gun_shoot.aim_idle_state[1] = false;
-                Sequence sequence = DOTween.Sequence();
-                sequence.Append(gun_shoot.aims[0].transform.DOLocalMove(Managers.GameManager.Player_character.position, 0.1f));
-                sequence.Append(gun_shoot.aims[0].transform.DOPunchScale(Vector3.one * 0.2f, 0.05f));
-                sequence.Append(gun_shoot.aims[1].transform.DOLocalMove(Managers.GameManager.Player_character.position, 0.1f));
-                sequence.Append(gun_shoot.aims[1].transform.DOPunchScale(Vector3.one * 0.2f, 0.05f));
-                sequence.SetLoops(1).OnComplete(() => {
-                    gun_shoot.aim_idle_state[0] = true;
-                    gun_shoot.aim_idle_state[1] = true;
-                });
+                //gun_shoot.aim_idle_state[0] = false;
+                //gun_shoot.aim_idle_state[1] = false;
+                //Sequence sequence = DOTween.Sequence();
+                //sequence.Append(gun_shoot.aims[0].transform.DOLocalMove(Managers.GameManager.Player_character.position, 0.1f));
+                //sequence.Append(gun_shoot.aims[0].transform.DOPunchScale(Vector3.one * 0.2f, 0.05f));
+                //sequence.Append(gun_shoot.aims[1].transform.DOLocalMove(Managers.GameManager.Player_character.position, 0.1f));
+                //sequence.Append(gun_shoot.aims[1].transform.DOPunchScale(Vector3.one * 0.2f, 0.05f));
+                //sequence.SetLoops(1).OnComplete(() => {
+                //    gun_shoot.aim_idle_state[0] = true;
+                //    gun_shoot.aim_idle_state[1] = true;
+                //});
                 break;
             case 5:     //장전
                 break;
@@ -141,7 +141,12 @@ public class The_most_angry_gunman : BossController
     public void Shoot_after_init_pos(GameObject aim, Action<bool> scope_action_end, sbyte num,ref bool attack)
     {
         attack = false;
-        aim.transform.DOPunchScale(Vector3.one * 0.2f, 0.1f).OnComplete(() => aim.transform.DOLocalMove(gun_shoot.move_befor_pos[num], 0.2f).OnComplete(() => scope_action_end(true)));
+        aim.transform.DOPunchScale(Vector3.one * 0.2f, 0.1f).OnComplete(() => 
+        {
+            //여기에 총알 자국 코드 쓰기
+            //Bullet_mark_ceate();
+            //aim.transform.DOLocalMove(gun_shoot.move_befor_pos[num], 0.2f).OnComplete(() => scope_action_end(true))
+            });
         
     }
     public void Lock_on(ref Gun_shoot gun_Shoot, sbyte num)
@@ -150,7 +155,9 @@ public class The_most_angry_gunman : BossController
         gun_Shoot.aims[num].transform.DOLocalMove(Managers.GameManager.Player_character.position, 0.3f);
         gun_Shoot.aim_idle_state[num] = false;
     }
-    
+    public void Bullet_mark_ceate()
+    {
+    }
     [Serializable]
     public class Gun_shoot : Pattern_base_data
     {
