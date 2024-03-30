@@ -69,7 +69,7 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
         {
             if (UI_jun.UI_window_on["Option"].activeSelf)
             {
-                GameManager.ui_on = false;
+                GameManager.option_window_on = false;
                 GameManager.game_stop = false;
                 UI_jun.UI_window_off.Peek().SetActive(false);
                 if(GameManager.scene_name != "Main_screen")
@@ -80,7 +80,7 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
             }
             else
             {
-                GameManager.ui_on = true;
+                GameManager.option_window_on = true;
                 GameManager.game_stop = true;
                 UI_jun.UI_window_on["Option"].SetActive(true);
                 Time.timeScale = 0;
