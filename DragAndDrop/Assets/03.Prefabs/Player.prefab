@@ -9960,15 +9960,19 @@ MonoBehaviour:
   bounce_sound: {fileID: 8300000, guid: 522b68e3c77f015429dc6471a0badbc5, type: 3}
   player: {fileID: 2327533933647803065}
   character: {fileID: 2677420827678754594}
+  player_size: 0
+  player_size_magnification: 0
   drag_dis_magnification: 5
   animator: {fileID: 3668438049600578730}
   mouse_current_pos: {x: 0, y: 0}
   mouse_click_pos: {x: 0, y: 0}
-  drag_dis: {x: 0, y: 0}
+  hit_statu: 0
+  player_rotation_z: 0
   player_statu: 0
   interation_obj: []
-  move_fragments: {fileID: 7836159725200195643}
-  move_wave: {fileID: 2558410034894741981}
+  move_particles:
+  - {fileID: 7836159725200195643}
+  - {fileID: 2558410034894741981}
   wavelength: {fileID: 5217170995999216716}
   move_fragments_figurel:
     origin_min_speed: 1

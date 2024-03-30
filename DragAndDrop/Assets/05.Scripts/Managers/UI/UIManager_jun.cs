@@ -47,7 +47,7 @@ public class UIManager_jun
         {
             Transform child = canvas.transform.GetChild(i);
             UI_window_on.Add(child.name, child.gameObject);
-            if(child.gameObject.name == "Stage_base")
+            /*if(child.gameObject.name == "Stage_base")
             {
                 for (int j = 0; j < child.childCount; j++)
                 {
@@ -70,7 +70,7 @@ public class UIManager_jun
 
                     }
                 }
-            }
+            }*/
         }
         slider_object = GameObject.FindObjectsOfType<Slider>();
         foreach (var item in slider_object)
@@ -124,9 +124,9 @@ public class UIManager_jun
                 UI_window_off.Peek().SetActive(false);
             } 
         }
-        if (Managers.GameManager.scene_name.Contains("Stage"))
+        /*if (Managers.GameManager.scene_name.Contains("Stage"))
         {
-            //Managers.Resource.Load<GameObject>("Timer_canvas").GetComponent<Canvas>().worldCamera = GameObject.FindObjectOfType<Camera>();
+            Managers.Resource.Load<GameObject>("Timer_canvas").GetComponent<Canvas>().worldCamera = GameObject.FindObjectOfType<Camera>();
             UI_window_on["Stage_base"].SetActive(true);
             foreach (var item in player_hp)
             {
@@ -140,7 +140,7 @@ public class UIManager_jun
         else
         {
             UI_window_on["Stage_base"].SetActive(false);
-        }
+        }*/
     }
 
 }

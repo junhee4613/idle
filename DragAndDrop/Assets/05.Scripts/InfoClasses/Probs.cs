@@ -24,6 +24,8 @@ public class playerData : Unit
 public enum Player_statu
 {
     IDLE,
+    RUN,
+    DRAG,
     HIT,
 }
 public class slow_eligibility : MonoBehaviour
