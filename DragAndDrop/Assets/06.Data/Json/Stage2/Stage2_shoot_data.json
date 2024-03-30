@@ -45,18 +45,18 @@
         "duration": "0"
     },
     {
-        "time": "23.3",
-        "action_num": "1",
-        "duration": "0"
-    },
-    {
-        "time": "23.5",
-        "action_num": "1",
-        "duration": "0"
-    },
-    {
         "time": "23.6",
         "action_num": "5",
+        "duration": "0"
+    },
+    {
+        "time": "24.3",
+        "action_num": "1",
+        "duration": "0"
+    },
+    {
+        "time": "24.5",
+        "action_num": "1",
         "duration": "0"
     },
     {
@@ -72,6 +72,11 @@
     {
         "time": "25.75",
         "action_num": "4",
+        "duration": "0"
+    },
+    {
+        "time": "25.9",
+        "action_num": "7",
         "duration": "0"
     },
     {
@@ -147,6 +152,11 @@
     {
         "time": "31.5",
         "action_num": "4",
+        "duration": "0"
+    },
+    {
+        "time": "31.65",
+        "action_num": "7",
         "duration": "0"
     },
     {

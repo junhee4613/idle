@@ -38,10 +38,10 @@ public class Camera_manager
         sequence.Append(Main_camera.transform.DOMoveY(move_pos, move_pos_time));
         sequence.Append(Main_camera.transform.DOMoveY(go_back_pos, go_back_pos_time));
     }
-    public void Punch(float expansion, float reduction)
+    public void Punch(float expansion, float reduction, float time)
     {
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(Main_camera.DOOrthoSize(expansion, 0.1f));
-        sequence.Append(Main_camera.DOOrthoSize(reduction, 0.1f));
+        sequence.Append(Main_camera.DOOrthoSize(expansion, time));
+        sequence.Append(Main_camera.DOOrthoSize(reduction, time));
     }
 }
