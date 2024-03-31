@@ -124,24 +124,22 @@ public class The_most_angry_gunman : BossController
     }
     public void Chasing_shoot(GameObject aim, Action<bool> scope_action_end, sbyte num)
     {
-        aim.transform.DOLocalMove(Managers.GameManager.Player_character.position, 0.05f).OnComplete(() =>
+        aim.transform.DOLocalMove(Managers.GameManager.Player_character.position, 0.2f).OnComplete(() =>
         {
-            //여기에 총알 자국 코드 쓰기
-            Debug.Log("연발");
-                Managers.Main_camera.Punch(4.8f, 5, 0.04f);
+            Managers.Main_camera.Punch(4.8f, 5, 0.1f);
             aim.transform.DOPunchScale(Vector3.one * 0.2f, 0.1f).OnComplete(() =>
             {
                 Bullet_mark_ceate(aim.transform.position);
-            }).OnComplete(() => aim.transform.DOLocalMove(Managers.GameManager.Player_character.position, 0.04f).OnComplete(() =>
-            {
-                Debug.Log("연발");
-                //여기에 총알 자국 코드 쓰기
-                aim.transform.DOPunchScale(Vector3.one * 0.2f, 0.1f).OnComplete(() =>
+                aim.transform.DOLocalMove(Managers.GameManager.Player_character.position, 0.2f).OnComplete(() =>
                 {
-                    Bullet_mark_ceate(aim.transform.position);
-                    aim.transform.DOLocalMove(gun_shoot.move_befor_pos[num], 0.2f).OnComplete(() => scope_action_end(true));
+                    Managers.Main_camera.Punch(4.8f, 5, 0.1f);
+                    aim.transform.DOPunchScale(Vector3.one * 0.2f, 0.1f).OnComplete(() =>
+                    {
+                        Bullet_mark_ceate(aim.transform.position);
+                        aim.transform.DOLocalMove(gun_shoot.move_befor_pos[num], 0.2f).OnComplete(() => scope_action_end(true));
+                    });
                 });
-            }));
+            });
         });
     }
     public void Scope_create(ref GameObject scope, Vector3 pop_pos)
@@ -162,7 +160,6 @@ public class The_most_angry_gunman : BossController
         attack = false;
         aim.transform.DOPunchScale(Vector3.one * 0.2f, 0.1f).OnComplete(() =>
         {
-            //여기에 총알 자국 코드 쓰기
             Bullet_mark_ceate(aim.transform.position);
             aim.transform.DOLocalMove(gun_shoot.move_befor_pos[num], 0.2f).OnComplete(() => scope_action_end(true));
         });
@@ -176,9 +173,14 @@ public class The_most_angry_gunman : BossController
     }
     public void Bullet_mark_ceate(Vector3 create_pos)
     {
-        GameObject bullet_mark = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Bullet_mark"));
-        bullet_mark.GetOrAddComponent<Bullet_mark_effet>().fade_time = 0.7f;
-        bullet_mark.transform.position = create_pos;
+        Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Bullet_mark")).transform.position = create_pos;
+        /*GameObject bullet_mark = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Bullet_mark"));
+        Debug.Log(bullet_mark.name);
+        if(!bullet_mark.TryGetComponent(out Bullet_mark_effet bullet_mark_effet))
+        {
+            bullet_mark.AddComponent<Bullet_mark_effet>().fade_time = 0.7f;
+        }*/
+        //usehbullet_mark.transform.position = create_pos;
     }
     [Serializable]
     public class Gun_shoot : Pattern_base_data

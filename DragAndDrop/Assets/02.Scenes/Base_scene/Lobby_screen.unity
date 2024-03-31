@@ -237,7 +237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ff6cef051d08f408f454148269be43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  invincibility: 1
+  invincibility: 0
 --- !u!4 &338457427
 Transform:
   m_ObjectHideFlags: 0

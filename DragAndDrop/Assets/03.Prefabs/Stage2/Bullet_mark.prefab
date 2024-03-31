@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6413470731118307732}
   - component: {fileID: 9109187333854536785}
   - component: {fileID: 5589238351352849617}
+  - component: {fileID: -4758849361491890603}
   m_Layer: 8
   m_Name: Bullet_mark
   m_TagString: Untagged
@@ -120,3 +121,15 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &-4758849361491890603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6658685098180020993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e3e71addca62754080932a2656ee0fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
