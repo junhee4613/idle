@@ -12,7 +12,7 @@ public class PlayerController : playerData
     //Drag_statu_walls_collider(); 이 함수가 실행이 생각대로 안됨
     // 스킬을 구현해야되는데 이거 어떻게 데이터를 정리할지 고민중 스킬들의 정보는 json으로 저장
     public Rigidbody2D rb;
-    public CapsuleCollider2D cc;
+    public CircleCollider2D cc;
     public GameObject shoot_dir_image;
     public Transform arrow_rotation_base;
     public float obj_size;
@@ -49,6 +49,7 @@ public class PlayerController : playerData
     {
         Managers.GameManager.gameover += Player_die_setActive;
         move_fragments_figurel.module = move_particles[0].emission;
+        cc = GetComponent<CircleCollider2D>();
     }
     void Start()
     {
@@ -215,7 +216,7 @@ public class PlayerController : playerData
     {
         if (!hit_statu)
         {
-            interation_obj = Physics2D.OverlapCircleAll(transform.position, obj_size, 1 << 8);
+            interation_obj = Physics2D.OverlapCircleAll(Managers.GameManager.Player_character.transform.position, cc.bounds.size.x, 1 << 8);
 
             foreach (var item in interation_obj)
             {
