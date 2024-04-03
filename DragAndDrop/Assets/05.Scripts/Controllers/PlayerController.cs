@@ -42,6 +42,7 @@ public class PlayerController : playerData
     public Collider2D[] interation_obj;
     public ParticleSystem[] move_particles;
     public ParticleSystem wavelength;
+    public ParticleSystem hit_particle;
     public Particle_figure move_fragments_figurel;
     #endregion
     // Start is called before the first frame update
@@ -176,7 +177,10 @@ public class PlayerController : playerData
     {
         if (!hit_statu)
         {
-            Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Hit_particle"));
+            //Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Hit_particle"));
+            Debug.Log("ÇÇ°Ý");
+            hit_particle.gameObject.SetActive(true);
+            hit_particle.Play();
             hit_statu = true;
             if (!Managers.invincibility)
             {

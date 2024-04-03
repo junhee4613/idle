@@ -6,6 +6,9 @@ using DG.Tweening;
 using Newtonsoft.Json;
 using System.Runtime.InteropServices;
 using Random = UnityEngine.Random;
+using Unity.VisualScripting;
+using static The_most_angry_gunman;
+using static UnityEditor.Progress;
 
 public class The_most_angry_gunman : BossController
 {
@@ -14,13 +17,14 @@ public class The_most_angry_gunman : BossController
     public Tumbleweed tumbleweed;
     protected override void Awake()
     {
-        //base.Awake();
+        base.Awake();
         gun_shoot.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_shoot_data").text);
         dynamite.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_dynamite_data").text);
     }
     // Start is called before the first frame update
     void Start()
     {
+        Anim_state_machin(anim_state["1_phase_idle"]);
         Managers.GameManager.game_start = true;
     }
 
@@ -45,6 +49,10 @@ public class The_most_angry_gunman : BossController
                 , gun_shoot.criteria_x, gun_shoot.criteria_y, gun_shoot.pop_pos[1].x, gun_shoot.pop_pos[1].y, gun_shoot.aim_speed);
         }
         Pattern_function(ref dynamite.pattern_data, ref dynamite.pattern_ending, ref dynamite.duration, ref dynamite.pattern_count, Dynamite_pattern);
+        if (dynamite.dynamite_obj != null && dynamite.dynamite_rotate)
+        {
+            dynamite.dynamite_obj.transform.Rotate(new Vector3(0, 0, 720) * Time.deltaTime);
+        }
     }
     public void Gun_shoot_pattern()
     {   
@@ -156,7 +164,7 @@ public class The_most_angry_gunman : BossController
     public void Scope_appearance(GameObject scope, Action<bool> scope_action_end)
     {
         scope.SetActive(true);
-        Sequence sequence = DOTween.Sequence();
+        DG.Tweening.Sequence sequence = DOTween.Sequence();
         sequence.Append(scope.transform.DOScale(Vector3.one * 1.5f, 0.2f));
         sequence.Append(scope.transform.DOScale(Vector3.one * 1f, 0.2f).OnComplete(() => scope_action_end(true)));
     }
@@ -182,10 +190,7 @@ public class The_most_angry_gunman : BossController
     }
     public void Dynamite_pattern()
     {
-        if (dynamite.dynamite_obj != null && dynamite.dynamite_rotate)
-        {
-            dynamite.dynamite_obj.transform.Rotate(new Vector3(0, 0, 360) * Time.deltaTime);
-        }
+        
         switch (dynamite.pattern_data[dynamite.pattern_count].action_num)
         {
             case 0:     //다이너마이트 생성 0.3초뒤에 생성
@@ -194,8 +199,11 @@ public class The_most_angry_gunman : BossController
                     if (!item.activeSelf)
                     {
                         item.SetActive(true);
-                        dynamite.dynamite_obj = item;
-                        dynamite.dynamite_obj.transform.localPosition = Vector3.zero;
+                        if(dynamite.dynamite_obj == null)
+                        {
+                            dynamite.dynamite_obj = item;
+                        }
+                        item.transform.localPosition = Vector3.zero;
                         break;
                     }
                 }
@@ -204,13 +212,23 @@ public class The_most_angry_gunman : BossController
                 break;
             case 2:     //다이너마이트 경고판 0.7
                 dynamite.dynamite_landing_pos = new Vector3(Random.Range(transform.position.x, 3.5f * dynamite.dir), -3f, 0);
-                dynamite.dynamite_obj.transform.DOJump(dynamite.dynamite_landing_pos, 5, 1, 0.7f).SetEase(Ease.InSine).OnComplete(() => dynamite.dynamite_rotate = false);
-                Warning_box(new Vector3(2, 5, 0), new Vector3(dynamite.dynamite_landing_pos.x, -1.6f, 0), true, 3, 0.233f);
+                dynamite.dynamite_obj.transform.DOJump(dynamite.dynamite_landing_pos, 5, 1, 0.5f).SetEase(Ease.InSine).OnComplete(() => dynamite.dynamite_rotate = false);
+                dynamite.warning = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
+                dynamite.warning.transform.position = new Vector3(dynamite.dynamite_landing_pos.x, -1.6f, 0);
+                dynamite.warning.transform.localScale = new Vector3(2, 5, 0);
                 dynamite.dynamite_rotate = true;
                 break;
             case 3:     //다이너마이트 던짐
+                Managers.Pool.Push(dynamite.warning);
                 dynamite.dynamite_obj.SetActive(false);
-                Debug.Log("hit");
+                foreach (var item in dynamite.dynamite_objs)
+                {
+                    if (item.activeSelf)
+                    {
+                        dynamite.dynamite_obj = item;
+                        break;
+                    }
+                }
                 break;
             case 4:     //섬광탄 던져서 0.6초뒤에 착지하고 그 후 0.8초뒤에 터짐
             default:
@@ -258,6 +276,7 @@ public class The_most_angry_gunman : BossController
         public Transform left_hand;
         public GameObject[] dynamite_objs;
         public GameObject dynamite_obj;
+        public GameObject warning;
         public Vector3 dynamite_landing_pos;
         public int dir = 1;
         public bool dynamite_rotate;
