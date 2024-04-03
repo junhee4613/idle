@@ -22,10 +22,7 @@ public class Bullet_mark_effet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        /*SR.DOFade(0, 0.7f).OnComplete(() =>
-        {
-            Managers.Pool.Push(this.gameObject);
-        }).SetDelay(0.3f);*/
+
     }
 
     // Update is called once per frame
@@ -37,7 +34,6 @@ public class Bullet_mark_effet : MonoBehaviour
     private void OnEnable()
     {
         SR.color = new Color(0 ,0, 0, 1);
-        Debug.Log(fade_time);
         SR.DOFade(0, fade_time).OnComplete(() =>
         {
             Managers.Pool.Push(this.gameObject);

@@ -29,14 +29,26 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6fce8b02cc649374fbe9d7f8dc73626f
+  - m_GUID: b6fa9a4096690064c8dbe1dec4ceafe1
+    m_Address: Bullet_mark
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8d1d9151e3e824c44a16aa5556a1d064
     m_Address: Stage2_shoot_data
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b6fa9a4096690064c8dbe1dec4ceafe1
-    m_Address: Bullet_mark
+  - m_GUID: 372d80ad8ea5ee34ea486386f694aea9
+    m_Address: Hit_particle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8a41fda10ca9f3246bc1febb7617297a
+    m_Address: Stage2_dynamite_data
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad

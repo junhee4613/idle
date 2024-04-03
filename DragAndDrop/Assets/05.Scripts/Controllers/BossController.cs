@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using DG.Tweening;
 
 public abstract class BossController : Stage_base_controller
 {
@@ -62,6 +63,20 @@ public abstract class BossController : Stage_base_controller
                     }
                 }
             }
+        }
+    }
+    public void Warning_box(Vector3 size, Vector3 pos, bool fade_option, sbyte count = 0, float minute = 0)
+    {
+        GameObject warning_box = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
+        warning_box.transform.position = pos;
+        warning_box.transform.localScale = size;
+        if (fade_option)
+        {
+            warning_box.GetComponent<SpriteRenderer>().DOFade(1, 0);
+            warning_box.GetComponent<SpriteRenderer>().DOFade(0, minute).SetLoops(count, LoopType.Yoyo).OnComplete(() =>
+            {
+                Managers.Pool.Push(warning_box);
+            });
         }
     }
     public virtual void Pattern_processing()

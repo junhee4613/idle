@@ -5,14 +5,18 @@ using System;
 using DG.Tweening;
 using Newtonsoft.Json;
 using System.Runtime.InteropServices;
+using Random = UnityEngine.Random;
 
 public class The_most_angry_gunman : BossController
 {
     public Gun_shoot gun_shoot;
+    public Dynamite dynamite;
+    public Tumbleweed tumbleweed;
     protected override void Awake()
     {
         //base.Awake();
         gun_shoot.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_shoot_data").text);
+        dynamite.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_dynamite_data").text);
     }
     // Start is called before the first frame update
     void Start()
@@ -40,6 +44,7 @@ public class The_most_angry_gunman : BossController
             Scope_side_move(ref gun_shoot.aims[1], ref gun_shoot.aims_data[1].criteria_dir_x, ref gun_shoot.aims_data[1].criteria_dir_y
                 , gun_shoot.criteria_x, gun_shoot.criteria_y, gun_shoot.pop_pos[1].x, gun_shoot.pop_pos[1].y, gun_shoot.aim_speed);
         }
+        Pattern_function(ref dynamite.pattern_data, ref dynamite.pattern_ending, ref dynamite.duration, ref dynamite.pattern_count, Dynamite_pattern);
     }
     public void Gun_shoot_pattern()
     {   
@@ -174,13 +179,58 @@ public class The_most_angry_gunman : BossController
     public void Bullet_mark_ceate(Vector3 create_pos)
     {
         Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Bullet_mark")).transform.position = create_pos;
-        /*GameObject bullet_mark = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Bullet_mark"));
-        Debug.Log(bullet_mark.name);
-        if(!bullet_mark.TryGetComponent(out Bullet_mark_effet bullet_mark_effet))
+    }
+    public void Dynamite_pattern()
+    {
+        if (dynamite.dynamite_obj != null && dynamite.dynamite_rotate)
         {
-            bullet_mark.AddComponent<Bullet_mark_effet>().fade_time = 0.7f;
-        }*/
-        //usehbullet_mark.transform.position = create_pos;
+            dynamite.dynamite_obj.transform.Rotate(new Vector3(0, 0, 360) * Time.deltaTime);
+        }
+        switch (dynamite.pattern_data[dynamite.pattern_count].action_num)
+        {
+            case 0:     //다이너마이트 생성 0.3초뒤에 생성
+                foreach (var item in dynamite.dynamite_objs)
+                {
+                    if (!item.activeSelf)
+                    {
+                        item.SetActive(true);
+                        dynamite.dynamite_obj = item;
+                        dynamite.dynamite_obj.transform.localPosition = Vector3.zero;
+                        break;
+                    }
+                }
+                break;
+            case 1:     //다이너마이트 들고 움직임 1초간 움직임
+                break;
+            case 2:     //다이너마이트 경고판 0.7
+                dynamite.dynamite_landing_pos = new Vector3(Random.Range(transform.position.x, 3.5f * dynamite.dir), -3f, 0);
+                dynamite.dynamite_obj.transform.DOJump(dynamite.dynamite_landing_pos, 5, 1, 0.7f).SetEase(Ease.InSine).OnComplete(() => dynamite.dynamite_rotate = false);
+                Warning_box(new Vector3(2, 5, 0), new Vector3(dynamite.dynamite_landing_pos.x, -1.6f, 0), true, 3, 0.233f);
+                dynamite.dynamite_rotate = true;
+                break;
+            case 3:     //다이너마이트 던짐
+                dynamite.dynamite_obj.SetActive(false);
+                Debug.Log("hit");
+                break;
+            case 4:     //섬광탄 던져서 0.6초뒤에 착지하고 그 후 0.8초뒤에 터짐
+            default:
+                break;
+        }
+    }
+    public void Tumbleweed_pattern()
+    {
+        switch (tumbleweed.pattern_data[gun_shoot.pattern_count].action_num)
+        {
+            case 0:     //경고판
+                break;
+            case 1:     //굴러감
+                break;
+            case 2:     //큰 장판
+                break;
+            case 3:     //섬광탄 던짐 0.8초뒤에 터짐
+            default:
+                break;
+        }
     }
     [Serializable]
     public class Gun_shoot : Pattern_base_data
@@ -195,12 +245,28 @@ public class The_most_angry_gunman : BossController
         public float criteria_x;        //에임들의 움직이는 x축 범위 
         public float criteria_y;        //에임들의 움직이는 y축 범위
         [Serializable]
-        public class Aims_dir
+        public class Aims_dir           //에임들이 공통적으로 독립적으로 갖는 값들
         {
             public float criteria_dir_x = 1;
             public float criteria_dir_y = 1;
             public bool attack_action = false;
         }
     }
+    [Serializable]
+    public class Dynamite : Pattern_base_data
+    {
+        public Transform left_hand;
+        public GameObject[] dynamite_objs;
+        public GameObject dynamite_obj;
+        public Vector3 dynamite_landing_pos;
+        public int dir = 1;
+        public bool dynamite_rotate;
+    }
+    [Serializable]
+    public class Tumbleweed : Pattern_base_data
+    {
+
+    }
+
 }
-    
+

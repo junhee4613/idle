@@ -49,7 +49,6 @@ public class PlayerController : playerData
     {
         Managers.GameManager.gameover += Player_die_setActive;
         move_fragments_figurel.module = move_particles[0].emission;
-        cc = GetComponent<CircleCollider2D>();
     }
     void Start()
     {
@@ -177,6 +176,7 @@ public class PlayerController : playerData
     {
         if (!hit_statu)
         {
+            Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Hit_particle"));
             hit_statu = true;
             if (!Managers.invincibility)
             {
@@ -193,21 +193,6 @@ public class PlayerController : playerData
             }
         }
     }
-    IEnumerator invincibility()
-    {
-        if (player_life != 0)
-        {
-            transform.DOPunchScale(Vector2.one * 1.5f, 2f, 3, 0.5f);
-        }
-
-        while (time < invincibility_time)
-        {
-            time += Time.fixedDeltaTime;
-            yield return null;
-        }
-        hit_statu = false;
-        time = 0;
-    }
     public void Player_die_setActive()
     {
         //플레이어 죽은 후 처리 애니메이션이 작동한다든지 등등
@@ -216,7 +201,7 @@ public class PlayerController : playerData
     {
         if (!hit_statu)
         {
-            interation_obj = Physics2D.OverlapCircleAll(Managers.GameManager.Player_character.transform.position, cc.bounds.size.x, 1 << 8);
+            interation_obj = Physics2D.OverlapCircleAll(Managers.GameManager.Player_character.transform.position, cc.radius, 1 << 8);
 
             foreach (var item in interation_obj)
             {
