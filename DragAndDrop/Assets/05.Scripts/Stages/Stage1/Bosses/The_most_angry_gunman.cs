@@ -15,11 +15,13 @@ public class The_most_angry_gunman : BossController
     public Gun_shoot gun_shoot;
     public Dynamite dynamite;
     public Tumbleweed tumbleweed;
+    public Powder_keg powder_keg;
     protected override void Awake()
     {
         base.Awake();
         gun_shoot.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_shoot_data").text);
         dynamite.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_dynamite_data").text);
+        powder_keg.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_powder_keg_data").text);
     }
     // Start is called before the first frame update
     void Start()
@@ -49,10 +51,8 @@ public class The_most_angry_gunman : BossController
                 , gun_shoot.criteria_x, gun_shoot.criteria_y, gun_shoot.pop_pos[1].x, gun_shoot.pop_pos[1].y, gun_shoot.aim_speed);
         }
         Pattern_function(ref dynamite.pattern_data, ref dynamite.pattern_ending, ref dynamite.duration, ref dynamite.pattern_count, Dynamite_pattern);
-        if (dynamite.dynamite_obj != null && dynamite.dynamite_rotate)
-        {
-            dynamite.dynamite_obj.transform.Rotate(new Vector3(0, 0, 720) * Time.deltaTime);
-        }
+        Pattern_function(ref powder_keg.pattern_data, ref powder_keg.pattern_ending, ref powder_keg.duration, ref powder_keg.pattern_count, Powder_keg_pattern);
+
     }
     public void Gun_shoot_pattern()
     {   
@@ -241,15 +241,78 @@ public class The_most_angry_gunman : BossController
         {
             case 0:     //경고판
                 break;
-            case 1:     //굴러감
+            case 1:     //굴러감(작은 장판)
                 break;
             case 2:     //큰 장판
                 break;
-            case 3:     //섬광탄 던짐 0.8초뒤에 터짐
+            case 3:     //박스 커짐: 0, -0.25, 0의 위치와  1.5의 스케일
             default:
                 break;
         }
     }
+    public void Powder_keg_pattern()
+    {
+        switch (powder_keg.pattern_data[powder_keg.pattern_count].action_num)
+        {
+            case 0:     //화약통 생성 후 족너 충족 시 폭발
+                powder_keg.num = Random.Range(0, powder_keg.deployable_pos.Count - 1);
+                GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Powder_keg"));
+                temp.transform.localScale = Vector3.zero;
+                temp.transform.position = powder_keg.deployable_pos[powder_keg.num];
+                temp.transform.DOScale(Vector3.one, 0.35f);
+                powder_keg.deployable_pos.RemoveAt(powder_keg.num);
+                powder_keg.objs.Add(temp.transform);
+                if (powder_keg.objs.Count != 0)
+                {
+                    foreach (var item in powder_keg.objs)
+                    {
+                        if (item.transform.position != temp.transform.position)
+                        {
+                            Debug.Log(item.gameObject.transform.position);
+                            Debug.Log(temp.gameObject.transform.position);
+
+                            if (item.position.x == temp.transform.position.x && !powder_keg.boom.Contains(item))
+                            {
+                                //FIX : 나중엔 여길 터지는 애니메이션 작동되게 변경
+                                powder_keg.boom.Add(item);
+                                powder_keg.boom.Add(temp.transform);
+                                Managers.Pool.Push(item.gameObject);
+                                Managers.Pool.Push(temp);
+                            }
+                            else if (item.position.y == temp.transform.position.y && !powder_keg.boom.Contains(item))
+                            {
+                                powder_keg.boom.Add(item);
+                                powder_keg.boom.Add(temp.transform);
+                                Managers.Pool.Push(item.gameObject);
+                                Managers.Pool.Push(temp);
+                            }
+                        }
+                    } 
+                }
+                if (powder_keg.boom.Count != 0)
+                {
+                    foreach (var item in powder_keg.boom)
+                    {
+                        powder_keg.deployable_pos.Add(item.position);
+                        powder_keg.objs.Remove(item);
+                    }
+                    powder_keg.boom.Clear();
+                }
+                break;
+            case 1:     //화약통 다 사라짐 0.4초 dotween 그리고 박스 작아짐: 0, -1.5, 0의 위치와 1의 스케일
+                foreach (var item in powder_keg.objs)
+                {
+                    if (item.gameObject.activeSelf)
+                    {
+                        item.DOScale(Vector3.zero, 0.35f).OnComplete(() => item.gameObject.SetActive(false));
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     [Serializable]
     public class Gun_shoot : Pattern_base_data
     {
@@ -286,6 +349,13 @@ public class The_most_angry_gunman : BossController
     {
 
     }
-
+    [Serializable]
+    public class Powder_keg : Pattern_base_data
+    {
+        public List<Vector3> deployable_pos = new List<Vector3>();      //배치 가능한 위치
+        public HashSet<Transform> objs = new HashSet<Transform>();            //배치된 오브젝트들
+        public HashSet<Transform> boom = new HashSet<Transform>();          //터져야되는 폭탄들
+        public int num;                     //List(deployable_pos)에 있는 값들중 랜덤으로 고르기 위한 변수
+    }
 }
 
