@@ -69,15 +69,20 @@ public class The_most_angry_gunman : BossController
                 Scope_appearance(gun_shoot.aims[0], (value) => gun_shoot.aim_idle_state[0] = value);
                 break;
             case 1:     //에임들이 플레이어 위치로 이동
-                if (gun_shoot.aim_idle_state[0] && gun_shoot.aims[0].activeSelf)
+                if (gun_shoot.aim_idle_state[0] && gun_shoot.aims[0].activeSelf && !gun_shoot.right_shoot)
                 {
                     Lock_on(ref gun_shoot, 0);
                     gun_shoot.aims_data[0].attack_action = true;
+                    if (gun_shoot.aims[1].activeSelf)
+                    {
+                        gun_shoot.right_shoot = true;
+                    }
                 }
                 else if(gun_shoot.aim_idle_state[1] && gun_shoot.aims[1].activeSelf)
                 {
                     Lock_on(ref gun_shoot, 1);
                     gun_shoot.aims_data[1].attack_action = true;
+                    gun_shoot.right_shoot = false;
                 }
                 break;
             case 2:     //해당 위치에서 쏜 후 0.3초 뒤에 출발 지점으로 돌아감
@@ -325,6 +330,7 @@ public class The_most_angry_gunman : BossController
         public float aim_speed = 5f;    //에임 스피드
         public float criteria_x;        //에임들의 움직이는 x축 범위 
         public float criteria_y;        //에임들의 움직이는 y축 범위
+        public bool right_shoot = false;        //두개의 에임중에 공격할 에임이 뭔지 판별하기 위한 변수
         [Serializable]
         public class Aims_dir           //에임들이 공통적으로 독립적으로 갖는 값들
         {
