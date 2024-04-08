@@ -328,15 +328,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6739641969548723374, guid: a27b213100c439548a1c05c934f4d0b4, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6739641969548723374, guid: a27b213100c439548a1c05c934f4d0b4, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6739641969548723374, guid: a27b213100c439548a1c05c934f4d0b4, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6739641969548723374, guid: a27b213100c439548a1c05c934f4d0b4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -344,7 +344,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6739641969548723374, guid: a27b213100c439548a1c05c934f4d0b4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.25
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: 6739641969548723374, guid: a27b213100c439548a1c05c934f4d0b4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -448,6 +448,7 @@ MonoBehaviour:
     aim_speed: 5
     criteria_x: 1
     criteria_y: 2
+    right_shoot: 0
   dynamite:
     pattern_count: 0
     pattern_ending: 0
@@ -480,6 +481,8 @@ MonoBehaviour:
     - {x: 5, y: -0.5, z: 0}
     - {x: 5, y: 2.25, z: 0}
     num: 0
+  anims:
+  - idle
 --- !u!4 &685879984
 Transform:
   m_ObjectHideFlags: 0

@@ -171,6 +171,28 @@ namespace Stage_FSM
 
         }
     }
+    public class Pattern_anim : Anim_stage_state 
+    {
+        public Pattern_anim(string anim_name, Animator temp_an)
+        {
+            this.an = temp_an;
+            temp_name = anim_name;
+        }
+        public override void On_state_enter()
+        {
+            Debug.Log(temp_name);
+            an.Play(temp_name);
+        }
+        public override void On_state_update(sbyte loop_num)
+        {
+
+        }
+        public override void On_state_exit()
+        {
+
+        }
+    }
+
     /*public class Simple_pattern1 : Anim_stage_state
     {
         public Simple_pattern1(string anim_name)

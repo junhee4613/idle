@@ -11,7 +11,7 @@ public class Stage_base_controller : MonoBehaviour
     public sbyte hard_pattern_num;
     protected virtual void Awake()
     {
-        anim_state.Anim_processing(ref an, gameObject, simple_pattern_num, hard_pattern_num);
+        anim_state.Anim_processing(ref an, simple_pattern_num, hard_pattern_num);
     }
     // Start is called before the first frame update
     void Start()
@@ -24,13 +24,35 @@ public class Stage_base_controller : MonoBehaviour
     {
 
     }
-    public void Anim_state_machin(Anim_stage_state clip_name)
+    public void Anim_state_machin(Anim_stage_state clip_name)       //FIX : 나중에 여기 리팩토링 해야됨
     {
         if (an.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1 && now_anim != clip_name)
         {
             clip_name.On_state_exit();
             now_anim = clip_name;
             clip_name.On_state_enter();
+        }
+
+    }
+    public void Anim_state_machin2(Anim_stage_state clip_name, bool anim_until_the_end)
+    {
+        if (now_anim != clip_name)
+        {
+            if (anim_until_the_end)
+            {
+                if (an.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1 )
+                {
+                    clip_name.On_state_exit();
+                    now_anim = clip_name;
+                    clip_name.On_state_enter();
+                }
+            }
+            else
+            {
+                clip_name.On_state_exit();
+                now_anim = clip_name;
+                clip_name.On_state_enter();
+            } 
         }
 
     }

@@ -16,9 +16,10 @@ public class The_most_angry_gunman : BossController
     public Dynamite dynamite;
     public Tumbleweed tumbleweed;
     public Powder_keg powder_keg;
+    string[] anims = new string[] {"idle", "reload", "right_shoot", "left_shoot"};
     protected override void Awake()
     {
-        base.Awake();
+        anim_state.Anim_processing2(ref an, anims);
         gun_shoot.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_shoot_data").text);
         dynamite.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_dynamite_data").text);
         powder_keg.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_powder_keg_data").text);
@@ -26,7 +27,7 @@ public class The_most_angry_gunman : BossController
     // Start is called before the first frame update
     void Start()
     {
-        Anim_state_machin(anim_state["1_phase_idle"]);
+        Anim_state_machin2(anim_state["idle"], true);
         Managers.GameManager.game_start = true;
     }
 
@@ -42,11 +43,13 @@ public class The_most_angry_gunman : BossController
         //활성화된 에임들이 바깥쪽에서 움직이는 코드
         if (gun_shoot.aim_idle_state[0] && gun_shoot.aims[0] != null && gun_shoot.aims[0].activeSelf)
         {
+            Anim_state_machin2(anim_state["idle"], false);
             Scope_side_move(ref gun_shoot.aims[0], ref gun_shoot.aims_data[0].criteria_dir_x, ref gun_shoot.aims_data[0].criteria_dir_y
                 , gun_shoot.criteria_x, gun_shoot.criteria_y, gun_shoot.pop_pos[0].x, gun_shoot.pop_pos[0].y, gun_shoot.aim_speed);
         }
         if (gun_shoot.aim_idle_state[1] && gun_shoot.aims[1] != null && gun_shoot.aims[1].activeSelf)
         {
+            Anim_state_machin2(anim_state["idle"], false);
             Scope_side_move(ref gun_shoot.aims[1], ref gun_shoot.aims_data[1].criteria_dir_x, ref gun_shoot.aims_data[1].criteria_dir_y
                 , gun_shoot.criteria_x, gun_shoot.criteria_y, gun_shoot.pop_pos[1].x, gun_shoot.pop_pos[1].y, gun_shoot.aim_speed);
         }
@@ -56,7 +59,6 @@ public class The_most_angry_gunman : BossController
     }
     public void Gun_shoot_pattern()
     {   
-        
         //패턴별 행동들
         switch (gun_shoot.pattern_data[gun_shoot.pattern_count].action_num)
         {
@@ -72,6 +74,7 @@ public class The_most_angry_gunman : BossController
                 if (gun_shoot.aim_idle_state[0] && gun_shoot.aims[0].activeSelf && !gun_shoot.right_shoot)
                 {
                     Lock_on(ref gun_shoot, 0);
+                    Anim_state_machin2(anim_state["left_shoot"], true);
                     gun_shoot.aims_data[0].attack_action = true;
                     if (gun_shoot.aims[1].activeSelf)
                     {
@@ -81,6 +84,7 @@ public class The_most_angry_gunman : BossController
                 else if(gun_shoot.aim_idle_state[1] && gun_shoot.aims[1].activeSelf)
                 {
                     Lock_on(ref gun_shoot, 1);
+                    Anim_state_machin2(anim_state["right_shoot"], true);
                     gun_shoot.aims_data[1].attack_action = true;
                     gun_shoot.right_shoot = false;
                 }
@@ -108,6 +112,7 @@ public class The_most_angry_gunman : BossController
                 Chasing_shoot(gun_shoot.aims[0], (value) => gun_shoot.aim_idle_state[0] = value, 0);
                 break;
             case 5:     //장전
+                Anim_state_machin2(anim_state["reload"], true);
                 break;
             case 6:     //에임들 사라짐
                 gun_shoot.aim_idle_state[0] = false;
