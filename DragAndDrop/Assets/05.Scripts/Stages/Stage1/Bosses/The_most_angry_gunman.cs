@@ -219,22 +219,44 @@ public class The_most_angry_gunman : BossController
                 }
                 break;
             case 1:     //다이너마이트 들고 움직임 1초간 움직임
+                transform.transform.DOMoveX(Random.Range(0, 3) * dynamite.dir, 0.7f);
+                dynamite.dir = -dynamite.dir;
+                transform.localScale = new Vector3(dynamite.dir, 1, 1);
+                if (dynamite.throw_dynamite)
+                {
+                    dynamite.throw_dynamite = false;
+                    foreach (var item in dynamite.dynamite_objs)
+                    {
+                        if (!item.activeSelf)
+                        {
+                            item.SetActive(true);
+                            if (dynamite.dynamite_obj == null)
+                            {
+                                dynamite.dynamite_obj = item;
+                            }
+                            item.transform.localPosition = Vector3.zero;
+                            break;
+                        }
+                    }
+                }
                 break;
-            case 2:     //다이너마이트 경고판 0.7
-                dynamite.dynamite_landing_pos = new Vector3(Random.Range(transform.position.x, 3.5f * dynamite.dir), -3f, 0);
-                dynamite.dynamite_obj.transform.DOJump(dynamite.dynamite_landing_pos, 5, 1, 0.5f).SetEase(Ease.InSine).OnComplete(() => dynamite.dynamite_rotate = false);
+            case 2:     //다이너마이트 경고판 0.7 이때 던짐
+                dynamite.dynamite_landing_pos_x = Random.Range(dynamite.left_hand.transform.position.x, dynamite.dynamite_throw_pos_x_range * dynamite.dir);
+                dynamite.dynamite_obj.transform.parent = null;
+                dynamite.dynamite_obj.transform.DOMoveX(dynamite.dynamite_landing_pos_x, 0.5f);
                 dynamite.warning = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
-                dynamite.warning.transform.position = new Vector3(dynamite.dynamite_landing_pos.x, -1.6f, 0);
+                dynamite.warning.transform.position = new Vector3(dynamite.dynamite_landing_pos_x, -1.6f, 0);
                 dynamite.warning.transform.localScale = new Vector3(2, 5, 0);
-                dynamite.dynamite_rotate = true;
+                dynamite.throw_dynamite = true;
                 break;
-            case 3:     //다이너마이트 던짐
+            case 3:     //다이너마이트 터짐
                 Managers.Pool.Push(dynamite.warning);
                 dynamite.dynamite_obj.SetActive(false);
                 foreach (var item in dynamite.dynamite_objs)
                 {
                     if (item.activeSelf)
                     {
+                        dynamite.dynamite_obj.transform.parent = dynamite.left_hand;
                         dynamite.dynamite_obj = item;
                         break;
                     }
@@ -351,9 +373,10 @@ public class The_most_angry_gunman : BossController
         public GameObject[] dynamite_objs;
         public GameObject dynamite_obj;
         public GameObject warning;
-        public Vector3 dynamite_landing_pos;
+        public float dynamite_landing_pos_x;
+        public float dynamite_throw_pos_x_range;
         public int dir = 1;
-        public bool dynamite_rotate;
+        public bool throw_dynamite = false;
     }
     [Serializable]
     public class Tumbleweed : Pattern_base_data

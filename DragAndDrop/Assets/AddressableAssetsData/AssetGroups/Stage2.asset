@@ -47,7 +47,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8a41fda10ca9f3246bc1febb7617297a
+  - m_GUID: 7bcc52f062b4ad64caabe17da6d36276
     m_Address: Stage2_dynamite_data
     m_ReadOnly: 0
     m_SerializedLabels:
