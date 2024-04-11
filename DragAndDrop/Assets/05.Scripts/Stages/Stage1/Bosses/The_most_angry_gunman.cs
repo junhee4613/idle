@@ -273,11 +273,11 @@ public class The_most_angry_gunman : BossController
         {
             case 0:     //경고판
                 break;
-            case 1:     //굴러감(작은 장판)
+            case 1:     //굴러감(이때 0번에서 생긴 모든 장판에 회전초가 동시에 굴러감 (작은 장판))
                 break;
-            case 2:     //큰 장판
+            case 2:     //위에서 회전초 떨어지고 비트박스 아랫부분에 닿으면 바람 부는 방향으로 굴러감(0.7초동안 경고장판이 생긴뒤 떨어짐)
                 break;
-            case 3:     //박스 커짐: 0, -0.25, 0의 위치와  1.5의 스케일
+            case 3:     //이때 큰 장판할지말지 고민중
             default:
                 break;
         }
