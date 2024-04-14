@@ -6,11 +6,6 @@ using UnityEngine.UI;
 
 public class PlayerController : playerData
 {
-    //벽의 옆면에 맞으면 다른 벽
-    //최저 속도는 플레이어가 드래그 상태일 때의 속도로 기준을 잡고 최고 속도는 
-    //보니까 addForce랑 velocity랑 값을 대입해줘서 실행되는 원리가 다른 것 같음 velrocity로 지정하면 바운스 머테리얼 넣은 채로 벽에 닿았을 때 튕겨지지가 않고 반대로 addForce는 머테리얼을 안넣고 로직으로 처리하면 작동이 안됨
-    //Drag_statu_walls_collider(); 이 함수가 실행이 생각대로 안됨
-    // 스킬을 구현해야되는데 이거 어떻게 데이터를 정리할지 고민중 스킬들의 정보는 json으로 저장
     public Rigidbody2D rb;
     public CircleCollider2D cc;
     public GameObject shoot_dir_image;

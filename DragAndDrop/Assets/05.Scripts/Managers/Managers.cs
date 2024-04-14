@@ -43,6 +43,7 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
                 Init();
             }*/
         });
+        Grid._grid = gameObject.GetOrAddComponent<Grid>();
     }
     private void Start()
     {
@@ -112,6 +113,7 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
     public static ResourceManager Resource { get { return instance?._resources; } }
     public static PoolManager Pool { get { return instance?._pool; } }
     public static Camera_manager Main_camera { get { return instance?._camera; } }
+    public static Grid_controller Grid { get { return instance?._grid; } }
 
     SoundManager _sound = new SoundManager();
     UIManager_jun _ui = new UIManager_jun();
@@ -120,4 +122,5 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
     Camera_manager _camera = new Camera_manager();
     GameManager _game = new GameManager();
     PoolManager _pool = new PoolManager();
+    Grid_controller _grid = new Grid_controller();
 }

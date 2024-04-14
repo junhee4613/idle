@@ -1,21 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-class Cell
+using System;
+[Serializable]
+public class Cell
 {
     public HashSet<GameObject> Objects { get; } = new HashSet<GameObject>();
 }
 
-public class Grid_controller : MonoBehaviour
+public class Grid_controller
 {
-    UnityEngine.Grid _grid;
-    Dictionary<Vector3Int, Cell> _cells = new Dictionary<Vector3Int, Cell>();
-
-    private void Awake()
-    {
-        _grid = gameObject.GetOrAddComponent<UnityEngine.Grid>();
-    }
+    public UnityEngine.Grid _grid;
+    public Dictionary<Vector3Int, Cell> _cells = new Dictionary<Vector3Int, Cell>();
+    public Dictionary<GameObject, Transform> hit_obstacle = new Dictionary<GameObject, Transform>();
 
     public void Add(GameObject go)
     {
@@ -51,7 +48,37 @@ public class Grid_controller : MonoBehaviour
 
         return cell;
     }
+    
+    IEnumerator Hit_box(GameObject obs, float range, float loop_time, float time)       //범위 (컴포넌트 상에선 2, 유니티 기본 그리드 상에선 0.2) 증가 
+    {
+        while (time > loop_time)
+        {
+            Vector3Int player_pos = _grid.WorldToCell(Managers.GameManager.Player_character.transform.position);
+            if (!hit_obstacle.ContainsKey(obs))
+            {
+                hit_obstacle.Add(obs, obs.transform);
+            }
+            Vector3Int left = _grid.WorldToCell(hit_obstacle[obs].position + new Vector3(-range, 0));
+            Vector3Int right = _grid.WorldToCell(hit_obstacle[obs].position + new Vector3(+range, 0));
+            Vector3Int bottom = _grid.WorldToCell(hit_obstacle[obs].position + new Vector3(0, -range, 0));
+            Vector3Int top = _grid.WorldToCell(hit_obstacle[obs].position + new Vector3(0, +range, 0));
 
+            int minX = left.x;
+            int maxX = right.x;
+            int minY = bottom.y;
+            int maxY = top.y;
+
+            if (minX <= player_pos.x && maxX >= player_pos.x && minY <= player_pos.y && maxY >= player_pos.y)
+            {
+                if (!Managers.GameManager.Player.hit_statu)
+                {
+                    Managers.GameManager.Player.Hit();
+                }
+            }
+            yield return null;
+        }
+        
+    }
     public List<GameObject> GatherObjects(Vector3 pos, float range)
     {
         List<GameObject> objects = new List<GameObject>();

@@ -356,7 +356,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
             case 0:
                 //빨간 박스 생김
                 Anim_state_machin(anim_state["simple_pattern1"]);
-                Warning_box(new Vector3(6.5f, 4, 0), new Vector3(0.75f, -2, 0), true, 3, 0.25f);
+                Warning_box_fade(new Vector3(6.5f, 4, 0), new Vector3(0.75f, -2, 0), true, 3, 0.25f);
                 break;
             case 1:
                 //울면서 플레이어 박스 끝쪽으로 이동
@@ -396,7 +396,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
             case 0:
                 //Warning_box(new Vector3(8, Mathf.Abs(4 - (Mathf.Abs(Mathf.Abs(rush.pos_y) - 2) * 2)), 0), new Vector3(0, rush.pos_y, 0), 3, 0.25f);
                 //여기 수정해야됨 
-                Warning_box(new Vector3(8, Mathf.Abs(4 - (Mathf.Abs(rush.pos_y) - 2)), 0), new Vector3(0, (rush.pos_y / 2f - 1), 0), true, 3, 0.25f);
+                Warning_box_fade(new Vector3(8, Mathf.Abs(4 - (Mathf.Abs(rush.pos_y) - 2)), 0), new Vector3(0, (rush.pos_y / 2f - 1), 0), true, 3, 0.25f);
                 //Warning_box(new Vector3(8, Mathf.Abs(4 - (Mathf.Abs(Mathf.Abs(rush.pos_y) - 2))), 0), new Vector3(0, rush.pos_y + Mathf.Abs(rush.pos_y / 2f - 1), 0), 3, 0.25f);
                 break;
             case 1:
@@ -492,7 +492,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 }
                 //여기 수정해야됨 
                 //Warning_box(new Vector3(8, Mathf.Abs(4 - (Mathf.Abs(rush.pos_y) - 2)), 0), new Vector3(0, rush.pos_y - (rush.pos_y / 2f -1), 0), 3, 0.25f);
-                Warning_box(new Vector3(8, Mathf.Abs(4 - Mathf.Abs(rush.pos_y + 2)), 0), new Vector3(0, (rush.pos_y / 2f - 1), 0), true, 3, 0.25f);
+                Warning_box_fade(new Vector3(8, Mathf.Abs(4 - Mathf.Abs(rush.pos_y + 2)), 0), new Vector3(0, (rush.pos_y / 2f - 1), 0), true, 3, 0.25f);
                 break;
             case 9:
                 transform.DOMoveX(rush.target_rush_pos_x * rush.dir, 0.4f);

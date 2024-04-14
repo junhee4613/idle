@@ -328,15 +328,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6739641969548723374, guid: a27b213100c439548a1c05c934f4d0b4, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 6739641969548723374, guid: a27b213100c439548a1c05c934f4d0b4, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 6739641969548723374, guid: a27b213100c439548a1c05c934f4d0b4, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 6739641969548723374, guid: a27b213100c439548a1c05c934f4d0b4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -344,7 +344,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6739641969548723374, guid: a27b213100c439548a1c05c934f4d0b4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6739641969548723374, guid: a27b213100c439548a1c05c934f4d0b4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -467,6 +467,23 @@ MonoBehaviour:
     pattern_count: 0
     pattern_ending: 0
     duration: 0
+    small_tumbleweed:
+    - 3.125
+    - 1.875
+    - 0.625
+    - -0.625
+    - -1.875
+    - -3.125
+    big_tumbleweed:
+    - 3
+    - 1.5
+    - 0
+    - -1.5
+    - -3
+    vertical_tumbleweed: []
+    dir: 1
+    small_turn: 0
+    horizontal_tumbleweed_instance: []
   powder_keg:
     pattern_count: 0
     pattern_ending: 0
@@ -680,7 +697,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2730576694993779675, guid: f054acdf6f51f484bb3b7536e528f45f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.08
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2730576694993779675, guid: f054acdf6f51f484bb3b7536e528f45f, type: 3}
       propertyPath: m_LocalPosition.y

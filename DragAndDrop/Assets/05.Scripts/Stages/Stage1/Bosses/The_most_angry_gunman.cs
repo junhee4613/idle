@@ -23,6 +23,7 @@ public class The_most_angry_gunman : BossController
         gun_shoot.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_shoot_data").text);
         dynamite.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_dynamite_data").text);
         powder_keg.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_powder_keg_data").text);
+        tumbleweed.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_tumbleweed_data").text);
     }
     // Start is called before the first frame update
     void Start()
@@ -54,6 +55,7 @@ public class The_most_angry_gunman : BossController
                 , gun_shoot.criteria_x, gun_shoot.criteria_y, gun_shoot.pop_pos[1].x, gun_shoot.pop_pos[1].y, gun_shoot.aim_speed);
         }
         Pattern_function(ref dynamite.pattern_data, ref dynamite.pattern_ending, ref dynamite.duration, ref dynamite.pattern_count, Dynamite_pattern);
+        Pattern_function(ref tumbleweed.pattern_data, ref tumbleweed.pattern_ending, ref tumbleweed.duration, ref tumbleweed.pattern_count, Tumbleweed_pattern);
         Pattern_function(ref powder_keg.pattern_data, ref powder_keg.pattern_ending, ref powder_keg.duration, ref powder_keg.pattern_count, Powder_keg_pattern);
 
     }
@@ -262,31 +264,77 @@ public class The_most_angry_gunman : BossController
                     }
                 }
                 break;
-            case 4:     //섬광탄 던져서 0.6초뒤에 착지하고 그 후 0.8초뒤에 터짐
+            case 4:     //섬광탄 던져서 0.6초뒤에 착지하고 그 후 0.8초뒤에 터짐 위치 :(0, 0, 0) 스케일 : (1.5, 1.5, 1.5)
             default:
                 break;
         }
     }
     public void Tumbleweed_pattern()
     {
-        switch (tumbleweed.pattern_data[gun_shoot.pattern_count].action_num)
+        //방향 정해주는 로직
+        tumbleweed.dir = Mathf.RoundToInt(Random.Range(0, 1)) == 1 ? 1 : -1;
+        switch (tumbleweed.pattern_data[tumbleweed.pattern_count].action_num)
         {
-            case 0:     //경고판
+            case 0:     //굴러감
+                foreach (var item in tumbleweed.horizontal_tumbleweed_instance)
+                {
+                    if (tumbleweed.small_turn)
+                    {
+                        GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Small_tumbleweed"));
+                        temp.transform.position = new Vector3(-10 * tumbleweed.dir, item, 0);
+                        temp.transform.DOMoveX(10 * tumbleweed.dir, 1.8f).SetEase(Ease.Linear).OnComplete(() =>
+                        {
+                            Managers.Pool.Push(temp);
+                            Managers.Pool.Push(tumbleweed.warning[0]);
+                            tumbleweed.warning.RemoveAt(0);
+
+                        }); ;
+                        //여기에 경고장판 사라지는 로직
+                        tumbleweed.small_tumbleweed.Add(item);
+                    }
+                    else
+                    {
+                        GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Big_tumbleweed"));
+                        temp.transform.position = new Vector3(-10 * tumbleweed.dir, item, 0);
+                        temp.transform.DOMoveX(10 * tumbleweed.dir, 1.8f).SetEase(Ease.Linear).OnComplete(() => 
+                        {
+                            Managers.Pool.Push(temp);
+                            Managers.Pool.Push(tumbleweed.warning[0]);
+                            tumbleweed.warning.RemoveAt(0);
+
+                        });
+                        //여기에 경고장판 사라지는 로직
+                        tumbleweed.big_tumbleweed.Add(item);
+                    }
+                }
+                tumbleweed.horizontal_tumbleweed_instance.Clear();
+
                 break;
-            case 1:     //굴러감(이때 0번에서 생긴 모든 장판에 회전초가 동시에 굴러감 (작은 장판))
+            case 1:     //큰 경고판 1.5
+                tumbleweed.small_turn = false;
+                int big_num = Random.Range(0, tumbleweed.big_tumbleweed.Count - 1);
+                tumbleweed.warning.Add(Warning_box_punch_scale(new Vector3(0, tumbleweed.big_tumbleweed[big_num], 0), new Vector3(15, 0, 0), new Vector3(15, 1.75f, 0), 0.1f, new Vector3(15, 1.5f, 0), 0.05f, true));
+                tumbleweed.horizontal_tumbleweed_instance.Add(tumbleweed.big_tumbleweed[big_num]);
+                tumbleweed.big_tumbleweed.RemoveAt(big_num);
                 break;
-            case 2:     //위에서 회전초 떨어지고 비트박스 아랫부분에 닿으면 바람 부는 방향으로 굴러감(0.7초동안 경고장판이 생긴뒤 떨어짐)
+            case 2:    //(작은 장판)) 1.25
+                tumbleweed.small_turn = true;
+                int small_num = Random.Range(0, tumbleweed.small_tumbleweed.Count - 1);
+                tumbleweed.warning.Add(Warning_box_punch_scale(new Vector3(0,tumbleweed.small_tumbleweed[small_num],0), new Vector3(15, 0, 0), new Vector3(15, 1.5f, 0), 0.1f, new Vector3(15, 1.25f, 0), 0.05f,true));
+                tumbleweed.horizontal_tumbleweed_instance.Add(tumbleweed.small_tumbleweed[small_num]);
+                tumbleweed.small_tumbleweed.RemoveAt(small_num);
                 break;
-            case 3:     //이때 큰 장판할지말지 고민중
+            case 3:     //위에서 회전초 떨어지고 비트박스 아랫부분에 닿으면 바람 부는 방향으로 굴러감(0.7초동안 경고장판이 생긴뒤 떨어짐) 1.5
             default:
                 break;
         }
     }
+    
     public void Powder_keg_pattern()
     {
         switch (powder_keg.pattern_data[powder_keg.pattern_count].action_num)
         {
-            case 0:     //화약통 생성 후 족너 충족 시 폭발
+            case 0:     //화약통 생성 후 조건 충족 시 폭발
                 powder_keg.num = Random.Range(0, powder_keg.deployable_pos.Count - 1);
                 GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Powder_keg"));
                 temp.transform.localScale = Vector3.zero;
@@ -305,6 +353,7 @@ public class The_most_angry_gunman : BossController
 
                             if (item.position.x == temp.transform.position.x && !powder_keg.boom.Contains(item))
                             {
+                                GameObject warning = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
                                 //FIX : 나중엔 여길 터지는 애니메이션 작동되게 변경
                                 powder_keg.boom.Add(item);
                                 powder_keg.boom.Add(temp.transform);
@@ -381,7 +430,13 @@ public class The_most_angry_gunman : BossController
     [Serializable]
     public class Tumbleweed : Pattern_base_data
     {
-
+        public List<float> small_tumbleweed = new List<float>();
+        public List<float> big_tumbleweed = new List<float>();
+        public List<float> vertical_tumbleweed = new List<float>();
+        public int dir = 1;
+        public bool small_turn = false;
+        public List<float> horizontal_tumbleweed_instance = new List<float>();
+        public List<GameObject> warning = new List<GameObject>();
     }
     [Serializable]
     public class Powder_keg : Pattern_base_data

@@ -65,6 +65,24 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 987e7d241d39a5f4c8b2cf19e5a11e44
+    m_Address: Small_tumbleweed
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 89ae18357cd8c5e43a0aafbba6dff890
+    m_Address: Big_tumbleweed
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6ee9860adc17ff246be4a251bede374f
+    m_Address: Stage2_tumbleweed_data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: ca7e6c5fcf72e2642944e03c7574a351, type: 2}
   m_SchemaSet:
