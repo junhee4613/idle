@@ -110,7 +110,7 @@ public abstract class BossController : Stage_base_controller
         }
     }
     public GameObject Warning_box_punch_scale(Vector3 pos, Vector3 init_size, Vector3 first_dotween, float first_dotween_duration, Vector3 end_size, float seconde_dotween_duration
-        , bool only_vertical = false, bool only_horizontal = false, Action dotween_end_function = null)
+        ,bool auto_disable, bool only_vertical = false, bool only_horizontal = false, Action dotween_end_function = null)
     {
         GameObject warning_box = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
         warning_box.transform.position = pos;
@@ -121,8 +121,14 @@ public abstract class BossController : Stage_base_controller
             {
                 warning_box.transform.DOScaleX(end_size.x, seconde_dotween_duration).OnComplete(() => 
                 { 
-                    dotween_end_function();
-                    Managers.Pool.Push(warning_box);
+                    if(dotween_end_function != null)
+                    {
+                        dotween_end_function();
+                    }
+                    if (auto_disable)
+                    {
+                        Managers.Pool.Push(warning_box);
+                    }
                 }); 
             });
         }
@@ -132,8 +138,14 @@ public abstract class BossController : Stage_base_controller
             {
                 warning_box.transform.DOScaleY(end_size.y, seconde_dotween_duration).OnComplete(() =>
                 {
-                    dotween_end_function();
-                    Managers.Pool.Push(warning_box);
+                    if (dotween_end_function != null)
+                    {
+                        dotween_end_function();
+                    }
+                    if (auto_disable)
+                    {
+                        Managers.Pool.Push(warning_box);
+                    }
                 });
             });
         }
@@ -143,8 +155,14 @@ public abstract class BossController : Stage_base_controller
             {
                 warning_box.transform.DOScale(end_size, seconde_dotween_duration).OnComplete(() =>
                 {
-                    dotween_end_function();
-                    Managers.Pool.Push(warning_box);
+                    if (dotween_end_function != null)
+                    {
+                        dotween_end_function();
+                    }
+                    if (auto_disable)
+                    {
+                        Managers.Pool.Push(warning_box);
+                    }
                 });
             });
         }

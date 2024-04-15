@@ -296,7 +296,7 @@ public class The_most_angry_gunman : BossController
                     {
                         GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Big_tumbleweed"));
                         temp.transform.position = new Vector3(-10 * tumbleweed.dir, item, 0);
-                        temp.transform.DOMoveX(10 * tumbleweed.dir, 1.8f).SetEase(Ease.Linear).OnComplete(() => 
+                        temp.transform.DOMoveX(10 * tumbleweed.dir, 1.8f).SetEase(Ease.Linear).OnComplete(() =>
                         {
                             Managers.Pool.Push(temp);
                             Managers.Pool.Push(tumbleweed.warning[0]);
@@ -313,37 +313,46 @@ public class The_most_angry_gunman : BossController
             case 1:     //큰 경고판 1.5
                 tumbleweed.small_turn = false;
                 int big_num = Random.Range(0, tumbleweed.big_tumbleweed.Count - 1);
-                tumbleweed.warning.Add(Warning_box_punch_scale(new Vector3(0, tumbleweed.big_tumbleweed[big_num], 0), new Vector3(15, 1.25f, 0), new Vector3(15, 1.4f, 0), 0.1f, new Vector3(15, 1.5f, 0), 0.05f, true));
+                tumbleweed.warning.Add(Warning_box_punch_scale(new Vector3(0, tumbleweed.big_tumbleweed[big_num], 0), new Vector3(15, 1.25f, 0), new Vector3(15, 1.4f, 0), 0.1f, new Vector3(15, 1.5f, 0), 0.05f, false, true));
                 tumbleweed.horizontal_tumbleweed_instance.Add(tumbleweed.big_tumbleweed[big_num]);
                 tumbleweed.big_tumbleweed.RemoveAt(big_num);
                 break;
             case 2:    //(작은 장판)) 1.25
                 tumbleweed.small_turn = true;
                 int small_num = Random.Range(0, tumbleweed.small_tumbleweed.Count - 1);
-                tumbleweed.warning.Add(Warning_box_punch_scale(new Vector3(0,tumbleweed.small_tumbleweed[small_num],0), new Vector3(15, 0.8f, 0), new Vector3(15, 1, 0), 0.1f, new Vector3(15, 1.25f, 0), 0.05f,true));
+                tumbleweed.warning.Add(Warning_box_punch_scale(new Vector3(0, tumbleweed.small_tumbleweed[small_num], 0), new Vector3(15, 0.8f, 0), new Vector3(15, 1, 0), 0.1f, new Vector3(15, 1.25f, 0), 0.05f, false, true));
                 tumbleweed.horizontal_tumbleweed_instance.Add(tumbleweed.small_tumbleweed[small_num]);
                 tumbleweed.small_tumbleweed.RemoveAt(small_num);
                 break;
             case 3:     //위에서 회전초 떨어지고 비트박스 아랫부분에 닿으면 바람 부는 방향으로 굴러감(0.7초동안 경고장판이 생긴뒤 떨어짐) 1.5
-                int vertical_num = Random.Range(0, tumbleweed.vertical_tumbleweed.Count - 1);
-                GameObject warning = Warning_box_punch_scale(new Vector3(tumbleweed.vertical_tumbleweed[vertical_num], -0.5f, 0), new Vector3(1.5f, 7.5f, 0), 
-                    new Vector3(1.8f, 7.5f, 0), 0.6f, new Vector3(2, 7.5f, 0), 0.1f, false, true, Vertical_tumble);
-                tumbleweed.vertical_tumble_obj = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Vertical_tumbleweed"));
-                tumbleweed.vertical_tumble_obj.transform.position = new Vector3(tumbleweed.vertical_tumbleweed[vertical_num], 7, 0);
-                tumbleweed.vertical_tumbleweed.RemoveAt(vertical_num);
-                
+                /*int vertical_num = Random.Range(0, tumbleweed.vertical_tumbleweed.Count - 1); 
+                GameObject warning = Warning_box_punch_scale(new Vector3(tumbleweed.vertical_tumbleweed[vertical_num], -0.5f, 0), new Vector3(1.5f, 7.5f, 0),
+                    new Vector3(1.8f, 7.5f, 0), 0.6f, new Vector3(2.5f, 7.5f, 0), 0.1f, false, true, () => 
+                    {
+                        Debug.Log(tumbleweed.vertical_tumbleweed[vertical_num]);  여기선 -6.25, 3.75가 찍히는데 순서는 아래 로그가 먼저임
+                        Vertical_tumble(Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Vertical_tumbleweed")), tumbleweed.vertical_tumbleweed[vertical_num]);
+                    });
+                Debug.Log(tumbleweed.vertical_tumbleweed[vertical_num]); 이렇게 하니까  -6.25, 1.25 찍히다가 */
+                float pos_x = tumbleweed.vertical_tumbleweed[Random.Range(0, tumbleweed.vertical_tumbleweed.Count - 1)];
+                tumbleweed.vertical_tumbleweed.Remove(pos_x);
+                GameObject warning = Warning_box_punch_scale(new Vector3(pos_x, -0.5f, 0), new Vector3(1.5f, 7.5f, 0),
+                    new Vector3(1.8f, 7.5f, 0), 0.5f, new Vector3(2.5f, 7.5f, 0), 0.1f, true, false, true, () =>
+                    {
+                        Vertical_tumble(Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Vertical_tumbleweed")), pos_x);
+
+                    });
                 break;
             default:
                 break;
         }
     }
-    public void Vertical_tumble()
+    public void Vertical_tumble(GameObject temp, float pos_x)
     {
-        tumbleweed.vertical_tumble_obj.transform.DOMoveY(-7, 0.3f).SetEase(Ease.Linear).OnComplete(() =>
+        temp.transform.position = new Vector3(pos_x, 7, 0);
+        temp.transform.DOMoveY(-7, 0.3f).SetEase(Ease.Linear).OnComplete(() =>
         {
-            tumbleweed.vertical_tumbleweed.Add(tumbleweed.vertical_tumble_obj.transform.position.x);
-            Debug.Log("동작");
-            Managers.Pool.Push(tumbleweed.vertical_tumble_obj);
+            tumbleweed.vertical_tumbleweed.Add(temp.transform.position.x);
+            Managers.Pool.Push(temp);
         });
     }
     public void Powder_keg_pattern()
@@ -453,7 +462,6 @@ public class The_most_angry_gunman : BossController
         public bool small_turn = false;
         public List<float> horizontal_tumbleweed_instance = new List<float>();
         public List<GameObject> warning = new List<GameObject>();
-        public GameObject vertical_tumble_obj;
     }
     [Serializable]
     public class Powder_keg : Pattern_base_data

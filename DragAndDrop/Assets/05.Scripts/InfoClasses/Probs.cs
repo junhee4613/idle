@@ -180,7 +180,6 @@ namespace Stage_FSM
         }
         public override void On_state_enter()
         {
-            Debug.Log(temp_name);
             an.Play(temp_name);
         }
         public override void On_state_update(sbyte loop_num)
