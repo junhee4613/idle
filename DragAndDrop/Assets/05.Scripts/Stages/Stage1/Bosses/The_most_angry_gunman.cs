@@ -313,23 +313,39 @@ public class The_most_angry_gunman : BossController
             case 1:     //큰 경고판 1.5
                 tumbleweed.small_turn = false;
                 int big_num = Random.Range(0, tumbleweed.big_tumbleweed.Count - 1);
-                tumbleweed.warning.Add(Warning_box_punch_scale(new Vector3(0, tumbleweed.big_tumbleweed[big_num], 0), new Vector3(15, 0, 0), new Vector3(15, 1.75f, 0), 0.1f, new Vector3(15, 1.5f, 0), 0.05f, true));
+                tumbleweed.warning.Add(Warning_box_punch_scale(new Vector3(0, tumbleweed.big_tumbleweed[big_num], 0), new Vector3(15, 1.25f, 0), new Vector3(15, 1.4f, 0), 0.1f, new Vector3(15, 1.5f, 0), 0.05f, true));
                 tumbleweed.horizontal_tumbleweed_instance.Add(tumbleweed.big_tumbleweed[big_num]);
                 tumbleweed.big_tumbleweed.RemoveAt(big_num);
                 break;
             case 2:    //(작은 장판)) 1.25
                 tumbleweed.small_turn = true;
                 int small_num = Random.Range(0, tumbleweed.small_tumbleweed.Count - 1);
-                tumbleweed.warning.Add(Warning_box_punch_scale(new Vector3(0,tumbleweed.small_tumbleweed[small_num],0), new Vector3(15, 0, 0), new Vector3(15, 1.5f, 0), 0.1f, new Vector3(15, 1.25f, 0), 0.05f,true));
+                tumbleweed.warning.Add(Warning_box_punch_scale(new Vector3(0,tumbleweed.small_tumbleweed[small_num],0), new Vector3(15, 0.8f, 0), new Vector3(15, 1, 0), 0.1f, new Vector3(15, 1.25f, 0), 0.05f,true));
                 tumbleweed.horizontal_tumbleweed_instance.Add(tumbleweed.small_tumbleweed[small_num]);
                 tumbleweed.small_tumbleweed.RemoveAt(small_num);
                 break;
             case 3:     //위에서 회전초 떨어지고 비트박스 아랫부분에 닿으면 바람 부는 방향으로 굴러감(0.7초동안 경고장판이 생긴뒤 떨어짐) 1.5
+                int vertical_num = Random.Range(0, tumbleweed.vertical_tumbleweed.Count - 1);
+                GameObject warning = Warning_box_punch_scale(new Vector3(tumbleweed.vertical_tumbleweed[vertical_num], -0.5f, 0), new Vector3(1.5f, 7.5f, 0), 
+                    new Vector3(1.8f, 7.5f, 0), 0.6f, new Vector3(2, 7.5f, 0), 0.1f, false, true, Vertical_tumble);
+                tumbleweed.vertical_tumble_obj = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Vertical_tumbleweed"));
+                tumbleweed.vertical_tumble_obj.transform.position = new Vector3(tumbleweed.vertical_tumbleweed[vertical_num], 7, 0);
+                tumbleweed.vertical_tumbleweed.RemoveAt(vertical_num);
+                
+                break;
             default:
                 break;
         }
     }
-    
+    public void Vertical_tumble()
+    {
+        tumbleweed.vertical_tumble_obj.transform.DOMoveY(-7, 0.3f).SetEase(Ease.Linear).OnComplete(() =>
+        {
+            tumbleweed.vertical_tumbleweed.Add(tumbleweed.vertical_tumble_obj.transform.position.x);
+            Debug.Log("동작");
+            Managers.Pool.Push(tumbleweed.vertical_tumble_obj);
+        });
+    }
     public void Powder_keg_pattern()
     {
         switch (powder_keg.pattern_data[powder_keg.pattern_count].action_num)
@@ -353,7 +369,7 @@ public class The_most_angry_gunman : BossController
 
                             if (item.position.x == temp.transform.position.x && !powder_keg.boom.Contains(item))
                             {
-                                GameObject warning = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
+                                //GameObject warning = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
                                 //FIX : 나중엔 여길 터지는 애니메이션 작동되게 변경
                                 powder_keg.boom.Add(item);
                                 powder_keg.boom.Add(temp.transform);
@@ -437,6 +453,7 @@ public class The_most_angry_gunman : BossController
         public bool small_turn = false;
         public List<float> horizontal_tumbleweed_instance = new List<float>();
         public List<GameObject> warning = new List<GameObject>();
+        public GameObject vertical_tumble_obj;
     }
     [Serializable]
     public class Powder_keg : Pattern_base_data

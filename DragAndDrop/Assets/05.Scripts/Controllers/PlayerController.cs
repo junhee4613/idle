@@ -173,7 +173,6 @@ public class PlayerController : playerData
         if (!hit_statu)
         {
             //Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Hit_particle"));
-            Debug.Log("ÇÇ°Ý");
             hit_particle.gameObject.SetActive(true);
             hit_particle.Play();
             hit_statu = true;
