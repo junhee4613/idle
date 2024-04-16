@@ -11,6 +11,7 @@ TagManager:
   - UI_sub
   - Boss
   - Player_character
+  - Beat_box
   layers:
   - Default
   - TransparentFX
