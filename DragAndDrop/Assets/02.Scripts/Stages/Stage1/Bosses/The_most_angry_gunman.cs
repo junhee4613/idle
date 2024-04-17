@@ -26,8 +26,8 @@ public class The_most_angry_gunman : BossController
     protected override void Awake()
     {
         anim_state.Anim_processing2(ref an, anims);
-        right_hand_state.Anim_processing2(ref an, hand_anims);
-        left_hand_state.Anim_processing2(ref an, hand_anims);
+        right_hand_state.Anim_processing2(ref right_hand, hand_anims);
+        left_hand_state.Anim_processing2(ref left_hand, hand_anims);
         gun_shoot.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_shoot_data").text);
         dynamite.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_dynamite_data").text);
         powder_keg.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_powder_keg_data").text);
