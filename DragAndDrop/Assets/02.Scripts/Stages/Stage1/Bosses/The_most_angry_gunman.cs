@@ -9,6 +9,7 @@ using Random = UnityEngine.Random;
 using Unity.VisualScripting;
 using static The_most_angry_gunman;
 using static UnityEditor.Progress;
+using TMPro;
 
 public class The_most_angry_gunman : BossController
 {
@@ -215,7 +216,6 @@ public class The_most_angry_gunman : BossController
     }
     public void Dynamite_pattern()
     {
-        
         switch (dynamite.pattern_data[dynamite.pattern_count].action_num)
         {
             case 0:     //다이너마이트 생성 0.3초뒤에 생성
@@ -265,6 +265,9 @@ public class The_most_angry_gunman : BossController
                 dynamite.throw_dynamite = true;
                 break;
             case 3:     //다이너마이트 터짐
+                GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Boom"));
+                temp.transform.position = new Vector3(dynamite.dynamite_landing_pos_x, -1.5f, 0);
+                temp.GetComponent<Animator>().Play("dynamite_boom");
                 Managers.Main_camera.Shake_move();
                 Managers.Pool.Push(dynamite.warning);
                 dynamite.dynamite_obj.SetActive(false);
@@ -392,17 +395,17 @@ public class The_most_angry_gunman : BossController
                         {
                             if (item.position.x == temp.transform.position.x && !powder_keg.boom.Contains(item))
                             {
-                                Warning_box_fade(new Vector3(5f, 7.5f, 0), new Vector3(item.position.x, 0, 0), true, 3, 0.23f,() => Powder_keg_pattern_boom(item, temp));
+                                Warning_box_fade(new Vector3(5f, 7.5f, 0), new Vector3(item.position.x, 0, 0), true, 3, 0.23f,() => Powder_keg_pattern_boom(item, temp, true));
+
                                 //FIX : 나중엔 여길 터지는 애니메이션 작동되게 변경
                             }
                             else if (item.position.y == temp.transform.position.y && !powder_keg.boom.Contains(item))
                             {
-                                Warning_box_fade(new Vector3(15f, 2.5f, 0), new Vector3(0, item.position.y, 0), true, 3, 0.23f,() => Powder_keg_pattern_boom(item, temp));
+                                Warning_box_fade(new Vector3(15f, 2.5f, 0), new Vector3(0, item.position.y, 0), true, 3, 0.23f,() => Powder_keg_pattern_boom(item, temp, false));
                             }
                         }
                     }
                 }//동시에 처지는 조건이 갖춰졌을 때 x축과 y축이 동시에 안터짐
-                
                 break;
             case 1:     //화약통 다 사라짐 0.4초 dotween 그리고 박스 작아짐: 0, -1.5, 0의 위치와 1의 스케일
                 foreach (var item in powder_keg.objs)
@@ -413,7 +416,6 @@ public class The_most_angry_gunman : BossController
                         Managers.Main_camera.Fade_out_in("White", 0f, 0.3f, 0.1f, 0.3f);
                         Managers.GameManager.Beat_box.transform.position = new Vector3(0, -1.5f, 0);
                         Managers.GameManager.Beat_box.transform.localScale = Vector3.one;
-                        
                     }
                 }
                 break;
@@ -421,12 +423,26 @@ public class The_most_angry_gunman : BossController
                 break;
         }
     }
-    public void Powder_keg_pattern_boom(Transform item, GameObject temp)
+    public void Powder_keg_pattern_boom(Transform item, GameObject temp, bool criteria_pos_x)
     {
         powder_keg.boom.Add(item);
         powder_keg.boom.Add(temp.transform);
         Managers.Pool.Push(item.gameObject);
         Managers.Pool.Push(temp);
+        if (criteria_pos_x)
+        {
+            GameObject temp2 = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Boom"));
+            temp2.transform.position = new Vector3(item.position.x, 0, 0);
+            if(temp2.transform.localScale != Vector3.one * 2f)
+                temp2.transform.localScale = Vector3.one * 2f;
+            temp2.GetComponent<Animator>().Play("dynamite_boom");
+        }
+        /*else    FIX : 나중에 가로로 터지는 애니메이션 넣으면 다시 주석 풀기
+        {
+            GameObject temp2 = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Boom"));
+            temp.transform.position = new Vector3(0, item.position.y, 0);
+            temp.GetComponent<Animator>().Play("dynamite_boom");
+        }*/
         foreach (var item2 in powder_keg.boom)
         {
             powder_keg.deployable_pos.Add(item2.position);
@@ -434,7 +450,6 @@ public class The_most_angry_gunman : BossController
         }
         powder_keg.boom.Clear();
     }
-
     [Serializable]
     public class Gun_shoot : Pattern_base_data
     {
@@ -448,6 +463,8 @@ public class The_most_angry_gunman : BossController
         public float criteria_x;        //에임들의 움직이는 x축 범위 
         public float criteria_y;        //에임들의 움직이는 y축 범위
         public bool right_shoot = false;        //두개의 에임중에 공격할 에임이 뭔지 판별하기 위한 변수
+        public GameObject left_gun;
+        public GameObject right_gun;
         [Serializable]
         public class Aims_dir           //에임들이 공통적으로 독립적으로 갖는 값들
         {
@@ -467,6 +484,7 @@ public class The_most_angry_gunman : BossController
         public float dynamite_throw_pos_x_range;
         public int dir = 1;
         public bool throw_dynamite = false;
+        public Animator dynamite_anim;
     }
     [Serializable]
     public class Tumbleweed : Pattern_base_data
