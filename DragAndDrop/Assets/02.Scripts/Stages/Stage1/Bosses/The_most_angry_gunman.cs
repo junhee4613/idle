@@ -224,7 +224,8 @@ public class The_most_angry_gunman : BossController
                     if (!item.activeSelf)
                     {
                         item.SetActive(true);
-                        if(dynamite.dynamite_obj == null)
+                        item.GetComponent<Animator>().Play("dynamite_throw");
+                        if (dynamite.dynamite_obj == null)
                         {
                             dynamite.dynamite_obj = item;
                         }
@@ -249,7 +250,7 @@ public class The_most_angry_gunman : BossController
                             {
                                 dynamite.dynamite_obj = item;
                             }
-                            item.transform.localPosition = Vector3.zero;
+                            item.transform.localPosition = new Vector3(1.28f, 0, 0);
                             break;
                         }
                     }
@@ -259,6 +260,7 @@ public class The_most_angry_gunman : BossController
                 dynamite.dynamite_landing_pos_x = Random.Range(dynamite.left_hand.transform.position.x, dynamite.dynamite_throw_pos_x_range * dynamite.dir);
                 dynamite.dynamite_obj.transform.parent = null;
                 dynamite.dynamite_obj.transform.DOMoveX(dynamite.dynamite_landing_pos_x, 0.5f);
+                dynamite.dynamite_obj.GetComponent<Animator>().Play("dynamite_throw");
                 dynamite.warning = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
                 dynamite.warning.transform.position = new Vector3(dynamite.dynamite_landing_pos_x, -1.5f, 0);
                 dynamite.warning.transform.localScale = new Vector3(2, 5, 0);
@@ -381,6 +383,7 @@ public class The_most_angry_gunman : BossController
             case 0:     //화약통 생성 후 조건 충족 시 폭발
                 powder_keg.num = Random.Range(0, powder_keg.deployable_pos.Count - 1);
                 GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Powder_keg"));
+                temp.GetComponent<Animator>().Play("Powder_keg_boom");
                 temp.transform.localScale = Vector3.zero;
                 temp.transform.position = powder_keg.deployable_pos[powder_keg.num];
                 temp.transform.DOScale(Vector3.one, 0.35f);
@@ -413,11 +416,11 @@ public class The_most_angry_gunman : BossController
                     if (item.gameObject.activeSelf)
                     {
                         item.gameObject.SetActive(false);
-                        Managers.Main_camera.Fade_out_in("White", 0f, 0.3f, 0.1f, 0.3f);
-                        Managers.GameManager.Beat_box.transform.position = new Vector3(0, -1.5f, 0);
-                        Managers.GameManager.Beat_box.transform.localScale = Vector3.one;
                     }
                 }
+                Managers.Main_camera.Fade_out_in("White", 0f, 0.3f, 0.1f, 0.3f);
+                Managers.GameManager.Beat_box.transform.position = new Vector3(0, -1.5f, 0);
+                Managers.GameManager.Beat_box.transform.localScale = Vector3.one;
                 break;
             default:
                 break;
@@ -425,19 +428,32 @@ public class The_most_angry_gunman : BossController
     }
     public void Powder_keg_pattern_boom(Transform item, GameObject temp, bool criteria_pos_x)
     {
+        Managers.Main_camera.Shake_move();
         powder_keg.boom.Add(item);
         powder_keg.boom.Add(temp.transform);
         Managers.Pool.Push(item.gameObject);
         Managers.Pool.Push(temp);
+        /*GameObject temp3 = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Hit_box"));
+        if (criteria_pos_x)
+        {
+            temp3.transform.position = new Vector3();
+            temp3.transform.localScale = new Vector3();
+        }
+        else
+        {
+
+        }
+        temp3.transform.position = new Vector3();
+        temp3.transform.localScale = new Vector3();*/
         if (criteria_pos_x)
         {
             GameObject temp2 = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Boom"));
             temp2.transform.position = new Vector3(item.position.x, 0, 0);
-            if(temp2.transform.localScale != Vector3.one * 2f)
-                temp2.transform.localScale = Vector3.one * 2f;
+            if (temp2.transform.localScale != new Vector3(2.5f, 1.5f, 0))
+                temp2.transform.localScale = new Vector3(2.5f, 1.5f, 0);
             temp2.GetComponent<Animator>().Play("dynamite_boom");
         }
-        /*else    FIX : 나중에 가로로 터지는 애니메이션 넣으면 다시 주석 풀기
+        /*else FIX: 나중에 가로로 터지는 애니메이션 넣으면 다시 주석 풀기
         {
             GameObject temp2 = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Boom"));
             temp.transform.position = new Vector3(0, item.position.y, 0);
@@ -445,6 +461,7 @@ public class The_most_angry_gunman : BossController
         }*/
         foreach (var item2 in powder_keg.boom)
         {
+            //item2.GetComponent<Animator>().Play("Powder_keg_boom");
             powder_keg.deployable_pos.Add(item2.position);
             powder_keg.objs.Remove(item2);
         }
