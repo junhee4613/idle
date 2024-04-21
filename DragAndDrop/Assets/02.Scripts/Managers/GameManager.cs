@@ -78,10 +78,33 @@ public class GameManager
         if (scene_name.Contains("Stage"))
         {
         }
+        Sound_init(scene, mode);
         Managers.UI_jun.option_window_on = false;           //FIX : 이거 왜 있는지 모르겠음 
+        if (Managers.UI_jun.UI_window_on["Game_over"].activeSelf)
+        {
+            Managers.UI_jun.UI_window_on["Game_over"].SetActive(false);
+        }
+        if (Managers.UI_jun.UI_window_off.Count != 0)
+        {
+            for (int i = 0; i < Managers.UI_jun.UI_window_off.Count; i++)
+            {
+                Managers.UI_jun.UI_window_off.Peek().SetActive(false);
+            }
+        }
     }
     public void Stage1()
     {
         //FIX : 나중에 여기에 플레이어 박스 파츠들 변경하는 로직 넣기
+    }
+    public void Sound_init(Scene arg0, LoadSceneMode arg1)
+    {
+        AudioClip temp = Managers.Resource.Load<AudioClip>(arg0.name);
+        if (temp != null)
+        {
+            if (arg0.name == temp.name)
+            {
+                Managers.Sound.BGMSound(temp);
+            }
+        }
     }
 }

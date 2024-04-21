@@ -29,16 +29,16 @@ public class The_most_angry_gunman : BossController
         anim_state.Anim_processing2(ref an, anims);
         right_hand_state.Anim_processing2(ref hand_ans[0], hand_anims);
         left_hand_state.Anim_processing2(ref hand_ans[1], hand_anims);
-        gun_shoot.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_shoot_data").text);
+        gun_shoot.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_shot_data").text);
         dynamite.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_dynamite_data").text);
         powder_keg.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_powder_keg_data").text);
         tumbleweed.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_tumbleweed_data").text);
+        Managers.GameManager.game_start = true;
     }
     // Start is called before the first frame update
     void Start()
     {
         Anim_state_machin2(anim_state["idle"], true);
-        Managers.GameManager.game_start = true;
     }
 
     // Update is called once per frame
@@ -270,17 +270,6 @@ public class The_most_angry_gunman : BossController
             gun_shoot.aims[num].transform.DOLocalMove(gun_shoot.move_befor_pos[num], 0.2f).OnComplete(() => 
             { 
                 scope_action_end(true);
-                /*if (num == 1)
-                {
-                    if (!hands[0].activeSelf)
-                    {
-                        foreach (var item in hands)
-                        {
-                            item.SetActive(false);
-                        }
-                    }
-                    Anim_state_machin2(anim_state["idle"], false);
-                }*/
             });
         });
         

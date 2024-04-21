@@ -35,12 +35,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8d1d9151e3e824c44a16aa5556a1d064
-    m_Address: Stage2_shoot_data
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 372d80ad8ea5ee34ea486386f694aea9
     m_Address: Hit_particle
     m_ReadOnly: 0
@@ -118,6 +112,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c65e606bf5fb2d542b14c7006c7f7020
+    m_Address: Stage2_shot_data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: ca7e6c5fcf72e2642944e03c7574a351, type: 2}

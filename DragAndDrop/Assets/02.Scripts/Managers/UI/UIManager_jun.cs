@@ -111,36 +111,6 @@ public class UIManager_jun
     {
         UI_window_on["Game_over"].SetActive(true);
     }
-    public void UI_on_scene_loaded(Scene arg0, LoadSceneMode arg1)
-    {
-        if (UI_window_on["Game_over"].activeSelf)
-        {
-            UI_window_on["Game_over"].SetActive(false);
-        }
-        if (UI_window_off.Count != 0)
-        {
-            for (int i = 0; i < UI_window_off.Count; i++)
-            {
-                UI_window_off.Peek().SetActive(false);
-            } 
-        }
-        /*if (Managers.GameManager.scene_name.Contains("Stage"))
-        {
-            Managers.Resource.Load<GameObject>("Timer_canvas").GetComponent<Canvas>().worldCamera = GameObject.FindObjectOfType<Camera>();
-            UI_window_on["Stage_base"].SetActive(true);
-            foreach (var item in player_hp)
-            {
-                item.SetActive(true);
-            }
-            foreach (var item in boss_hp)
-            {
-                item.SetActive(true);
-            }
-        }
-        else
-        {
-            UI_window_on["Stage_base"].SetActive(false);
-        }*/
-    }
+    
 
 }

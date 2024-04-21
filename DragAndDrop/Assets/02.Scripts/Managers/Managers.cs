@@ -14,16 +14,14 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
     {
         Resource.LoadAllAsync<Object>("PreLoad", (key, count, totalCount) =>
         {
-            if(count == totalCount)
+            if (count == totalCount)
             {
-                Debug.Log(Resource._resources.Count);
-
                 UI_jun.Init();
                 GameManager.Init();
                 Sound.mixer = Resource.Load<AudioMixer>("Sound_option.mixer");
                 SceneManager.sceneLoaded += GameManager.Next_sceneLoaded;
-                SceneManager.sceneLoaded += Sound.OnSceneLoaded;
-                SceneManager.sceneLoaded += UI_jun.UI_on_scene_loaded;
+                //SceneManager.sceneLoaded += Sound.OnSceneLoaded;
+                //SceneManager.sceneLoaded += UI_jun.UI_on_scene_loaded;
                 Sound.bgSound = gameObject.GetOrAddComponent<AudioSource>();
                 GameManager.scene_name = SceneManager.GetActiveScene().name;
                 GameManager.gameover += Sound.Game_over_sound;

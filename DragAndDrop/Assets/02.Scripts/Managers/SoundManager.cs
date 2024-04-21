@@ -8,26 +8,11 @@ public class SoundManager
 {
     public AudioSource bgSound;
     public AudioMixer mixer;
-    
-
-
-
-    void Awake()
+    /*public void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
+        Debug.Log("사운드 매니저");
         
-
-    }
-    public void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
-    {
-        AudioClip temp = Managers.Resource.Load<AudioClip>(arg0.name);
-        if(temp != null)
-        {
-            if (arg0.name == temp.name)
-            {
-                BGMSound(temp);
-            }
-        }
-    }
+    }*/
 
     public void BGMSound(AudioClip clip)
     {

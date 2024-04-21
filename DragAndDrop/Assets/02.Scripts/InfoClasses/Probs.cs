@@ -180,7 +180,6 @@ namespace Stage_FSM
         }
         public override void On_state_enter()
         {
-            Debug.Log(temp_name);
             an.Play(temp_name);
         }
         public override void On_state_update(sbyte loop_num)
@@ -192,46 +191,6 @@ namespace Stage_FSM
 
         }
     }
-
-    /*public class Simple_pattern1 : Anim_stage_state
-    {
-        public Simple_pattern1(string anim_name)
-        {
-            temp_name = anim_name;
-        }
-        public override void On_state_enter()
-        {
-            an.Play(temp_name);
-        }
-        public override void On_state_update(sbyte loop_num)
-        {
-
-        }
-        public override void On_state_exit()
-        {
-
-        }
-
-    }
-    public class Simple_pattern2 : Anim_stage_state
-    {
-        public Simple_pattern2(string anim_name)
-        {
-            temp_name = anim_name;
-        }
-        public override void On_state_enter()
-        {
-            an.Play(temp_name);
-        }
-        public override void On_state_update(sbyte loop_num)
-        {
-
-        }
-        public override void On_state_exit()
-        {
-
-        }
-    }*/
     public class Hard_pattern : Anim_stage_state
     {
         public Hard_pattern(string anim_name, Animator temp_an)
@@ -252,44 +211,6 @@ namespace Stage_FSM
 
         }
     }
-    /*public class Hard_pattern1 : Anim_stage_state
-    {
-        public Hard_pattern1(string anim_name)
-        {
-            temp_name = anim_name;
-        }
-        public override void On_state_enter()
-        {
-            an.Play(temp_name);
-        }
-        public override void On_state_update(sbyte loop_num)
-        {
-
-        }
-        public override void On_state_exit()
-        {
-
-        }
-    }
-    public class Hard_pattern3 : Anim_stage_state
-    {
-        public Hard_pattern3(string anim_name)
-        {
-            temp_name = anim_name;
-        }
-        public override void On_state_enter()
-        {
-            an.Play(temp_name);
-        }
-        public override void On_state_update(sbyte loop_num)
-        {
-
-        }
-        public override void On_state_exit()
-        {
-
-        }
-    }*/
 }
 
 
