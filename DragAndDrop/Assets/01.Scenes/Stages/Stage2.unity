@@ -499,8 +499,6 @@ MonoBehaviour:
     criteria_x: 1
     criteria_y: 2
     right_shoot: 0
-    left_gun: {fileID: 0}
-    right_gun: {fileID: 0}
   dynamite:
     pattern_count: 0
     pattern_ending: 0
@@ -559,9 +557,13 @@ MonoBehaviour:
     - {x: 5, y: 0, z: 0}
     - {x: 5, y: 2.5, z: 0}
     num: 0
-  right_hand: {fileID: 1922715296}
-  left_hand: {fileID: 2005806585}
+  hand_ans:
+  - {fileID: 1922715296}
+  - {fileID: 2005806585}
   boss_character: {fileID: 328899420}
+  hands:
+  - {fileID: 1922715293}
+  - {fileID: 2005806582}
 --- !u!4 &685879984
 Transform:
   m_ObjectHideFlags: 0
@@ -987,7 +989,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1922715294
 Transform:
   m_ObjectHideFlags: 0
@@ -1142,7 +1144,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2005806583
 Transform:
   m_ObjectHideFlags: 0
@@ -1201,7 +1203,7 @@ SpriteRenderer:
   m_SortingLayerID: 1767122327
   m_SortingLayer: 12
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 0d8649ecb8f01804bac5638e275db76c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8334a486c51765a438591afa66ac3108, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

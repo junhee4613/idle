@@ -17,18 +17,18 @@ public class The_most_angry_gunman : BossController
     public Dynamite dynamite;
     public Tumbleweed tumbleweed;
     public Powder_keg powder_keg;
-    public Animator right_hand;
-    public Animator left_hand;
+    public Animator[] hand_ans;
     public GameObject boss_character;
+    public GameObject[] hands = new GameObject[2];
     Dictionary<string, Anim_stage_state> right_hand_state = new Dictionary<string, Anim_stage_state>();
     Dictionary<string, Anim_stage_state> left_hand_state = new Dictionary<string, Anim_stage_state>();
-    string[] anims = new string[] {"idle", "reload", "right_shoot", "left_shoot"};
-    string[] hand_anims = new string[] {"gun_idle", "reload", "shoot"};
+    string[] anims = new string[] {"idle", "reload", "right_move","right_shot","left_move", "left_shot"};
+    string[] hand_anims = new string[] {"gun_idle", "reload", "shot", "look_on", "gun_shot_init" };
     protected override void Awake()
     {
         anim_state.Anim_processing2(ref an, anims);
-        right_hand_state.Anim_processing2(ref right_hand, hand_anims);
-        left_hand_state.Anim_processing2(ref left_hand, hand_anims);
+        right_hand_state.Anim_processing2(ref hand_ans[0], hand_anims);
+        left_hand_state.Anim_processing2(ref hand_ans[1], hand_anims);
         gun_shoot.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_shoot_data").text);
         dynamite.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_dynamite_data").text);
         powder_keg.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_powder_keg_data").text);
@@ -50,23 +50,26 @@ public class The_most_angry_gunman : BossController
     {
         base.Pattern_processing();
         Pattern_function(ref gun_shoot.pattern_data, ref gun_shoot.pattern_ending, ref gun_shoot.duration,ref gun_shoot.pattern_count, Gun_shoot_pattern);
-        //활성화된 에임들이 바깥쪽에서 움직이는 코드
+        Aim_moving();
+        Pattern_function(ref dynamite.pattern_data, ref dynamite.pattern_ending, ref dynamite.duration, ref dynamite.pattern_count, Dynamite_pattern);
+        Pattern_function(ref tumbleweed.pattern_data, ref tumbleweed.pattern_ending, ref tumbleweed.duration, ref tumbleweed.pattern_count, Tumbleweed_pattern);
+        Pattern_function(ref powder_keg.pattern_data, ref powder_keg.pattern_ending, ref powder_keg.duration, ref powder_keg.pattern_count, Powder_keg_pattern);
+
+    }
+    public void Aim_moving()    //활성화된 에임들이 바깥쪽에서 움직이는 코드
+    {
         if (gun_shoot.aim_idle_state[0] && gun_shoot.aims[0] != null && gun_shoot.aims[0].activeSelf)
         {
-            Anim_state_machin2(anim_state["idle"], false);
+
             Scope_side_move(ref gun_shoot.aims[0], ref gun_shoot.aims_data[0].criteria_dir_x, ref gun_shoot.aims_data[0].criteria_dir_y
                 , gun_shoot.criteria_x, gun_shoot.criteria_y, gun_shoot.pop_pos[0].x, gun_shoot.pop_pos[0].y, gun_shoot.aim_speed);
         }
         if (gun_shoot.aim_idle_state[1] && gun_shoot.aims[1] != null && gun_shoot.aims[1].activeSelf)
         {
-            Anim_state_machin2(anim_state["idle"], false);
             Scope_side_move(ref gun_shoot.aims[1], ref gun_shoot.aims_data[1].criteria_dir_x, ref gun_shoot.aims_data[1].criteria_dir_y
                 , gun_shoot.criteria_x, gun_shoot.criteria_y, gun_shoot.pop_pos[1].x, gun_shoot.pop_pos[1].y, gun_shoot.aim_speed);
         }
-        Pattern_function(ref dynamite.pattern_data, ref dynamite.pattern_ending, ref dynamite.duration, ref dynamite.pattern_count, Dynamite_pattern);
-        Pattern_function(ref tumbleweed.pattern_data, ref tumbleweed.pattern_ending, ref tumbleweed.duration, ref tumbleweed.pattern_count, Tumbleweed_pattern);
-        Pattern_function(ref powder_keg.pattern_data, ref powder_keg.pattern_ending, ref powder_keg.duration, ref powder_keg.pattern_count, Powder_keg_pattern);
-
+        
     }
     public void Gun_shoot_pattern()
     {   
@@ -85,7 +88,6 @@ public class The_most_angry_gunman : BossController
                 if (gun_shoot.aim_idle_state[0] && gun_shoot.aims[0].activeSelf && !gun_shoot.right_shoot)
                 {
                     Lock_on(ref gun_shoot, 0);
-                    Anim_state_machin2(anim_state["left_shoot"], true);
                     gun_shoot.aims_data[0].attack_action = true;
                     if (gun_shoot.aims[1].activeSelf)
                     {
@@ -95,7 +97,6 @@ public class The_most_angry_gunman : BossController
                 else if(gun_shoot.aim_idle_state[1] && gun_shoot.aims[1].activeSelf)
                 {
                     Lock_on(ref gun_shoot, 1);
-                    Anim_state_machin2(anim_state["right_shoot"], true);
                     gun_shoot.aims_data[1].attack_action = true;
                     gun_shoot.right_shoot = false;
                 }
@@ -104,28 +105,32 @@ public class The_most_angry_gunman : BossController
                 if (!gun_shoot.aim_idle_state[0] && gun_shoot.aims_data[0].attack_action)
                 {
                     Managers.Main_camera.Punch(4.8f, 5, 0.05f);
-                    Anim_state_machin2(right_hand_state["shoot"], false);
-                    Shoot_after_init_pos(gun_shoot.aims[0], (value) => gun_shoot.aim_idle_state[0] = value, 0,ref gun_shoot.aims_data[0].attack_action);
+                    Shoot_after_init_pos((value) => gun_shoot.aim_idle_state[0] = value, 0,ref gun_shoot.aims_data[0].attack_action);
                 }
                 else if (!gun_shoot.aim_idle_state[1] && gun_shoot.aims_data[1].attack_action)
                 {
                     Managers.Main_camera.Punch(4.8f, 5, 0.05f);
-                    Anim_state_machin2(left_hand_state["shoot"], false);
-
-                    Shoot_after_init_pos(gun_shoot.aims[1], (value) => gun_shoot.aim_idle_state[1] = value, 1, ref gun_shoot.aims_data[1].attack_action);
+                    Shoot_after_init_pos((value) => gun_shoot.aim_idle_state[1] = value, 1, ref gun_shoot.aims_data[1].attack_action);
                 }
                 break;
             case 3:     //공격하면서 또 하나의 에임 생성
                 Scope_appearance(gun_shoot.aims[1], (value) => gun_shoot.aim_idle_state[1] = value);
                 Managers.Main_camera.Punch(4.8f, 5, 0.05f);
-                Shoot_after_init_pos(gun_shoot.aims[0], (value) => gun_shoot.aim_idle_state[0] = value, 0, ref gun_shoot.aims_data[0].attack_action);
+                Shoot_after_init_pos((value) => gun_shoot.aim_idle_state[0] = value, 0, ref gun_shoot.aims_data[0].attack_action);
                 break;
             case 4:     //4연발   0.15초 간격으로 총을 쏜다.
                 gun_shoot.aim_idle_state[0] = false;
                 gun_shoot.aims[0].transform.position = gun_shoot.aims[0].transform.position;
-                Chasing_shoot(gun_shoot.aims[0], (value) => gun_shoot.aim_idle_state[0] = value, 0);
+                Chasing_shoot(0, (value) => gun_shoot.aim_idle_state[0] = value);
                 break;
             case 5:     //장전
+                if (!hands[0].activeSelf)
+                {
+                    foreach (var item in hands)
+                    {
+                        item.SetActive(true);
+                    }
+                }
                 Anim_state_machin2(right_hand_state["reload"], false);
                 Anim_state_machin2(left_hand_state["reload"], false);
                 Anim_state_machin2(anim_state["reload"], true);
@@ -142,14 +147,14 @@ public class The_most_angry_gunman : BossController
             case 7:
                 gun_shoot.aim_idle_state[1] = false;
                 gun_shoot.aims[1].transform.position = gun_shoot.aims[1].transform.position;
-                Chasing_shoot(gun_shoot.aims[1], (value) => gun_shoot.aim_idle_state[1] = value, 1);
+                Chasing_shoot(1, (value) => gun_shoot.aim_idle_state[1] = value);
                 break;
             default:
                 break;
         }
     }
     public void Scope_side_move(ref GameObject aim, ref float dir_x, ref float dir_y, float range_x, float range_y, float pop_pos_x , float pop_pos_y, float speed)
-    {
+    {                   //에임들이 외각에서 움직이는 코드
         aim.transform.position = new Vector3(Mathf.Clamp(aim.transform.position.x + Time.deltaTime * Mathf.Sin(45 * Mathf.Deg2Rad) * dir_x * speed, pop_pos_x - range_x, pop_pos_x + range_x),
                     Mathf.Clamp(aim.transform.position.y + Time.deltaTime * Mathf.Cos(315 * Mathf.Deg2Rad) * dir_y * speed, pop_pos_y - range_y, pop_pos_y + range_y));
         if (aim.transform.position.x == pop_pos_x + range_x || aim.transform.position.x == pop_pos_x - range_x)
@@ -161,51 +166,145 @@ public class The_most_angry_gunman : BossController
             dir_y = -dir_y;
         }
     }
-    public void Chasing_shoot(GameObject aim, Action<bool> scope_action_end, sbyte num)
+    public void Chasing_shoot(sbyte gun_num, Action<bool> scope_action_end)     //연발
     {
-        aim.transform.DOLocalMove(Managers.GameManager.Player_character.position, 0.2f).OnComplete(() =>
+        gun_shoot.aims[gun_num].transform.DOLocalMove(Managers.GameManager.Player_character.position, 0.2f).OnComplete(() =>
         {
             Managers.Main_camera.Punch(4.8f, 5, 0.1f);
-            aim.transform.DOPunchScale(Vector3.one * 0.2f, 0.1f).OnComplete(() =>
+            if (!hands[0].activeSelf)
             {
-                Bullet_mark_ceate(aim.transform.position);
-                aim.transform.DOLocalMove(Managers.GameManager.Player_character.position, 0.2f).OnComplete(() =>
+                foreach (var item in hands)
+                {
+                    item.SetActive(true);
+                }
+            }
+            switch (gun_num)
+            {
+                case 0:
+                    Anim_state_machin2(anim_state["right_shot"], false);
+                    Anim_state_machin2(right_hand_state["shot"], false);
+                    break;
+                case 1:
+                    Anim_state_machin2(anim_state["left_shot"], false);
+                    Anim_state_machin2(left_hand_state["shot"], false);
+                    break;
+            }
+            gun_shoot.aims[gun_num].transform.DOPunchScale(Vector3.one * 0.2f, 0.1f).OnComplete(() =>
+            {
+                Bullet_mark_ceate(gun_shoot.aims[gun_num].transform.position);
+                gun_shoot.aims[gun_num].transform.DOLocalMove(Managers.GameManager.Player_character.position, 0.2f).OnComplete(() =>
                 {
                     Managers.Main_camera.Punch(4.8f, 5, 0.1f);
-                    aim.transform.DOPunchScale(Vector3.one * 0.2f, 0.1f).OnComplete(() =>
+                    switch (gun_num)
                     {
-                        Bullet_mark_ceate(aim.transform.position);
-                        aim.transform.DOLocalMove(gun_shoot.move_befor_pos[num], 0.2f).OnComplete(() => scope_action_end(true));
+                        case 0:
+                            Anim_state_machin2(anim_state["right_shot"], false);
+                            Anim_state_machin2(right_hand_state["shot"], false);
+                            break;
+                        case 1:
+                            Anim_state_machin2(anim_state["left_shot"], false);
+                            Anim_state_machin2(left_hand_state["shot"], false);
+                            break;
+                    }
+                    gun_shoot.aims[gun_num].transform.DOPunchScale(Vector3.one * 0.2f, 0.1f).OnComplete(() =>
+                    {
+                        Bullet_mark_ceate(gun_shoot.aims[gun_num].transform.position);
+                        gun_shoot.aims[gun_num].transform.DOLocalMove(gun_shoot.move_befor_pos[gun_num], 0.2f).OnComplete(() => 
+                        { 
+                            scope_action_end(true);
+                        });
                     });
                 });
             });
         });
     }
-    public void Scope_create(ref GameObject scope, Vector3 pop_pos)
+    public void Scope_create(ref GameObject scope, Vector3 pop_pos)         //스코프 생성
     {
         scope = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Scope"));
         scope.transform.position = pop_pos;
         scope.SetActive(false);
     }
-    public void Scope_appearance(GameObject scope, Action<bool> scope_action_end)
+    public void Scope_appearance(GameObject scope, Action<bool> scope_action_end)   //스코프 등장
     {
         scope.SetActive(true);
         DG.Tweening.Sequence sequence = DOTween.Sequence();
         sequence.Append(scope.transform.DOScale(Vector3.one * 1.5f, 0.2f));
-        sequence.Append(scope.transform.DOScale(Vector3.one * 1f, 0.2f).OnComplete(() => scope_action_end(true)));
+        sequence.Append(scope.transform.DOScale(Vector3.one * 1f, 0.2f).OnComplete(() => 
+        { 
+            scope_action_end(true);
+        }));
     }
-    public void Shoot_after_init_pos(GameObject aim, Action<bool> scope_action_end, sbyte num, ref bool attack)
-    {
-        attack = false;
-        aim.transform.DOPunchScale(Vector3.one * 0.2f, 0.1f).OnComplete(() =>
+    public void Shoot_after_init_pos(Action<bool> scope_action_end, sbyte num, ref bool attack)
+    {               //스코프 발사 후 원래 위치로 이동
+        if (!hands[0].activeSelf)
         {
-            Bullet_mark_ceate(aim.transform.position);
-            aim.transform.DOLocalMove(gun_shoot.move_befor_pos[num], 0.2f).OnComplete(() => scope_action_end(true));
+            foreach (var item in hands)
+            {
+                item.SetActive(true);
+            }
+        }
+        attack = false;
+        switch (num)
+        {
+            case 0:
+                Anim_state_machin2(anim_state["right_shot"], false);
+                Anim_state_machin2(right_hand_state["shot"], false);
+                break;
+            case 1:
+                Anim_state_machin2(anim_state["left_shot"], false);
+                Anim_state_machin2(left_hand_state["shot"], false);
+                break;
+        }
+        gun_shoot.aims[num].transform.DOPunchScale(Vector3.one * 0.2f, 0.1f).OnComplete(() =>
+        {
+            Bullet_mark_ceate(gun_shoot.aims[num].transform.position);
+            switch (num)
+            {
+                case 0:
+                    Anim_state_machin2(right_hand_state["gun_shot_init"], false);
+                    break;
+                case 1:
+                    Anim_state_machin2(left_hand_state["gun_shot_init"], false);
+                    break;
+            }
+            gun_shoot.aims[num].transform.DOLocalMove(gun_shoot.move_befor_pos[num], 0.2f).OnComplete(() => 
+            { 
+                scope_action_end(true);
+                /*if (num == 1)
+                {
+                    if (!hands[0].activeSelf)
+                    {
+                        foreach (var item in hands)
+                        {
+                            item.SetActive(false);
+                        }
+                    }
+                    Anim_state_machin2(anim_state["idle"], false);
+                }*/
+            });
         });
         
     }
-    public void Lock_on(ref Gun_shoot gun_Shoot, sbyte num)
+    public void Lock_on(ref Gun_shoot gun_Shoot, sbyte num)         //스코프 플레이어 위치로 이동
     {
+        if (!hands[0].activeSelf)
+        {
+            foreach (var item in hands)
+            {
+                item.SetActive(true);
+            }
+        }
+        switch (num)
+        {
+            case 0:
+                Anim_state_machin2(anim_state["right_move"], false);
+                Anim_state_machin2(right_hand_state["look_on"], false);
+                break;
+            case 1:
+                Anim_state_machin2(anim_state["left_move"], false);
+                Anim_state_machin2(left_hand_state["look_on"], false);
+                break;
+        }
         gun_Shoot.move_befor_pos[num] = gun_shoot.aims[num].transform.position;
         gun_Shoot.aims[num].transform.DOLocalMove(Managers.GameManager.Player_character.position, 0.3f);
         gun_Shoot.aim_idle_state[num] = false;
@@ -480,8 +579,6 @@ public class The_most_angry_gunman : BossController
         public float criteria_x;        //에임들의 움직이는 x축 범위 
         public float criteria_y;        //에임들의 움직이는 y축 범위
         public bool right_shoot = false;        //두개의 에임중에 공격할 에임이 뭔지 판별하기 위한 변수
-        public GameObject left_gun;
-        public GameObject right_gun;
         [Serializable]
         public class Aims_dir           //에임들이 공통적으로 독립적으로 갖는 값들
         {

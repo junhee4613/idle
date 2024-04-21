@@ -59,7 +59,6 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
                 go = new GameObject { name = "@Managers" };
                 go.AddComponent<Managers>();
             }
-
             DontDestroyOnLoad(go);
             _instance = go.GetComponent<Managers>();
         }
