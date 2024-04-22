@@ -64,7 +64,15 @@ public class GameManager
     // Start is called before the first frame update
     public void Next_sceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        game_start = false;
+        AudioClip temp = Managers.Resource.Load<AudioClip>(scene.name);
+        if (temp != null)
+        {
+            if (scene.name == temp.name)
+            {
+                Managers.Sound.BGMSound(temp);
+            }
+        }
+        //game_start = false;
         scene_name = scene.name;
         Managers.Pool.Clear();
         switch (scene_name)
@@ -98,13 +106,6 @@ public class GameManager
     }
     public void Sound_init(Scene arg0, LoadSceneMode arg1)
     {
-        AudioClip temp = Managers.Resource.Load<AudioClip>(arg0.name);
-        if (temp != null)
-        {
-            if (arg0.name == temp.name)
-            {
-                Managers.Sound.BGMSound(temp);
-            }
-        }
+        
     }
 }

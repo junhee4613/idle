@@ -17,16 +17,6 @@ public abstract class BossController : Stage_base_controller
         if (Managers.GameManager.game_start)
         {
             Pattern_processing();
-
-            /*Managers.UI_jun.timer.value = Mathf.Clamp(Managers.UI_jun.timer.value - Time.fixedDeltaTime, 0, Managers.UI_jun.timer.value);
-            Managers.UI_jun.timer.value -= 1f / Managers.GameManager.bgm_length * Time.fixedDeltaTime;
-            if (boss_hp > 0)
-            {
-            }
-            else
-            {
-                Managers.GameManager.boss_die = true;
-            }*/
         }
     }
     public void Pattern_function(ref List<Pattern_json_date> pattern_json_data, ref bool pattern_ending, ref float pattern_duration_time, ref sbyte pattern_count, 

@@ -44,7 +44,6 @@ public class The_most_angry_gunman : BossController
     // Update is called once per frame
     void Update()
     {
-        
     }
     public override void Pattern_processing()
     {
@@ -181,12 +180,12 @@ public class The_most_angry_gunman : BossController
             switch (gun_num)
             {
                 case 0:
-                    Anim_state_machin2(anim_state["right_shot"], false);
-                    Anim_state_machin2(right_hand_state["shot"], false);
+                    Anim_state_machin2(anim_state["right_shot"], false, true);
+                    Anim_state_machin2(right_hand_state["shot"], false, true);
                     break;
                 case 1:
-                    Anim_state_machin2(anim_state["left_shot"], false);
-                    Anim_state_machin2(left_hand_state["shot"], false);
+                    Anim_state_machin2(anim_state["left_shot"], false, true);
+                    Anim_state_machin2(left_hand_state["shot"], false, true);
                     break;
             }
             gun_shoot.aims[gun_num].transform.DOPunchScale(Vector3.one * 0.2f, 0.1f).OnComplete(() =>
@@ -198,12 +197,12 @@ public class The_most_angry_gunman : BossController
                     switch (gun_num)
                     {
                         case 0:
-                            Anim_state_machin2(anim_state["right_shot"], false);
-                            Anim_state_machin2(right_hand_state["shot"], false);
+                            Anim_state_machin2(anim_state["right_shot"], false, true);
+                            Anim_state_machin2(right_hand_state["shot"], false, true);
                             break;
                         case 1:
-                            Anim_state_machin2(anim_state["left_shot"], false);
-                            Anim_state_machin2(left_hand_state["shot"], false);
+                            Anim_state_machin2(anim_state["left_shot"], false, true);
+                            Anim_state_machin2(left_hand_state["shot"], false, true);
                             break;
                     }
                     gun_shoot.aims[gun_num].transform.DOPunchScale(Vector3.one * 0.2f, 0.1f).OnComplete(() =>

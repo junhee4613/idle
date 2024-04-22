@@ -34,7 +34,7 @@ public class Stage_base_controller : MonoBehaviour
         }
 
     }
-    public void Anim_state_machin2(Anim_stage_state clip_name, bool anim_until_the_end)
+    public void Anim_state_machin2(Anim_stage_state clip_name, bool anim_until_the_end, bool same_name_action = false)
     {
         if (now_anim != clip_name)
         {
@@ -49,11 +49,30 @@ public class Stage_base_controller : MonoBehaviour
             }
             else
             {
+                Debug.Log("실행");
                 clip_name.On_state_exit();
                 now_anim = clip_name;
                 clip_name.On_state_enter();
             } 
         }
-
+        else if (same_name_action)
+        {
+            if (anim_until_the_end)
+            {
+                if (an.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+                {
+                    clip_name.On_state_exit();
+                    now_anim = clip_name;
+                    clip_name.On_state_enter();
+                }
+            }
+            else
+            {
+                Debug.Log("실행");
+                clip_name.On_state_exit();
+                now_anim = clip_name;
+                clip_name.On_state_enter();
+            }
+        }
     }
 }
