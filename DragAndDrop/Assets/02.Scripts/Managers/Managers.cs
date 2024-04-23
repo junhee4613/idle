@@ -63,6 +63,11 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
     }
     public void Update()        
     {
+        if (!GameManager.splash && Input.GetKeyDown(KeyCode.Tab))
+        {
+            GameManager.splash = true;
+            UI_jun.Fade_out_next_in("Black", 0, 1f, "Main_screen", 1f);
+        }
         if (Input.GetKeyDown(KeyCode.Escape) && GameManager.scene_name != "Lobby_screen")       //FIX : ³ªÁß¿¡ ¿©±â ¼öÁ¤ÇØ¾ßµÊ
         {
             if (UI_jun.UI_window_on["Option"].activeSelf)

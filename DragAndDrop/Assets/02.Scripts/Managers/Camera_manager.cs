@@ -18,17 +18,6 @@ public class Camera_manager
             return main_camera; 
         }
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void Shake_move()
     {
         Main_camera.transform.DOShakePosition(0.3f, 0.3f, 100, 90, false, true);
@@ -45,19 +34,20 @@ public class Camera_manager
         sequence.Append(Main_camera.DOOrthoSize(expansion, time));
         sequence.Append(Main_camera.DOOrthoSize(reduction, time));
     }
-    public void Fade_out_in(string color,float out_delay, float out_duration, float in_delay, float in_duration, Action action1 = null, Action action2 = null)
+    /*public void Fade_out_in(string color,float out_delay, float out_duration, float in_delay, float in_duration, Action first_delay = null, Action second_delay = null)
     {
         GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>(color + "_fade"));
         temp.GetComponent<SpriteRenderer>().DOFade(1, out_duration).SetDelay(out_delay).OnComplete(() => 
         {
-            Managers.Pool.Push(temp);
-            if (action1 != null)
-                action1();
+            if (first_delay != null)
+                first_delay();
             temp.GetComponent<SpriteRenderer>().DOFade(0, in_duration).SetDelay(in_delay).OnComplete(() => 
-            { 
-                if(action2 != null)
-                    action2();
+            {
+
+                Managers.Pool.Push(temp);
+                if (second_delay != null)
+                    second_delay();
             });
         });
-    }
+    }*/
 }

@@ -22,6 +22,7 @@ public class GameManager
             return beat_box; 
         } 
     }
+    public bool splash = false;
     public string scene_name;
     public bool option_window_on = false;
     public Dictionary<string, bool> stage_clear = new Dictionary<string, bool>() 

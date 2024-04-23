@@ -49,7 +49,6 @@ public class Stage_base_controller : MonoBehaviour
             }
             else
             {
-                Debug.Log("실행");
                 clip_name.On_state_exit();
                 now_anim = clip_name;
                 clip_name.On_state_enter();
@@ -68,7 +67,6 @@ public class Stage_base_controller : MonoBehaviour
             }
             else
             {
-                Debug.Log("실행");
                 clip_name.On_state_exit();
                 now_anim = clip_name;
                 clip_name.On_state_enter();

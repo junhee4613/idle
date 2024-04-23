@@ -22,7 +22,7 @@ public class The_most_angry_gunman : BossController
     public GameObject[] hands = new GameObject[2];
     Dictionary<string, Anim_stage_state> right_hand_state = new Dictionary<string, Anim_stage_state>();
     Dictionary<string, Anim_stage_state> left_hand_state = new Dictionary<string, Anim_stage_state>();
-    string[] anims = new string[] {"idle", "reload", "right_move","right_shot","left_move", "left_shot"};
+    string[] anims = new string[] {"idle", "reload", "right_move","right_shot","left_move", "left_shot", "stage2_dead" };
     string[] hand_anims = new string[] {"gun_idle", "reload", "shot", "look_on", "gun_shot_init" };
     protected override void Awake()
     {
@@ -271,7 +271,6 @@ public class The_most_angry_gunman : BossController
                 scope_action_end(true);
             });
         });
-        
     }
     public void Lock_on(ref Gun_shoot gun_Shoot, sbyte num)         //스코프 플레이어 위치로 이동
     {
@@ -374,7 +373,7 @@ public class The_most_angry_gunman : BossController
                 GameObject flash_bang = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Flashbang"));
                 flash_bang.transform.DOMoveY(0f, 0.7f).SetEase(Ease.InCubic).OnComplete(() =>
                 {
-                    Managers.Main_camera.Fade_out_in("White", 0f, 0.1f, 0.4f, 0.2f, () => Beat_box_size_up());
+                    Managers.UI_jun.Fade_out_in("White", 0f, 0.1f, 0.4f, 0.2f, Beat_box_size_up);
                     Managers.Pool.Push(flash_bang);
                 });
                 break;
@@ -391,7 +390,8 @@ public class The_most_angry_gunman : BossController
     public void Tumbleweed_pattern()
     {
         //방향 정해주는 로직
-        tumbleweed.dir = Mathf.RoundToInt(Random.Range(0, 1)) == 1 ? 1 : -1;
+        tumbleweed.dir = Random.Range(0, 2) == 1 ? 1 : -1;
+        Debug.Log(tumbleweed.dir);
         switch (tumbleweed.pattern_data[tumbleweed.pattern_count].action_num)
         {
             case 0:     //굴러감
@@ -505,13 +505,23 @@ public class The_most_angry_gunman : BossController
                         item.gameObject.SetActive(false);
                     }
                 }
-                Managers.Main_camera.Fade_out_in("White", 0f, 0.3f, 0.1f, 0.3f);
+                Managers.UI_jun.Fade_out_in("White", 0f, 0.3f, 0.1f, 0.3f, Boss_die);
                 Managers.GameManager.Beat_box.transform.position = new Vector3(0, -1.5f, 0);
                 Managers.GameManager.Beat_box.transform.localScale = Vector3.one;
                 break;
             default:
                 break;
         }
+    }
+    public void Boss_die()
+    {
+        boss_character.SetActive(true);
+        boss_character.transform.position = new Vector3(0, 0.25f, 0);
+        foreach (var item in hands)
+        {
+            item.SetActive(false);
+        }
+        Anim_state_machin2(anim_state["stage2_dead"], false);
     }
     public void Powder_keg_pattern_boom(Transform item, GameObject temp, bool criteria_pos_x)
     {
@@ -520,18 +530,6 @@ public class The_most_angry_gunman : BossController
         powder_keg.boom.Add(temp.transform);
         Managers.Pool.Push(item.gameObject);
         Managers.Pool.Push(temp);
-        /*GameObject temp3 = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Hit_box"));
-        if (criteria_pos_x)
-        {
-            temp3.transform.position = new Vector3();
-            temp3.transform.localScale = new Vector3();
-        }
-        else
-        {
-
-        }
-        temp3.transform.position = new Vector3();
-        temp3.transform.localScale = new Vector3();*/
         if (criteria_pos_x)
         {
             GameObject temp2 = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Boom"));
@@ -551,6 +549,7 @@ public class The_most_angry_gunman : BossController
             //item2.GetComponent<Animator>().Play("Powder_keg_boom");
             powder_keg.deployable_pos.Add(item2.position);
             powder_keg.objs.Remove(item2);
+            //objs 는 씬에 배치된 화약통
         }
         powder_keg.boom.Clear();
     }

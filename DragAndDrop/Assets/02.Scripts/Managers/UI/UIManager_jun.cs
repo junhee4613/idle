@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
+using System;
 
 public class UIManager_jun
 {
@@ -43,10 +45,11 @@ public class UIManager_jun
             canvas = temp;
             UnityEngine.MonoBehaviour.DontDestroyOnLoad(canvas);
         }
-        for (int i = 0; i < canvas.transform.childCount; i++)
+        for (int i = 0; i < canvas.transform.childCount; i++)       //GetChild는 자식 오브젝트 중 최상위 오브젝트만 가져옴
         {
             Transform child = canvas.transform.GetChild(i);
             UI_window_on.Add(child.name, child.gameObject);
+            Debug.Log(child.name);
             /*if(child.gameObject.name == "Stage_base")
             {
                 for (int j = 0; j < child.childCount; j++)
@@ -106,6 +109,71 @@ public class UIManager_jun
         {
             item.Value.SetActive(false);
         }
+    }
+    public void Fade_out_in(string color, float out_delay, float out_duration, float in_delay, float in_duration, Action first_delay = null, Action second_delay = null)
+    {
+        UI_window_on[color].SetActive(true);
+        UI_window_on[color].GetComponent<Image>().DOFade(1, out_duration).SetDelay(out_delay).OnComplete(() =>
+        {
+            if (first_delay != null)
+                first_delay();
+            UI_window_on[color].GetComponent<Image>().DOFade(0, in_duration).SetDelay(in_delay).OnComplete(() =>
+            {
+                UI_window_on[color].GetComponent<Image>().DOFade(1, 0);
+                UI_window_on[color].SetActive(false);
+                if (second_delay != null)
+                    second_delay();
+            });
+        });
+    }
+    public void Fade_out_in(string color, float out_delay, float out_duration, float in_delay, float in_duration, string next_scene)
+    {
+        UI_window_on[color].SetActive(true);
+        UI_window_on[color].GetComponent<Image>().DOFade(1, out_duration).SetDelay(out_delay).OnComplete(() =>
+        {
+
+            UI_window_on[color].GetComponent<Image>().DOFade(0, in_duration).SetDelay(in_delay).OnComplete(() =>
+            {
+                UI_window_on[color].GetComponent<Image>().DOFade(1, 0);
+                UI_window_on[color].SetActive(false);
+                SceneManager.LoadScene(next_scene);
+            });
+        });
+    }
+    public void Fade_out_in(string color, float out_delay, float out_duration, float in_delay, float in_duration, string next_scene, Action first_delay = null, Action second_delay = null)
+    {
+        UI_window_on[color].SetActive(true);
+        UI_window_on[color].GetComponent<Image>().DOFade(1, out_duration).SetDelay(out_delay).OnComplete(() =>
+        {
+            if (first_delay != null)
+                first_delay();
+            UI_window_on[color].GetComponent<Image>().DOFade(0, in_duration).SetDelay(in_delay).OnComplete(() =>
+            {
+                UI_window_on[color].GetComponent<Image>().DOFade(1, 0);
+                UI_window_on[color].SetActive(false);
+                if (second_delay != null)
+                    second_delay();
+
+                SceneManager.LoadScene(next_scene);
+            });
+        });
+    }
+    public void Fade_out_next_in(string color, float out_delay, float out_duration, string next_scene, float in_duration, Action action = null)
+    {
+        UI_window_on[color].SetActive(true);
+        Image temp_image = UI_window_on[color].GetComponent<Image>();
+        Color origin_color = temp_image.color;
+        temp_image.color = Color.clear;
+        temp_image.DOFade(1, out_duration).SetDelay(out_delay).OnComplete(() =>
+        {
+            temp_image.color = origin_color;
+            SceneManager.LoadScene(next_scene);
+            temp_image.DOFade(0, in_duration).OnComplete(() => 
+            {
+                UI_window_on[color].SetActive(false);
+                action();
+            });
+        });
     }
     public void Game_over_ui()
     {

@@ -33,6 +33,6 @@ public class Portal : MonoBehaviour, IInteraction_obj
 
     public void practice()
     {
-        SceneManager.LoadScene(gameObject.name);
+        Managers.UI_jun.Fade_out_next_in("Black", 0, 1, gameObject.name, 1);
     }
 }
