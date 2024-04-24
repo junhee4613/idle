@@ -66,15 +66,18 @@ public class GameManager
     public void Next_sceneLoaded(Scene scene, LoadSceneMode mode)
     {
         AudioClip temp = Managers.Resource.Load<AudioClip>(scene.name);
+        scene_name = scene.name;
         if (temp != null)
         {
-            if (scene.name == temp.name)
+            if(scene.name == "Main_screen")
             {
-                Managers.Sound.BGMSound(temp);
+                Managers.Sound.BGMSound(temp, true);
+            }
+            else
+            {
+                Managers.Sound.BGMSound(temp, false);
             }
         }
-        //game_start = false;
-        scene_name = scene.name;
         Managers.Pool.Clear();
         switch (scene_name)
         {

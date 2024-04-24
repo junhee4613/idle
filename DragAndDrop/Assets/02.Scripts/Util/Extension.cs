@@ -83,7 +83,6 @@ public static class Extension //¿·¿¡´Â Á¤Àû Å¬·¡½ºÀÌ´Ù. ¾Æ·¡¿¡ ÀÖ´Â ¸Þ¼­µåµéÀº È
         Animator temp = anim;
         foreach (string s in anims_name)
         {
-            Debug.Log(s);
             dic.Add(s, new Pattern_anim(s, anim));
         }
     }

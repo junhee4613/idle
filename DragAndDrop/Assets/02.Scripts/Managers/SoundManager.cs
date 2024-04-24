@@ -13,8 +13,8 @@ public class SoundManager
         Debug.Log("사운드 매니저");
         
     }*/
-
-    public void BGMSound(AudioClip clip)
+    // Fix : 여기 수정(스테이지 별로 공통 명칭을 정해놓고 그 공통 명칭으로 처리)
+    public void BGMSound(AudioClip clip, bool is_loop)
     {
         bgSound.clip = clip;
         bgSound.outputAudioMixerGroup = mixer.FindMatchingGroups("BGM_sound_volume")[0];
@@ -27,10 +27,11 @@ public class SoundManager
             Managers.UI_jun.timer.maxValue = clip.length;
             Managers.UI_jun.timer.value = clip.length;*/
         }
-        else
+        else if(is_loop)
         {
             bgSound.loop = true;
         }
+
         bgSound.Play();
 
     }

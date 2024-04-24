@@ -169,9 +169,11 @@ public class UIManager_jun
         temp_image.color = Color.clear;
         temp_image.DOFade(1, out_duration).SetDelay(out_delay).OnComplete(() =>
         {
+            Managers.Sound.bgSound.pitch = 0;
             SceneManager.LoadScene(next_scene);
             temp_image.DOFade(0, in_duration).OnComplete(() =>
             {
+                Managers.Sound.bgSound.pitch = 1;
                 temp_image.color = origin_color;
                 Debug.Log("½ÇÇà");
                 UI_window_on[color].SetActive(false);

@@ -17,6 +17,10 @@ public abstract class BossController : Stage_base_controller
         if (Managers.GameManager.game_start)
         {
             Pattern_processing();
+            if(Managers.Sound.bgSound.time >= Managers.Sound.bgSound.clip.length - 0.2f)
+            {
+                Game_clear();
+            }
         }
     }
     public void Pattern_function(ref List<Pattern_json_date> pattern_json_data, ref bool pattern_ending, ref float pattern_duration_time, ref sbyte pattern_count, 
@@ -159,6 +163,11 @@ public abstract class BossController : Stage_base_controller
             });
         }
         return warning_box;
+    }
+    public void Game_clear()
+    {
+        Managers.GameManager.game_start = false;
+        Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Main_screen", 1);
     }
     public virtual void Pattern_processing()
     {

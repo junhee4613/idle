@@ -468,6 +468,7 @@ MonoBehaviour:
     dynamite_throw_pos_x_range: 0
     dir: 1
     throw_dynamite: 0
+    temp_bool: 1
     dynamite_anim: {fileID: 0}
   tumbleweed:
     pattern_count: 0

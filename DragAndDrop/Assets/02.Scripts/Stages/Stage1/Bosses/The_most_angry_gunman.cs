@@ -6,10 +6,6 @@ using DG.Tweening;
 using Newtonsoft.Json;
 using System.Runtime.InteropServices;
 using Random = UnityEngine.Random;
-using Unity.VisualScripting;
-using static The_most_angry_gunman;
-using static UnityEditor.Progress;
-using TMPro;
 
 public class The_most_angry_gunman : BossController
 {
@@ -22,8 +18,8 @@ public class The_most_angry_gunman : BossController
     public GameObject[] hands = new GameObject[2];
     Dictionary<string, Anim_stage_state> right_hand_state = new Dictionary<string, Anim_stage_state>();
     Dictionary<string, Anim_stage_state> left_hand_state = new Dictionary<string, Anim_stage_state>();
-    string[] anims = new string[] {"idle", "reload", "right_move","right_shot","left_move", "left_shot", "stage2_dead" };
-    string[] hand_anims = new string[] {"gun_idle", "reload", "shot", "look_on", "gun_shot_init" };
+    string[] anims = new string[] {"idle", "reload", "right_move","right_shot","left_move", "left_shot", "stage2_dead", "dynamite_throw", "change_weapon" };
+    string[] hand_anims = new string[] {"gun_idle", "reload", "shot", "look_on", "gun_shot_init", "blank"};
     protected override void Awake()
     {
         anim_state.Anim_processing2(ref an, anims);
@@ -140,6 +136,11 @@ public class The_most_angry_gunman : BossController
                 gun_shoot.aims[0].transform.DOScale(Vector3.zero, 0.35f).OnComplete(() =>
                 {
                     gun_shoot.aims[0].SetActive(false);
+                    foreach (var item in hands)
+                    {
+                        item.GetComponent<SpriteRenderer>().sprite = null;
+                    }
+                    Anim_state_machin2(anim_state["change_weapon"], false);
                     gun_shoot.aims[1].transform.DOScale(Vector3.zero, 0.35f).OnComplete(() => gun_shoot.aims[1].SetActive(false));
                 });
                 break;
@@ -305,6 +306,10 @@ public class The_most_angry_gunman : BossController
         switch (dynamite.pattern_data[dynamite.pattern_count].action_num)
         {
             case 0:     //다이너마이트 생성 0.3초뒤에 생성
+                if (dynamite.temp_bool)
+                {
+                    dynamite.temp_bool = false;
+                }
                 foreach (var item in dynamite.dynamite_objs)
                 {
                     if (!item.activeSelf)
@@ -314,7 +319,7 @@ public class The_most_angry_gunman : BossController
                         {
                             dynamite.dynamite_obj = item;
                         }
-                        item.transform.localPosition = Vector3.zero;
+                        item.transform.localPosition = new Vector3(1.28f, 0 ,0);
                         break;
                     }
                 }
@@ -342,6 +347,8 @@ public class The_most_angry_gunman : BossController
                 }
                 break;
             case 2:     //다이너마이트 경고판 0.7 이때 던짐
+                Anim_state_machin2(right_hand_state["blank"], true);
+                Anim_state_machin2(anim_state["dynamite_throw"], false);
                 dynamite.dynamite_landing_pos_x = Random.Range(transform.position.x, 3.5f * dynamite.dir);
                 Debug.Log(dynamite.dynamite_obj.name);
                 dynamite.dynamite_obj.transform.parent = null;
@@ -508,6 +515,7 @@ public class The_most_angry_gunman : BossController
                 }
                 Managers.UI_jun.Fade_out_in("White", 0f, 0.3f, 0.1f, 0.3f, Boss_die);
                 Managers.GameManager.Beat_box.transform.position = new Vector3(0, -1.5f, 0);
+                Managers.GameManager.Player.transform.position = Vector3.zero;
                 Managers.GameManager.Beat_box.transform.localScale = Vector3.one;
                 break;
             default:
@@ -586,6 +594,7 @@ public class The_most_angry_gunman : BossController
         public float dynamite_throw_pos_x_range;
         public int dir = 1;
         public bool throw_dynamite = false;
+        public bool temp_bool = true;          //Fix : 나중에 이거 없애고 다르게 처리
         public Animator dynamite_anim;
     }
     [Serializable]
