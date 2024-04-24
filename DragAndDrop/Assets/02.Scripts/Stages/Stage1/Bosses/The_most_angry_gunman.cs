@@ -478,7 +478,11 @@ public class The_most_angry_gunman : BossController
             case 0:     //화약통 생성 후 조건 충족 시 폭발
                 powder_keg.num = Random.Range(0, powder_keg.deployable_pos.Count - 1);
                 GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Powder_keg"));
-                temp.GetComponent<Animator>().Play("Powder_keg_boom");
+                if (!powder_keg.powder_keg_anims.ContainsKey(temp))
+                {
+                    powder_keg.powder_keg_anims.Add(temp, temp.GetComponent<Animator>());
+                }
+                powder_keg.powder_keg_anims[temp].Play("");
                 temp.transform.localScale = Vector3.zero;
                 temp.transform.position = powder_keg.deployable_pos[powder_keg.num];
                 temp.transform.DOScale(Vector3.one, 0.35f);
@@ -539,27 +543,27 @@ public class The_most_angry_gunman : BossController
         powder_keg.boom.Add(temp.transform);
         Managers.Pool.Push(item.gameObject);
         Managers.Pool.Push(temp);
-        if (criteria_pos_x)
+        /*if (criteria_pos_x)
         {
             GameObject temp2 = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Boom"));
             temp2.transform.position = new Vector3(item.position.x, 0, 0);
-            if (temp2.transform.localScale != new Vector3(2.5f, 1.5f, 0))
-                temp2.transform.localScale = new Vector3(2.5f, 1.5f, 0);
+            if (temp2.transform.localScale != new Vector3(1.5f, 1.5f, 0))
+                temp2.transform.localScale = new Vector3(1.5f, 1.5f, 0);
             temp2.GetComponent<Animator>().Play("dynamite_boom");
         }
-        /*else FIX: 나중에 가로로 터지는 애니메이션 넣으면 다시 주석 풀기
+       *//* else
         {
             GameObject temp2 = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Boom"));
             temp.transform.position = new Vector3(0, item.position.y, 0);
             temp.GetComponent<Animator>().Play("dynamite_boom");
-        }*/
+        }*//*
         foreach (var item2 in powder_keg.boom)
         {
             //item2.GetComponent<Animator>().Play("Powder_keg_boom");
             powder_keg.deployable_pos.Add(item2.position);
             powder_keg.objs.Remove(item2);
             //objs 는 씬에 배치된 화약통
-        }
+        }*/
         powder_keg.boom.Clear();
     }
     [Serializable]
@@ -611,6 +615,7 @@ public class The_most_angry_gunman : BossController
     [Serializable]
     public class Powder_keg : Pattern_base_data
     {
+        public Dictionary<GameObject, Animator> powder_keg_anims = new Dictionary<GameObject, Animator>();
         public List<Vector3> deployable_pos = new List<Vector3>();      //배치 가능한 위치
         public HashSet<Transform> objs = new HashSet<Transform>();            //배치된 오브젝트들
         public HashSet<Transform> boom = new HashSet<Transform>();          //터진 오브젝트들

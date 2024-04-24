@@ -22,6 +22,7 @@ public class UIManager_jun
     public GameObject boss_hp_bar;
     public GameObject[] player_hp = new GameObject[3];
     public GameObject[] boss_hp = new GameObject[3];
+    public bool fade_start = false;
     public void Init()
     {
         timer = Managers.Resource.Load<GameObject>("Timer").GetComponent<Slider>();
@@ -163,6 +164,7 @@ public class UIManager_jun
     }
     public void Fade_out_next_in(string color, float out_delay, float out_duration, string next_scene, float in_duration, Action action = null)
     {
+        fade_start = true;
         UI_window_on[color].SetActive(true);
         Image temp_image = UI_window_on[color].GetComponent<Image>();
         Color origin_color = temp_image.color;
@@ -173,9 +175,9 @@ public class UIManager_jun
             SceneManager.LoadScene(next_scene);
             temp_image.DOFade(0, in_duration).OnComplete(() =>
             {
+                fade_start = false;
                 Managers.Sound.bgSound.pitch = 1;
                 temp_image.color = origin_color;
-                Debug.Log("½ÇÇà");
                 UI_window_on[color].SetActive(false);
                 if (action != null)
                 {

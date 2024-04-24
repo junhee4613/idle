@@ -101,12 +101,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4501d66db5d583b4dae8456a894936c8
-    m_Address: Boom
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 488092e546fd7c446a53261cfb804288
     m_Address: Parts_enlarge
     m_ReadOnly: 0
