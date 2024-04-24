@@ -310,7 +310,6 @@ public class The_most_angry_gunman : BossController
                     if (!item.activeSelf)
                     {
                         item.SetActive(true);
-                        item.GetComponent<Animator>().Play("dynamite_throw");
                         if (dynamite.dynamite_obj == null)
                         {
                             dynamite.dynamite_obj = item;
@@ -343,10 +342,12 @@ public class The_most_angry_gunman : BossController
                 }
                 break;
             case 2:     //다이너마이트 경고판 0.7 이때 던짐
-                dynamite.dynamite_landing_pos_x = Random.Range(dynamite.left_hand.transform.position.x, dynamite.dynamite_throw_pos_x_range * dynamite.dir);
+                dynamite.dynamite_landing_pos_x = Random.Range(transform.position.x, 3.5f * dynamite.dir);
+                Debug.Log(dynamite.dynamite_obj.name);
                 dynamite.dynamite_obj.transform.parent = null;
-                dynamite.dynamite_obj.transform.DOMoveX(dynamite.dynamite_landing_pos_x, 0.5f);
-                dynamite.dynamite_obj.GetComponent<Animator>().Play("dynamite_throw");
+                DG.Tweening.Sequence sequence = DOTween.Sequence();
+                sequence.Join(dynamite.dynamite_obj.transform.DOLocalJump(new Vector3(dynamite.dynamite_landing_pos_x, -3, 0), 5, 1, 0.5f).SetEase(Ease.InSine));
+                sequence.Join(dynamite.dynamite_obj.transform.DORotate(new Vector3(0, 0, 360), 0.25f, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetLoops(2));
                 dynamite.warning = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
                 dynamite.warning.transform.position = new Vector3(dynamite.dynamite_landing_pos_x, -1.5f, 0);
                 dynamite.warning.transform.localScale = new Vector3(2, 5, 0);
@@ -391,7 +392,6 @@ public class The_most_angry_gunman : BossController
     {
         //방향 정해주는 로직
         tumbleweed.dir = Random.Range(0, 2) == 1 ? 1 : -1;
-        Debug.Log(tumbleweed.dir);
         switch (tumbleweed.pattern_data[tumbleweed.pattern_count].action_num)
         {
             case 0:     //굴러감
@@ -400,8 +400,9 @@ public class The_most_angry_gunman : BossController
                     if (tumbleweed.small_turn)
                     {
                         GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Small_tumbleweed"));
-                        temp.transform.position = new Vector3(-10 * tumbleweed.dir, item, 0);
-                        temp.transform.DOMoveX(10 * tumbleweed.dir, 1.8f).SetEase(Ease.Linear).OnComplete(() =>
+                        temp.transform.localScale = new Vector3(temp.transform.localScale.x * tumbleweed.dir, temp.transform.localScale.y, temp.transform.localScale.z);
+                        temp.transform.position = new Vector3(10 * tumbleweed.dir, item, 0);
+                        temp.transform.DOMoveX(-10 * tumbleweed.dir, 1.8f).SetEase(Ease.Linear).OnComplete(() =>
                         {
                             Managers.Pool.Push(temp);
                             Managers.Pool.Push(tumbleweed.warning[0]);
@@ -413,8 +414,9 @@ public class The_most_angry_gunman : BossController
                     else
                     {
                         GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Big_tumbleweed"));
-                        temp.transform.position = new Vector3(-10 * tumbleweed.dir, item, 0);
-                        temp.transform.DOMoveX(10 * tumbleweed.dir, 1.8f).SetEase(Ease.Linear).OnComplete(() =>
+                        temp.transform.localScale = new Vector3(temp.transform.localScale.x * tumbleweed.dir, temp.transform.localScale.y, temp.transform.localScale.z);
+                        temp.transform.position = new Vector3(10 * tumbleweed.dir, item, 0);
+                        temp.transform.DOMoveX(-10 * tumbleweed.dir, 1.8f).SetEase(Ease.Linear).OnComplete(() =>
                         {
                             Managers.Pool.Push(temp);
                             Managers.Pool.Push(tumbleweed.warning[0]);
@@ -425,7 +427,6 @@ public class The_most_angry_gunman : BossController
                     }
                 }
                 tumbleweed.horizontal_tumbleweed_instance.Clear();
-
                 break;
             case 1:     //큰 경고판 1.5
                 tumbleweed.small_turn = false;

@@ -140,19 +140,22 @@ public class UIManager_jun
             });
         });
     }
-    public void Fade_out_in(string color, float out_delay, float out_duration, float in_delay, float in_duration, string next_scene, Action first_delay = null, Action second_delay = null)
+    public void Fade_out_in(string color, float out_delay, float out_duration, float in_delay, float in_duration, string next_scene, Action out_end_action = null, Action in_end_action = null)
     {
         UI_window_on[color].SetActive(true);
-        UI_window_on[color].GetComponent<Image>().DOFade(1, out_duration).SetDelay(out_delay).OnComplete(() =>
+        Image temp_image = UI_window_on[color].GetComponent<Image>();
+        Color origin_color = temp_image.color;
+        temp_image.color = Color.clear;
+        temp_image.DOFade(1, out_duration).SetDelay(out_delay).OnComplete(() =>
         {
-            if (first_delay != null)
-                first_delay();
-            UI_window_on[color].GetComponent<Image>().DOFade(0, in_duration).SetDelay(in_delay).OnComplete(() =>
+            if (out_end_action != null)
+                out_end_action();
+            temp_image.DOFade(0, in_duration).SetDelay(in_delay).OnComplete(() =>
             {
-                UI_window_on[color].GetComponent<Image>().DOFade(1, 0);
+                temp_image.color = origin_color;
                 UI_window_on[color].SetActive(false);
-                if (second_delay != null)
-                    second_delay();
+                if (in_end_action != null)
+                    in_end_action();
 
                 SceneManager.LoadScene(next_scene);
             });
@@ -166,12 +169,16 @@ public class UIManager_jun
         temp_image.color = Color.clear;
         temp_image.DOFade(1, out_duration).SetDelay(out_delay).OnComplete(() =>
         {
-            temp_image.color = origin_color;
             SceneManager.LoadScene(next_scene);
-            temp_image.DOFade(0, in_duration).OnComplete(() => 
+            temp_image.DOFade(0, in_duration).OnComplete(() =>
             {
+                temp_image.color = origin_color;
+                Debug.Log("½ÇÇà");
                 UI_window_on[color].SetActive(false);
-                action();
+                if (action != null)
+                {
+                    action();
+                }
             });
         });
     }

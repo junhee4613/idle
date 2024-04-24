@@ -200,13 +200,12 @@ public class PlayerController : playerData
         if (!hit_statu)
         {
             interation_obj = Physics2D.OverlapCircleAll(Managers.GameManager.Player_character.transform.position, cc.radius, 1 << 8);
-
+            
             foreach (var item in interation_obj)
             {
-                IInteraction_obj obj = item.GetComponent<IInteraction_obj>();
-                if (obj != null)
+                if (item.TryGetComponent<IInteraction_obj>(out IInteraction_obj interaction_obj))
                 {
-                    obj.practice();
+                    interaction_obj.practice();
                 }
                 else
                 {
