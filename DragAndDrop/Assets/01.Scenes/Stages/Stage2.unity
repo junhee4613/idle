@@ -204,7 +204,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 5, y: 5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -356,11 +356,10 @@ MonoBehaviour:
     dynamite_objs:
     - {fileID: 0}
     - {fileID: 0}
-    dynamite_obj: {fileID: 0}
+    throw_dynamite: {fileID: 0}
     dynamite_landing_pos_x: 0
     dynamite_throw_pos_x_range: 0
     dir: 1
-    throw_dynamite: 0
     temp_bool: 1
     dynamite_anim: {fileID: 0}
   tumbleweed:

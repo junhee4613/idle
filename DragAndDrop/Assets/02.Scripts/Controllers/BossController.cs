@@ -7,7 +7,6 @@ using DG.Tweening;
 public abstract class BossController : Stage_base_controller
 {
     public Dictionary<GameObject, Animator> anim_end_push_objs = new Dictionary<GameObject, Animator>();
-    public Dictionary<string, Animator> pattern_obj_anim;
     //public Animator an;
     protected override void Awake()
     {

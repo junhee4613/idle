@@ -19,7 +19,7 @@ public class The_most_angry_gunman : BossController
     Dictionary<string, Anim_stage_state> right_hand_state = new Dictionary<string, Anim_stage_state>();
     Dictionary<string, Anim_stage_state> left_hand_state = new Dictionary<string, Anim_stage_state>();
     string[] anims = new string[] {"idle", "reload", "right_move","right_shot","left_move", "left_shot", "stage2_dead", "dynamite_throw", "change_weapon", "right_dynamite_throw", "left_dynamite_throw" };
-    string[] weapon_anims = new string[] {"gun_idle", "reload", "shot", "look_on", "gun_shot_init", "dynamite_idle", "dynamite_boom" };
+    string[] weapon_anims = new string[] {"gun_idle", "reload", "shot", "look_on", "gun_shot_init", "dynamite_idle", "dynamite_boom", "dynamite_instance", "gun_base" };
     protected override void Awake()
     {
         Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Right_weapon")).transform.parent = hands[0].transform;
@@ -37,10 +37,6 @@ public class The_most_angry_gunman : BossController
         dynamite.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_dynamite_data").text);
         powder_keg.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_powder_keg_data").text);
         tumbleweed.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage2_tumbleweed_data").text);
-        foreach (var item in hands)
-        {
-            item.transform.GetChild(0).gameObject.SetActive(false);
-        }
         Managers.GameManager.game_start = true;
     }
     // Start is called before the first frame update
@@ -83,13 +79,7 @@ public class The_most_angry_gunman : BossController
         switch (gun_shoot.pattern_data[gun_shoot.pattern_count].action_num)
         {
             case 0:     //에임 생성
-                if ()
-                {
-                    foreach (var item in hands)
-                    {
-                        item.transform.GetChild(0).gameObject.SetActive(true);
-                    }
-                }
+                
                 if(gun_shoot.aims[0] == null && gun_shoot.aims[1] == null)
                 {
                     Scope_create(ref gun_shoot.aims[0], gun_shoot.pop_pos[0]);
@@ -154,10 +144,7 @@ public class The_most_angry_gunman : BossController
                 gun_shoot.aims[0].transform.DOScale(Vector3.zero, 0.35f).OnComplete(() =>
                 {
                     gun_shoot.aims[0].SetActive(false);
-                    foreach (var item in hands)
-                    {
-                        item.GetComponent<SpriteRenderer>().sprite = null;
-                    }
+                    
                     Anim_state_machin2(anim_state["change_weapon"], false);
                     gun_shoot.aims[1].transform.DOScale(Vector3.zero, 0.35f).OnComplete(() => gun_shoot.aims[1].SetActive(false));
                 });
@@ -326,8 +313,18 @@ public class The_most_angry_gunman : BossController
             case 0:     //다이너마이트 생성 0.3초뒤에 생성
                 for (int i = 0; i < hands.Length - 1; i++)
                 {
-                    hands[i] = hands[0] ? Managers.Pool.Pop(Managers.Resource.Load<GameObject>("right_weapon")) 
-                        : Managers.Pool.Pop(Managers.Resource.Load<GameObject>("left_weapon"));
+                    if (hands[i].transform.childCount == 0)
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Right_weapon")).transform.parent = hands[0].transform;
+                                break;
+                            case 1:
+                                Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Left_weapon")).transform.parent = hands[1].transform;
+                                break;
+                        }
+                    }
                 }
                 break;
             case 1:     //다이너마이트 들고 움직임 1초간 움직임
@@ -352,33 +349,53 @@ public class The_most_angry_gunman : BossController
                 }*/
                 break;
             case 2:     //다이너마이트 경고판 0.7 이때 던짐
+                dynamite.dynamite_landing_pos_x = Random.Range(transform.position.x, 3.5f * dynamite.dir);
+                DG.Tweening.Sequence sequence = DOTween.Sequence();
+
                 switch (dynamite.dir)
                 {
                     case 1:
-                        Anim_state_machin2(right_hand_state["blank"], true);
-                        Anim_state_machin2(anim_state["dynamite_throw"], false);
+                        Anim_state_machin2(anim_state["left_dynamite_throw"], false);
+                        for (int i = 0; i < hands[1].transform.childCount -1; i++)
+                        {
+                            if (hands[1].transform.GetChild(i).gameObject.activeSelf)
+                            {
+                                dynamite.throw_dynamite = hands[1].transform.GetChild(i).gameObject;
+                                Debug.Log(dynamite.throw_dynamite.name);
+                                dynamite.throw_dynamite.transform.parent = null;
+                                sequence.Join(dynamite.throw_dynamite.transform.DOLocalJump(new Vector3(dynamite.dynamite_landing_pos_x, -3, 0), 5, 1, 0.5f).SetEase(Ease.InSine));
+                                sequence.Join(dynamite.throw_dynamite.transform.DORotate(new Vector3(0, 0, 360), 0.25f, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetLoops(2));
+                            }
+                        }
                         break;
                     case -1:
-                        Anim_state_machin2(right_hand_state["blank"], true);
-                        Anim_state_machin2(anim_state["dynamite_throw"], false);
+                        Anim_state_machin2(anim_state["right_dynamite_throw"], false);
+                        for (int i = 0; i < hands[1].transform.childCount - 1; i++)
+                        {
+                            if (hands[0].transform.GetChild(i).gameObject.activeSelf)
+                            {
+                                dynamite.throw_dynamite = hands[0].transform.GetChild(i).gameObject;
+                                Debug.Log(dynamite.throw_dynamite.name);
+                                dynamite.throw_dynamite.transform.parent = null;
+                                sequence.Join(dynamite.throw_dynamite.transform.DOLocalJump(new Vector3(dynamite.dynamite_landing_pos_x, -3, 0), 5, 1, 0.5f).SetEase(Ease.InSine));
+                                sequence.Join(dynamite.throw_dynamite.transform.DORotate(new Vector3(0, 0, 360), 0.25f, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetLoops(2));
+                            }
+                        }
                         break;
                 }
-                dynamite.dynamite_landing_pos_x = Random.Range(transform.position.x, 3.5f * dynamite.dir);
-
-                dynamite.dynamite_obj.transform.parent = null;
-                DG.Tweening.Sequence sequence = DOTween.Sequence();
-                sequence.Join(dynamite.dynamite_obj.transform.DOLocalJump(new Vector3(dynamite.dynamite_landing_pos_x, -3, 0), 5, 1, 0.5f).SetEase(Ease.InSine));
-                sequence.Join(dynamite.dynamite_obj.transform.DORotate(new Vector3(0, 0, 360), 0.25f, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetLoops(2);
-
                 //경고판 생성하는 로직 추가
 
                 /*dynamite.warning = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
                 dynamite.warning.transform.position = new Vector3(dynamite.dynamite_landing_pos_x, -1.5f, 0);
                 dynamite.warning.transform.localScale = new Vector3(2, 5, 0);*/
-                dynamite.throw_dynamite = true;
+                //dynamite.throw_dynamite = true;
                 break;
             case 3:     //다이너마이트 터짐
-                dynamite.dynamite_obj.transform.rotation = Quaternion.identity;
+                dynamite.throw_dynamite.transform.rotation = Quaternion.identity;
+                dynamite.throw_dynamite.GetComponent<Animator>().Play("dynamite_boom");
+                anim_end_push_objs.Add(dynamite.throw_dynamite, dynamite.throw_dynamite.GetComponent<Animator>());
+                Managers.Main_camera.Shake_move();
+                Managers.Pool.Push(dynamite.throw_dynamite);
                 /*GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Boom"));
                 temp.transform.position = new Vector3(dynamite.dynamite_landing_pos_x, -1.5f, 0);*/
                 //temp.GetComponent<Animator>().Play("dynamite_boom");
@@ -595,12 +612,12 @@ public class The_most_angry_gunman : BossController
     {
         public Transform[] hands;
         public GameObject[] dynamite_objs;
-        //public GameObject dynamite_obj;
+        public GameObject throw_dynamite;
         //public GameObject warning;
         public float dynamite_landing_pos_x;
         public float dynamite_throw_pos_x_range;
         public int dir = 1;
-        public bool throw_dynamite = false;
+        //public bool throw_dynamite = false;
         public bool temp_bool = true;          //Fix : 나중에 이거 없애고 다르게 처리
         public Animator dynamite_anim;
     }
