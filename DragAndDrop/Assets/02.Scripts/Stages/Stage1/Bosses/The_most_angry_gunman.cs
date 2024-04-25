@@ -306,21 +306,11 @@ public class The_most_angry_gunman : BossController
         switch (dynamite.pattern_data[dynamite.pattern_count].action_num)
         {
             case 0:     //다이너마이트 생성 0.3초뒤에 생성
-                if (dynamite.temp_bool)
+                foreach (var item in hands)
                 {
-                    dynamite.temp_bool = false;
-                }
-                foreach (var item in dynamite.dynamite_objs)
-                {
-                    if (!item.activeSelf)
+                    if(item.transform.childCount == 0)
                     {
-                        item.SetActive(true);
-                        if (dynamite.dynamite_obj == null)
-                        {
-                            dynamite.dynamite_obj = item;
-                        }
-                        item.transform.localPosition = new Vector3(1.28f, 0 ,0);
-                        break;
+                        GameObject dynamites = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("다이너마이트"));
                     }
                 }
                 break;
@@ -350,20 +340,22 @@ public class The_most_angry_gunman : BossController
                 Anim_state_machin2(right_hand_state["blank"], true);
                 Anim_state_machin2(anim_state["dynamite_throw"], false);
                 dynamite.dynamite_landing_pos_x = Random.Range(transform.position.x, 3.5f * dynamite.dir);
-                Debug.Log(dynamite.dynamite_obj.name);
                 dynamite.dynamite_obj.transform.parent = null;
                 DG.Tweening.Sequence sequence = DOTween.Sequence();
                 sequence.Join(dynamite.dynamite_obj.transform.DOLocalJump(new Vector3(dynamite.dynamite_landing_pos_x, -3, 0), 5, 1, 0.5f).SetEase(Ease.InSine));
-                sequence.Join(dynamite.dynamite_obj.transform.DORotate(new Vector3(0, 0, 360), 0.25f, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetLoops(2));
+                sequence.Join(dynamite.dynamite_obj.transform.DORotate(new Vector3(0, 0, 360), 0.25f, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetLoops(2).OnComplete(() => 
+                {
+                    dynamite.dynamite_obj.transform.rotation = Quaternion.identity;
+                }));
                 dynamite.warning = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
                 dynamite.warning.transform.position = new Vector3(dynamite.dynamite_landing_pos_x, -1.5f, 0);
                 dynamite.warning.transform.localScale = new Vector3(2, 5, 0);
                 dynamite.throw_dynamite = true;
                 break;
             case 3:     //다이너마이트 터짐
-                GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Boom"));
-                temp.transform.position = new Vector3(dynamite.dynamite_landing_pos_x, -1.5f, 0);
-                temp.GetComponent<Animator>().Play("dynamite_boom");
+                /*GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Boom"));
+                temp.transform.position = new Vector3(dynamite.dynamite_landing_pos_x, -1.5f, 0);*/
+                //temp.GetComponent<Animator>().Play("dynamite_boom");
                 Managers.Main_camera.Shake_move();
                 Managers.Pool.Push(dynamite.warning);
                 dynamite.dynamite_obj.SetActive(false);
@@ -478,11 +470,7 @@ public class The_most_angry_gunman : BossController
             case 0:     //화약통 생성 후 조건 충족 시 폭발
                 powder_keg.num = Random.Range(0, powder_keg.deployable_pos.Count - 1);
                 GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Powder_keg"));
-                if (!powder_keg.powder_keg_anims.ContainsKey(temp))
-                {
-                    powder_keg.powder_keg_anims.Add(temp, temp.GetComponent<Animator>());
-                }
-                powder_keg.powder_keg_anims[temp].Play("");
+                
                 temp.transform.localScale = Vector3.zero;
                 temp.transform.position = powder_keg.deployable_pos[powder_keg.num];
                 temp.transform.DOScale(Vector3.one, 0.35f);
@@ -541,31 +529,20 @@ public class The_most_angry_gunman : BossController
         Managers.Main_camera.Shake_move();
         powder_keg.boom.Add(item);
         powder_keg.boom.Add(temp.transform);
-        Managers.Pool.Push(item.gameObject);
-        Managers.Pool.Push(temp);
-        /*if (criteria_pos_x)
-        {
-            GameObject temp2 = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Boom"));
-            temp2.transform.position = new Vector3(item.position.x, 0, 0);
-            if (temp2.transform.localScale != new Vector3(1.5f, 1.5f, 0))
-                temp2.transform.localScale = new Vector3(1.5f, 1.5f, 0);
-            temp2.GetComponent<Animator>().Play("dynamite_boom");
-        }
-       *//* else
-        {
-            GameObject temp2 = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Boom"));
-            temp.transform.position = new Vector3(0, item.position.y, 0);
-            temp.GetComponent<Animator>().Play("dynamite_boom");
-        }*//*
         foreach (var item2 in powder_keg.boom)
         {
-            //item2.GetComponent<Animator>().Play("Powder_keg_boom");
+            if (!anim_end_push_objs.ContainsKey(item2.gameObject))
+            {
+                anim_end_push_objs.Add(item2.gameObject, item2.GetComponent<Animator>());
+            }
+            anim_end_push_objs[item2.gameObject].Play("Powder_keg_boom");
+            
             powder_keg.deployable_pos.Add(item2.position);
             powder_keg.objs.Remove(item2);
-            //objs 는 씬에 배치된 화약통
-        }*/
+        }
         powder_keg.boom.Clear();
     }
+    
     [Serializable]
     public class Gun_shoot : Pattern_base_data
     {
@@ -590,7 +567,7 @@ public class The_most_angry_gunman : BossController
     [Serializable]
     public class Dynamite : Pattern_base_data
     {
-        public Transform left_hand;
+        public Transform[] hands;
         public GameObject[] dynamite_objs;
         public GameObject dynamite_obj;
         public GameObject warning;
@@ -615,7 +592,6 @@ public class The_most_angry_gunman : BossController
     [Serializable]
     public class Powder_keg : Pattern_base_data
     {
-        public Dictionary<GameObject, Animator> powder_keg_anims = new Dictionary<GameObject, Animator>();
         public List<Vector3> deployable_pos = new List<Vector3>();      //배치 가능한 위치
         public HashSet<Transform> objs = new HashSet<Transform>();            //배치된 오브젝트들
         public HashSet<Transform> boom = new HashSet<Transform>();          //터진 오브젝트들

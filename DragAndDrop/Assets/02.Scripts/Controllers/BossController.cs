@@ -6,6 +6,7 @@ using DG.Tweening;
 
 public abstract class BossController : Stage_base_controller
 {
+    public Dictionary<GameObject, Animator> anim_end_push_objs = new Dictionary<GameObject, Animator>();
     public Dictionary<string, Animator> pattern_obj_anim;
     //public Animator an;
     protected override void Awake()
@@ -21,6 +22,7 @@ public abstract class BossController : Stage_base_controller
             {
                 Game_clear();
             }
+            Anim_end_push();
         }
     }
     public void Pattern_function(ref List<Pattern_json_date> pattern_json_data, ref bool pattern_ending, ref float pattern_duration_time, ref sbyte pattern_count, 
@@ -173,5 +175,18 @@ public abstract class BossController : Stage_base_controller
     {
 
         
+    }
+    public void Anim_end_push()
+    {
+        if(anim_end_push_objs.Count != 0)
+        {
+            foreach (var item in anim_end_push_objs)
+            {
+                if(item.Value.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+                {
+                    Managers.Pool.Push(item.Key);
+                }
+            }
+        }
     }
 }
