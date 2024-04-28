@@ -9,6 +9,7 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
 {
     public bool invincibility = false;
     static Managers _instance;
+
     public static Managers instance { get { Init(); return _instance; } }
     private void Awake()
     {
@@ -30,16 +31,8 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
                 {
                     Managers.GameManager.stage_clear.Values.All((value) => true);
                 }
-
+                GameManager.load_end = true;
             }
-            //¿©±âºÎÅÍ ÇÏ¸é µÊ 
-            /*Debug.Log("key : " + key + " Count : " + count + " totalCount : " + totalCount);
-            if (count == totalCount)
-            {
-                Managers.Data.Init();
-                Managers.Game.Init();
-                Init();
-            }*/
         });
         Grid._grid = gameObject.GetOrAddComponent<Grid>();
     }
@@ -63,38 +56,41 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
     }
     public void Update()        
     {
-        if (!GameManager.splash && Input.GetKeyDown(KeyCode.Tab))
+        if (GameManager.load_end)
         {
-            GameManager.splash = true;
-            UI_jun.Fade_out_next_in("Black", 0, 1f, "Main_screen", 1f);
-        }
-        if (Input.GetKeyDown(KeyCode.Escape) && GameManager.scene_name != "Lobby_screen" && UI_jun.fade_start)       //FIX : ³ªÁß¿¡ ¿©±â ¼öÁ¤ÇØ¾ßµÊ
-        {
-            if (UI_jun.UI_window_on["Option"].activeSelf)
+            if (!GameManager.splash && Input.GetKeyDown(KeyCode.Tab))
             {
-                GameManager.option_window_on = false;
-                GameManager.game_stop = false;
-                UI_jun.UI_window_off.Peek().SetActive(false);
-                if(GameManager.scene_name != "Main_screen")
-                {
-                    Sound.bgSound.pitch = 1;
-                }
-                Time.timeScale = 1;
+                GameManager.splash = true;
+                UI_jun.Fade_out_next_in("Black", 0, 1f, "Main_screen", 1f);
             }
-            else
+            if (Input.GetKeyDown(KeyCode.Escape) && GameManager.splash && !UI_jun.fade_start)       //FIX : ³ªÁß¿¡ ¿©±â ¼öÁ¤ÇØ¾ßµÊ
             {
-                GameManager.option_window_on = true;
-                GameManager.game_stop = true;
-                UI_jun.UI_window_on["Option"].SetActive(true);
-                Time.timeScale = 0;
-                if (GameManager.scene_name != "Main_screen")
+                if (UI_jun.UI_window_on["Option"].activeSelf)
                 {
-                    Sound.bgSound.pitch = 0;
+                    GameManager.option_window_on = false;
+                    GameManager.game_stop = false;
+                    UI_jun.UI_window_off.Peek().SetActive(false);
+                    if (GameManager.scene_name != "Main_screen")
+                    {
+                        Sound.bgSound.pitch = 1;
+                    }
+                    Time.timeScale = 1;
                 }
-                UI_jun.UI_window_off.Push(UI_jun.UI_window_on["Option"]);
+                else
+                {
+                    GameManager.option_window_on = true;
+                    GameManager.game_stop = true;
+                    UI_jun.UI_window_on["Option"].SetActive(true);
+                    Time.timeScale = 0;
+                    if (GameManager.scene_name != "Main_screen")
+                    {
+                        Sound.bgSound.pitch = 0;
+                    }
+                    UI_jun.UI_window_off.Push(UI_jun.UI_window_on["Option"]);
 
+                }
+                //StartCoroutine(Option_window());
             }
-            //StartCoroutine(Option_window());
         }
     }
     /*IEnumerator Option_window()

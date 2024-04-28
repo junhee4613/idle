@@ -22,8 +22,9 @@ public class GameManager
             return beat_box; 
         } 
     }
-    public bool splash = false;
+    public bool splash = false;             //스플레시 화면일 때 쓰는 불값
     public string scene_name;
+    public bool load_end = false;
     public bool option_window_on = false;
     public Dictionary<string, bool> stage_clear = new Dictionary<string, bool>() 
     { {"Stage1", false}, { "Stage2", false }, { "Stage3", false }, { "Stage4", false } };
