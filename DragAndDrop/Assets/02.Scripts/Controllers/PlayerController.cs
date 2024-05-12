@@ -200,7 +200,8 @@ public class PlayerController : playerData
         if (!hit_statu)
         {
             interation_obj = Physics2D.OverlapCircleAll(Managers.GameManager.Player_character.transform.position, cc.radius, 1 << 8);
-            
+            if(interation_obj.Length != 0)
+                Debug.Log(interation_obj[0].transform.position);
             foreach (var item in interation_obj)
             {
                 if (item.TryGetComponent<IInteraction_obj>(out IInteraction_obj interaction_obj))
@@ -209,6 +210,8 @@ public class PlayerController : playerData
                 }
                 else
                 {
+                    Debug.Log(transform.position);
+                    Debug.Log(item.transform.position);
                     Hit();
                 }
             }
