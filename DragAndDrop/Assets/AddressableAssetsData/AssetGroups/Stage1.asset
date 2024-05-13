@@ -18,7 +18,7 @@ MonoBehaviour:
   m_GUID: 9a77580d35e94574691aac3f2f9a769f
   m_SerializeEntries:
   - m_GUID: fc38c75262abdc9438defe5792dec413
-    m_Address: Stage1
+    m_Address: Chapter1_boss_stage
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad

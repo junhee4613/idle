@@ -24,7 +24,7 @@ MonoBehaviour:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: eb50dcfdf0143494187e96f05b40a790
-    m_Address: Stage2
+    m_Address: Chapter2_boss_stage
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
@@ -109,6 +109,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c65e606bf5fb2d542b14c7006c7f7020
     m_Address: Stage2_shot_data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cb3e9a48cf964474eb08b533822a7051
+    m_Address: Chapter2_general_stage1
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad

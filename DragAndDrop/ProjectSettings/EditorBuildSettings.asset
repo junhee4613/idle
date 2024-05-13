@@ -12,10 +12,13 @@ EditorBuildSettings:
     path: Assets/01.Scenes/Base_scene/Main_screen.unity
     guid: dc4cac095cc365146939a6d7688bfb53
   - enabled: 1
-    path: Assets/01.Scenes/Stages/Stage1.unity
+    path: Assets/01.Scenes/Chapters/1/Chapter1_boss_stage.unity
     guid: 8e337428e8886fe4491594a1f26d9115
   - enabled: 1
-    path: Assets/01.Scenes/Stages/Stage2.unity
+    path: Assets/01.Scenes/Chapters/2/Chapter2_boss_stage.unity
     guid: 7133762253808274db0a4980d1b4c932
+  - enabled: 1
+    path: Assets/01.Scenes/Chapters/2/Chapter2_general_stage1.unity
+    guid: ee38dbffb11ad2d4aab3faad6cb5b4cc
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: e73d4f16ff7ba5d42954ec1351e2db34, type: 2}

@@ -27,7 +27,7 @@ public class GameManager
     public bool load_end = false;
     public bool option_window_on = false;
     public Dictionary<string, bool> stage_clear = new Dictionary<string, bool>() 
-    { {"Stage1", false}, { "Stage2", false }, { "Stage3", false }, { "Stage4", false } };
+    { {"Chapter1_boss_stage", false}, { "Chapter2_boss_stage", false }, { "Chapter2_general_stage1", false }, { "Stage4", false } };
 
     public PlayerController Player 
     { 
@@ -80,7 +80,7 @@ public class GameManager
             }
         }
         Managers.Pool.Clear();
-        switch (scene_name)
+        /*switch (scene_name)
         {
             case "Stage1":
                 Stage1();
@@ -90,7 +90,7 @@ public class GameManager
         }
         if (scene_name.Contains("Stage"))
         {
-        }
+        }*/
         Sound_init(scene, mode);
         Managers.UI_jun.option_window_on = false;           //FIX : 이거 왜 있는지 모르겠음 
         if (Managers.UI_jun.UI_window_on["Game_over"].activeSelf)

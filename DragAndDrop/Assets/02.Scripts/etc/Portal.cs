@@ -34,6 +34,5 @@ public class Portal : MonoBehaviour, IInteraction_obj
     public void practice()
     {
         Managers.UI_jun.Fade_out_next_in("Black", 0, 1, gameObject.name, 1);
-        gameObject.SetActive(false);
     }
 }

@@ -18,7 +18,7 @@ public class SoundManager
     {
         bgSound.clip = clip;
         bgSound.outputAudioMixerGroup = mixer.FindMatchingGroups("BGM_sound_volume")[0];
-        if (Managers.GameManager.scene_name.Contains("Stage"))
+        if (Managers.GameManager.scene_name.Contains("stage"))
         {
             bgSound.loop = false;
             Managers.GameManager.bgm_length = clip.length;

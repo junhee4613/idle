@@ -55,7 +55,7 @@ public class PlayerController : playerData
     {
         if (!Managers.GameManager.option_window_on)
         {
-            Interaction_obj();
+            //Interaction_obj();
             Key_operate();
         }
         
@@ -195,13 +195,11 @@ public class PlayerController : playerData
     {
         //플레이어 죽은 후 처리 애니메이션이 작동한다든지 등등
     }
-    public void Interaction_obj()
+    public void Interaction_obj()       //DEL : 나중에 불필요하면 제거
     {
         if (!hit_statu)
         {
             interation_obj = Physics2D.OverlapCircleAll(Managers.GameManager.Player_character.transform.position, cc.radius, 1 << 8);
-            if(interation_obj.Length != 0)
-                Debug.Log(interation_obj[0].transform.position);
             foreach (var item in interation_obj)
             {
                 if (item.TryGetComponent<IInteraction_obj>(out IInteraction_obj interaction_obj))
@@ -210,8 +208,6 @@ public class PlayerController : playerData
                 }
                 else
                 {
-                    Debug.Log(transform.position);
-                    Debug.Log(item.transform.position);
                     Hit();
                 }
             }
@@ -225,5 +221,19 @@ public class PlayerController : playerData
         public float origin_max_speed;
         public float origin_start_size;
         public float origin_life_time;
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (!Managers.GameManager.option_window_on)
+        {
+            if (collision.TryGetComponent<IInteraction_obj>(out IInteraction_obj interaction_obj))
+            {
+                interaction_obj.practice();
+            }
+            else
+            {
+                Hit();
+            } 
+        }
     }
 }
