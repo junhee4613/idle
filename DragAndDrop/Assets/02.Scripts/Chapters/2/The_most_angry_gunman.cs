@@ -45,7 +45,6 @@ public class The_most_angry_gunman : BossController
     }
     public override void Pattern_processing()
     {
-        base.Pattern_processing();
         Pattern_function(ref gun_shoot.pattern_data, ref gun_shoot.pattern_ending, ref gun_shoot.duration,ref gun_shoot.pattern_count, Gun_shoot_pattern);
         Aim_moving();
         Pattern_function(ref dynamite.pattern_data, ref dynamite.pattern_ending, ref dynamite.duration, ref dynamite.pattern_count, Dynamite_pattern);

@@ -47,7 +47,6 @@ public class ChaInGureumi : BossController          //ºñÆ®´Â 80dlek
     }
     public override void Pattern_processing()
     {
-        base.Pattern_processing();
         if (!rain_storm.pattern_ending)
         {
             if ((rain_storm.pattern_data[rain_storm.pattern_count].time <= Managers.Sound.bgSound.time || rain_storm.duration != 0))
