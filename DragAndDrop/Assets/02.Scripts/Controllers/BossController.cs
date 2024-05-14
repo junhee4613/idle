@@ -7,7 +7,8 @@ using DG.Tweening;
 public abstract class BossController : Stage_base_controller
 {
     public Dictionary<GameObject, Animator> anim_end_push_objs = new Dictionary<GameObject, Animator>();
-    //public Animator an;
+    protected HashSet<GameObject> warning_obj = new HashSet<GameObject>();
+    protected HashSet<SpriteRenderer> warning_sp = new HashSet<SpriteRenderer>();
     protected override void Awake()
     {
         base.Awake();
@@ -58,8 +59,16 @@ public abstract class BossController : Stage_base_controller
             }
         }
     }
-    public void Warning_box_fade(Vector3 size, Vector3 pos, bool fade_option, sbyte count = 0, float minute = 0, Action dotween_end_function = null)
+    public void Warning_box_fade(Vector3 size, Vector3 pos, bool fade_option, bool size_increase, sbyte count = 0, float minute = 0, Action dotween_end_function = null)
     {
+        if(warning_obj.Count != 0)
+        {
+            //warning_obj.
+        }
+        else
+        {
+            //warning_obj.Add()
+        }
         GameObject warning_box = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
         warning_box.transform.position = pos;
         warning_box.transform.localScale = size;
@@ -74,6 +83,10 @@ public abstract class BossController : Stage_base_controller
                 }
                 Managers.Pool.Push(warning_box);
             });
+        }
+        if (size_increase)
+        {
+
         }
     }
     public void Warning_box_scale(Vector3 init_size, Vector3 pos, float dotween_dration, Vector3 end_value, bool only_vertical = false, bool only_horizontal = false, Action dotween_end_function = null)
