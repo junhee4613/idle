@@ -6,7 +6,8 @@ using DG.Tweening;
 
 public abstract class BossController : Stage_base_controller
 {
-    public Dictionary<GameObject, Animator> anim_end_push_objs = new Dictionary<GameObject, Animator>();
+    protected Dictionary<GameObject, Animator> anim_end_push_objs = new Dictionary<GameObject, Animator>();
+    protected Dictionary<GameObject, SpriteRenderer> general_warning_box_sr = new Dictionary<GameObject, SpriteRenderer>();
     protected override void Awake()
     {
         base.Awake();
@@ -162,6 +163,19 @@ public abstract class BossController : Stage_base_controller
                 });
             });
         }
+        return warning_box;
+    }
+    public GameObject General_warning_box(Vector3 init_size, Vector3 pos, Color color)
+    {
+        GameObject warning_box = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
+        warning_box.transform.position = pos;
+        warning_box.transform.localScale = init_size;
+        if (!general_warning_box_sr.ContainsValue(warning_box.GetComponent<SpriteRenderer>()))
+        {
+            general_warning_box_sr.Add(warning_box, warning_box.GetComponent<SpriteRenderer>());
+
+        }
+        general_warning_box_sr[warning_box].color = color;
         return warning_box;
     }
     public void Game_clear()
