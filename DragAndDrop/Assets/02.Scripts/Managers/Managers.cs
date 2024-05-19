@@ -112,6 +112,7 @@ public class Managers : MonoBehaviour           //µğ¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
     public static PoolManager Pool { get { return instance?._pool; } }
     public static Camera_manager Main_camera { get { return instance?._camera; } }
     public static Grid_controller Grid { get { return instance?._grid; } }
+    public static Barrage_manager Barrage { get { return instance?._barrage; } }
 
     SoundManager _sound = new SoundManager();
     UIManager_jun _ui = new UIManager_jun();
@@ -121,4 +122,5 @@ public class Managers : MonoBehaviour           //µğ¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
     GameManager _game = new GameManager();
     PoolManager _pool = new PoolManager();
     Grid_controller _grid = new Grid_controller();
+    Barrage_manager _barrage = new Barrage_manager();
 }
