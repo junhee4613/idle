@@ -12,17 +12,21 @@ public abstract class BossController : Stage_base_controller
     {
         base.Awake();
     }
-    public void FixedUpdate()
+    public void Update()
     {
         if (Managers.GameManager.game_start)
         {
             Pattern_processing();
-            if(Managers.Sound.bgSound.time >= Managers.Sound.bgSound.clip.length - 0.2f)
+            if (Managers.Sound.bgSound.time >= Managers.Sound.bgSound.clip.length - 0.2f)
             {
                 Game_clear();
             }
             Anim_end_push();
         }
+    }
+    public void FixedUpdate()
+    {
+        
     }
     public void Pattern_function(ref List<Pattern_json_date> pattern_json_data, ref bool pattern_ending, ref float pattern_duration_time, ref sbyte pattern_count, 
          Action not_duration_pattern, bool pattern_duration_obj_enable = false, float pattern_time = 0f, float time = 0f, Action duration_pattern = null)
@@ -167,7 +171,7 @@ public abstract class BossController : Stage_base_controller
     }
     public GameObject General_warning_box(Vector3 init_size, Vector3 pos, Color color)
     {
-        GameObject warning_box = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
+        GameObject warning_box = Managers.Resource.Load<GameObject>("Warning_box");
         warning_box.transform.position = pos;
         warning_box.transform.localScale = init_size;
         if (!general_warning_box_sr.ContainsValue(warning_box.GetComponent<SpriteRenderer>()))
@@ -176,7 +180,7 @@ public abstract class BossController : Stage_base_controller
 
         }
         general_warning_box_sr[warning_box].color = color;
-        return warning_box;
+        return Managers.Pool.Pop(warning_box);
     }
     public void Game_clear()
     {

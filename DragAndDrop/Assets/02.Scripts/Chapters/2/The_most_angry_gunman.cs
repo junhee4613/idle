@@ -40,9 +40,7 @@ public class The_most_angry_gunman : BossController
     }
 
     // Update is called once per frame
-    void Update()
-    {
-    }
+    
     public override void Pattern_processing()
     {
         Pattern_function(ref gun_shoot.pattern_data, ref gun_shoot.pattern_ending, ref gun_shoot.duration,ref gun_shoot.pattern_count, Gun_shoot_pattern);

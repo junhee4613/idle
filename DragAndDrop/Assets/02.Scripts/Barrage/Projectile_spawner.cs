@@ -4,14 +4,19 @@ using UnityEngine;
 
 public class Projectile_spawner : MonoBehaviour
 {
-    public List<GameObject> projectiles = new List<GameObject>();
-    public int repeat_num = 0;
-    public float projectile_speed = 0;
-    public Color projectile_color = Color.red;
-    public Projectile_shape shape = Projectile_shape.NON;
-    public Spawner_mode spawner_mode = Spawner_mode.NON;
-    public Projectile_moving_mode moving_mode = Projectile_moving_mode.NON;
+    List<GameObject> projectiles = new List<GameObject>();
+    int repeat_num = 0;
+    float projectile_speed = 0;
+    Color projectile_color = Color.red;
+    Projectile_shape shape = Projectile_shape.NON;
+    Spawner_mode spawner_mode = Spawner_mode.NON;
+    Projectile_moving_mode moving_mode = Projectile_moving_mode.NON;
 
+    public void Init(int repeat_num, float projectile_speed, Color projectile_color, 
+        Projectile_shape shape, Spawner_mode spawner_mode, Projectile_moving_mode moving_mode)
+    {
+
+    }
     // Start is called before the first frame update
     private void Awake()
     {
@@ -31,26 +36,7 @@ public class Projectile_spawner : MonoBehaviour
     {
         Projectile_move();
     }
-    void Projectile_move()
-    {
-        if (projectiles.Count != 0)
-        {
-            for (int i = 0; i < projectiles.Count; i++)
-            {
-                switch (moving_mode)
-                {
-                    case Projectile_moving_mode.GENERAL:
-                        projectiles[i].transform.position = projectiles[i].transform.forward * projectile_speed;
-                        break;
-                    case Projectile_moving_mode.NON:
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-    }
-    public void Projectile_spawn()
+    void Projectile_spawn()
     {
         for (int i = 0; i < repeat_num; i++)
         {
@@ -59,7 +45,7 @@ public class Projectile_spawner : MonoBehaviour
                 case Projectile_shape.CIRCLE:
                     GameObject circel = Managers.Resource.Load<GameObject>("¿ø");
                     circel.transform.position = transform.position;
-                    circel.transform.rotation = transform.rotation;
+                    circel.transform.rotation = Quaternion.Euler(new Vector3(0, 0 ,(360 / repeat_num) * i));
                     circel.transform.localScale = Vector3.one;
                     projectiles.Add(circel);
                     Managers.Pool.Pop(circel);
@@ -67,7 +53,7 @@ public class Projectile_spawner : MonoBehaviour
                 case Projectile_shape.BOX:
                     GameObject box = Managers.Resource.Load<GameObject>("¹Ú½º");
                     box.transform.position = transform.position;
-                    box.transform.rotation = transform.rotation;
+                    box.transform.rotation = Quaternion.Euler(new Vector3(0, 0, (360 / repeat_num) * i));
                     box.transform.localScale = Vector3.one;
                     projectiles.Add(box);
                     Managers.Pool.Pop(box);
@@ -75,7 +61,7 @@ public class Projectile_spawner : MonoBehaviour
                 case Projectile_shape.TRIANGLE:
                     GameObject triangle = Managers.Resource.Load<GameObject>("»ï°¢Çü");
                     triangle.transform.position = transform.position;
-                    triangle.transform.rotation = transform.rotation;
+                    triangle.transform.rotation = Quaternion.Euler(new Vector3(0, 0, (360 / repeat_num) * i));
                     triangle.transform.localScale = Vector3.one;
                     projectiles.Add(triangle);
                     Managers.Pool.Pop(triangle);
@@ -83,7 +69,7 @@ public class Projectile_spawner : MonoBehaviour
                 case Projectile_shape.CAPSULE:
                     GameObject capsule = Managers.Resource.Load<GameObject>("Ä¸½¶");
                     capsule.transform.position = transform.position;
-                    capsule.transform.rotation = transform.rotation;
+                    capsule.transform.rotation = Quaternion.Euler(new Vector3(0, 0, (360 / repeat_num) * i));
                     capsule.transform.localScale = Vector3.one;
                     projectiles.Add(capsule);
                     Managers.Pool.Pop(capsule);
@@ -110,7 +96,27 @@ public class Projectile_spawner : MonoBehaviour
 
 
     }
-    private void OnDisable()
+    void Projectile_move()
+    {
+        if (projectiles.Count != 0)
+        {
+            for (int i = 0; i < projectiles.Count; i++)
+            {
+                switch (moving_mode)
+                {
+                    case Projectile_moving_mode.GENERAL:
+                        projectiles[i].transform.position = projectiles[i].transform.forward * projectile_speed;
+                        break;
+                    case Projectile_moving_mode.NON:
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+    
+    void OnDisable()
     {
         if(TryGetComponent<Projectile_spawner>(out Projectile_spawner component))
         {
