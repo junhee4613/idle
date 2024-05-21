@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Chapter2_general1
+  m_EditorClassIdentifier: 
+  m_GroupName: Chapter2_general1
+  m_Data:
+    m_SerializedData: []
+  m_GUID: f8e55bca433d78c4e899ae2ed6e19ecc
+  m_SerializeEntries:
+  - m_GUID: 8cdcfe18bc730f84f8f031c53d45b0cf
+    m_Address: Fruit_cactus
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d1420c5cf1e5c04458deafe0091b5c3c
+    m_Address: Fruit
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: ca7e6c5fcf72e2642944e03c7574a351, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: e056813d053051e4780e77b9090f100b, type: 2}
+    - {fileID: 11400000, guid: 40aed955971e8a340993ec1ccd673941, type: 2}

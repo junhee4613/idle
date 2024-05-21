@@ -474,7 +474,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &679508297
 Transform:
   m_ObjectHideFlags: 0
@@ -910,15 +910,25 @@ MonoBehaviour:
     appearance_height: 0
     index_num: 0
   warning_color: {r: 0.69803923, g: 0.08235294, b: 0.19215688, a: 0}
-  cactus_barrage:
+  fruit_barrage:
     pattern_count: 0
     pattern_ending: 0
     duration: 0
-    fruit_spawner_pos: []
+    fruit_spawner_pos:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     barrage_bullet_num: 0
     cactus: {fileID: 0}
     fully_grown: []
     random_num: 0
+    fruit: {fileID: 0}
   cactus_thorn:
     pattern_count: 0
     pattern_ending: 0
