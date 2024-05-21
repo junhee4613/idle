@@ -24,7 +24,7 @@ public abstract class BossController : Stage_base_controller
             Anim_end_push();
         }
     }
-    public void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         
     }

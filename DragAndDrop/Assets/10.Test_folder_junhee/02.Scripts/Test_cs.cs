@@ -17,6 +17,8 @@ public class Test_cs : MonoBehaviour
     private void Awake()
     {
         Managers.Pool.Pop(new GameObject()).transform.parent = transform;
+        Rigidbody2D rb = new Rigidbody2D();
+        GameObject temp = rb.gameObject;
     }
     public void FixedUpdate()
     {
@@ -24,18 +26,7 @@ public class Test_cs : MonoBehaviour
     }
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            //Managers.Pool.Push(transform.GetChild(0).gameObject);
-
-            /*            num = Random.Range(0, powder_keg_pos.Count - 1);
-                        Instantiate(obj).transform.position = powder_keg_pos[num];
-                        powder_keg_pos.RemoveAt(num);*/
-        }
-        else if (Input.GetKeyDown(KeyCode.E))
-        {
-            Managers.Pool.Pop(transform.GetChild(0).gameObject);
-        }
+        Debug.Log(Random.Range(1, 8));
     }
 }
 

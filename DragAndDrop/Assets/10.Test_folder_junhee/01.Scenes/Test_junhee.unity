@@ -11841,16 +11841,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1397474019}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9710c6f53a4840e4ab47b237f4c078f5, type: 3}
+  m_Script: {fileID: 11500000, guid: 407f10983950c014c98fe663ba310bce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectiles: []
-  repeat_num: 0
-  projectile_speed: 0
-  projectile_color: {r: 0, g: 0, b: 0, a: 0}
-  shape: 1
-  spawner_mode: 1
-  moving_mode: 1
 --- !u!1 &1411437557
 GameObject:
   m_ObjectHideFlags: 0
@@ -13310,7 +13303,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1858364017
 MonoBehaviour:
   m_ObjectHideFlags: 0

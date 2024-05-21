@@ -50,7 +50,6 @@ public class UIManager_jun
         {
             Transform child = canvas.transform.GetChild(i);
             UI_window_on.Add(child.name, child.gameObject);
-            Debug.Log(child.name);
             /*if(child.gameObject.name == "Stage_base")
             {
                 for (int j = 0; j < child.childCount; j++)

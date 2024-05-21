@@ -12,7 +12,7 @@ public class Projectile_spawner : MonoBehaviour
     Spawner_mode spawner_mode = Spawner_mode.NON;
     Projectile_moving_mode moving_mode = Projectile_moving_mode.NON;
 
-    public Projectile_spawner(int repeat_num, float projectile_speed, Color projectile_color, 
+    public void Init(int repeat_num, float projectile_speed, Color projectile_color, 
         GameObject obj, Spawner_mode spawner_mode, Projectile_moving_mode moving_mode)
     {
         this.repeat_num = repeat_num;
