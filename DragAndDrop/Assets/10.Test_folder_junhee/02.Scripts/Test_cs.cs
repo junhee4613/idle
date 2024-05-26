@@ -10,23 +10,27 @@ using Random = UnityEngine.Random;
 public class Test_cs : MonoBehaviour
 {
     public GameObject target;
+    public float rot_speed;
+    HashSet<int> test = new HashSet<int>();
+
     private void Awake()
     {
-        
     }
     public void FixedUpdate()
     {
+        if(Input.GetKeyDown(KeyCode.Backspace))
+        {
+            int num = Random.Range(0, 4);
+            test.Add(num);
+            Debug.Log(test.Count);
+            Debug.Log(num);
 
+        }
     }
     public void Update()
     {
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Max(transform.rotation.z + Time.deltaTime, Look_at_target(target.transform.position))));
     }
-    public float Look_at_target(Vector3 target)
-    {
-        float temp_rot = Mathf.Atan2(transform.position.y - target.y, transform.position.x - target.x) * Mathf.Rad2Deg + 90;
-        return temp_rot;
-    }
+    
 }
 
 

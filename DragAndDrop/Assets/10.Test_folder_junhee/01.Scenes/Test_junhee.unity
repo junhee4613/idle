@@ -11876,6 +11876,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 564832740}
+  rot_speed: 30
 --- !u!1 &1411437557
 GameObject:
   m_ObjectHideFlags: 0
@@ -12272,6 +12273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  rot_speed: 0
 --- !u!212 &1494684827
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12415,6 +12417,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  rot_speed: 0
 --- !u!212 &1549528516
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12774,6 +12777,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  rot_speed: 0
 --- !u!4 &1599354583
 Transform:
   m_ObjectHideFlags: 0
@@ -13159,6 +13163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  rot_speed: 0
 --- !u!1 &1834675800
 GameObject:
   m_ObjectHideFlags: 0

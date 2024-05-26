@@ -10,11 +10,14 @@ public class Base_projectile : MonoBehaviour
     float speed;
     float rot_speed;
     Projectile_moving_mode moving_mode;
+    Rigidbody2D rb;
     public void Init(float push_time,float speed, Projectile_moving_mode moving_move)
     {
         this.push_time = push_time;
         this.moving_mode = moving_move;
         this.speed = speed;
+        rb = gameObject.GetOrAddComponent<Rigidbody2D>();
+        rb.gravityScale = 0;
         init = true;
     }
     public void Init(float push_time, float speed, float rot_speed, Projectile_moving_mode moving_move)
@@ -23,6 +26,8 @@ public class Base_projectile : MonoBehaviour
         this.moving_mode = moving_move;
         this.speed = speed;
         this.rot_speed = rot_speed;
+        rb = gameObject.GetOrAddComponent<Rigidbody2D>();
+        rb.gravityScale = 0;
         init = true;
     }
     private void Update()
@@ -48,7 +53,7 @@ public class Base_projectile : MonoBehaviour
     {
 
     }
-    public void Projectile_move()
+    void Projectile_move()
     {
         switch (moving_mode)
         {
@@ -57,9 +62,11 @@ public class Base_projectile : MonoBehaviour
                 break;
             case Projectile_moving_mode.GUIDED_X:
                 Guided('x');
+                General_move();
                 break;
             case Projectile_moving_mode.GUIDED_Y:
                 Guided('y');
+                General_move();
                 break;
             case Projectile_moving_mode.NON:
                 Debug.LogError("모드 설정을 안했음");
@@ -68,18 +75,33 @@ public class Base_projectile : MonoBehaviour
                 break;
         }
     }
-    public void General_move()
+    void General_move()
     {
-        transform.Translate(transform.up * (speed * Time.deltaTime));
+        //transform.Translate((transform.up * speed) * Time.deltaTime, Space.Self);
+        rb.velocity = transform.up * speed;
     }
-    public void Guided(char dir)
+    void Guided(char dir)
     {
         switch (dir)
         {
             case 'x':
+                Rotation(Managers.GameManager.Player_character.position.x,transform.position.x);
                 break;
             case 'y':
+                Rotation(Managers.GameManager.Player_character.position.y, transform.position.y);
                 break;
         }
+    }
+    float Look_at_target(Vector3 target)
+    {
+        return Mathf.Atan2(transform.position.y - target.y, transform.position.x - target.x) * Mathf.Rad2Deg + 90;
+    }
+    void Rotation(float target_pos, float this_pos)
+    {
+        if(target_pos > this_pos)
+        {
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(transform.rotation.x, transform.rotation.y, Look_at_target(Managers.GameManager.Player_character.transform.position)), rot_speed * Time.deltaTime);
+        }
+
     }
 }
