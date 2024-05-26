@@ -4,28 +4,41 @@ using UnityEngine;
 
 public class Projectile_spawner : MonoBehaviour
 {
-    List<GameObject> projectiles = new List<GameObject>();
-    int repeat_num = 0;
+    int projectile_spawn_count = 0;
+    int repeat;
+    int repeat_count;
     float projectile_speed = 0;
+    float spawn_time;
+    float time;
+    float push_time;
+    bool init_end = false;
     Color projectile_color = Color.red;
+    Vector3 projectile_pos;
+    Vector3 projectile_scale;
+    GameObject barrage_obj;
     GameObject projectile_obj;
-    Spawner_mode spawner_mode = Spawner_mode.NON;
     Projectile_moving_mode moving_mode = Projectile_moving_mode.NON;
 
-    public void Init(int repeat_num, float projectile_speed, Color projectile_color, 
-        GameObject obj, Spawner_mode spawner_mode, Projectile_moving_mode moving_mode)
+    public void Init(int projectile_spawn_count, int repeat, float spawn_time, float projectile_speed, float projectile_push_time, Color projectile_color, 
+        GameObject obj, Spawner_mode spawner_mode, Projectile_moving_mode moving_mode, Vector3 spanw_pos, Vector3 projectile_rot, Vector3 projectile_scale, GameObject parent)
     {
-        this.repeat_num = repeat_num;
+        this.projectile_spawn_count = projectile_spawn_count;
+        this.repeat = repeat;
+        this.spawn_time = spawn_time;
         this.projectile_speed = projectile_speed;
         this.projectile_color = projectile_color;
         this.projectile_obj = obj;
-        this.spawner_mode = spawner_mode;
         this.moving_mode = moving_mode;
+        this.projectile_pos = spanw_pos;
+        this.projectile_scale = projectile_scale;
+        barrage_obj = parent;
+        push_time = projectile_push_time;
+        init_end = true;
+
     }
     // Start is called before the first frame update
     private void Awake()
     {
-
     }
     void Start()
     {
@@ -35,65 +48,34 @@ public class Projectile_spawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Projectile_spawn();
+        if (repeat >= repeat_count)
+        {
+            if (spawn_time < time && init_end)
+            {
+                Projectile_spawn();
+                repeat_count++;
+            } 
+        }
+        else
+        {
+            Managers.Pool.Push(gameObject);
+        }
     }
-    void FixedUpdate()
+    private void OnEnable()
     {
-        Projectile_move();
+        
     }
     void Projectile_spawn()
     {
-
-        for (int i = 0; i < repeat_num; i++)
+        for (int i = 0; i < projectile_spawn_count; i++)
         {
-            GameObject projectile = this.projectile_obj;
-            projectile.transform.position = transform.position;
-            projectile.transform.rotation = Quaternion.Euler(new Vector3(0, 0, (360 / repeat_num) * i));
-            projectile.transform.localScale = Vector3.one;
-            projectiles.Add(projectile);
-            Managers.Pool.Pop(projectile);
-        }
-        Barrage_end();
-    }
-    void Barrage_end()
-    {
-        switch (spawner_mode)
-        {
-            case Spawner_mode.REPEAT_END:
-                Managers.Pool.Push(gameObject);
-                break;
-            case Spawner_mode.NON:
-                Debug.Log("설정 안함");
-                break;
-            default:
-                break;
-        }
-    }
-    void Projectile_move()
-    {
-        if (projectiles.Count != 0)
-        {
-            for (int i = 0; i < projectiles.Count; i++)
-            {
-                switch (moving_mode)
-                {
-                    case Projectile_moving_mode.GENERAL:
-                        projectiles[i].transform.position = projectiles[i].transform.forward * projectile_speed;
-                        break;
-                    case Projectile_moving_mode.NON:
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-    }
-    
-    void OnDisable()
-    {
-        if(TryGetComponent<Projectile_spawner>(out Projectile_spawner component))
-        {
-            Destroy(component);
+            GameObject projectile = Managers.Pool.Pop(this.projectile_obj);
+            projectile.GetComponent<SpriteRenderer>().color = projectile_color;
+            projectile.transform.parent = Managers.Pool.Pop(barrage_obj).transform;
+            projectile.transform.position = projectile_pos;
+            projectile.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, barrage_obj.transform.rotation.z + (360 / projectile_spawn_count) * i));
+            projectile.transform.localScale = projectile_scale;
+            projectile.GetOrAddComponent<Base_projectile>().Init(push_time, projectile_speed, moving_mode);
         }
     }
 }

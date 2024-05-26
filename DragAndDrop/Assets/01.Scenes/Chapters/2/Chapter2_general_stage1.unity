@@ -806,15 +806,16 @@ MonoBehaviour:
     pattern_ending: 0
     duration: 0
     fruit_spawner_pos: []
-    barrage_bullet_num: 0
+    barrage_bullet_num: 6
+    projectile_speed: 3
     cactus: {fileID: 0}
     fully_grown: []
     random_num: 0
-    fruit: {fileID: 0}
     set_grow_time: 0
     time: 0
     random_pos_num: 0
     dop_fruit: {fileID: 0}
+    cactus_grow_end: 0
   cactus_thorn:
     pattern_count: 0
     pattern_ending: 0

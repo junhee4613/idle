@@ -4,83 +4,82 @@ using UnityEngine;
 
 public class Base_projectile : MonoBehaviour
 {
-    Vector3 init_pos 
-    { 
-        get 
-        { 
-            if(Managers.Barrage.Projectile_spawners.Count != 0)
-            {
-                return Managers.Barrage.Projectile_spawners[Managers.Barrage.Projectile_spawners.Count].transform.position;
-            }
-            else
-            {
-                return Vector3.zero;
-            }
-        } 
-    }
-    Vector3 init_scale = Vector3.one;
-    Quaternion init_rotation;
-    public float speed;
-    bool init_complete;
-    bool addtion_mode;
-
-    
-    // Start is called before the first frame update
-    private void Awake()
+    public float push_time;
+    float time;
+    bool init = false;
+    float speed;
+    float rot_speed;
+    Projectile_moving_mode moving_mode;
+    public void Init(float push_time,float speed, Projectile_moving_mode moving_move)
     {
-        Trans_init();
-        if(gameObject.layer != 8)
+        this.push_time = push_time;
+        this.moving_mode = moving_move;
+        this.speed = speed;
+        init = true;
+    }
+    public void Init(float push_time, float speed, float rot_speed, Projectile_moving_mode moving_move)
+    {
+        this.push_time = push_time;
+        this.moving_mode = moving_move;
+        this.speed = speed;
+        this.rot_speed = rot_speed;
+        init = true;
+    }
+    private void Update()
+    {
+        if(time > push_time)
         {
-            gameObject.layer = 8;
+            Managers.Pool.Push(this.gameObject);
         }
-        gameObject.AddComponent<CircleCollider2D>();
     }
-    void Start()
+    private void FixedUpdate()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    protected void FixedUpdate()
-    {
-        if (init_complete == true)
+        if (init)
         {
-            transform.position = transform.position + Vector3.zero * speed;
-            Debug.Log(Mathf.Acos(0.5f));
-            //Vector3.zero 대신 나중에 방향을 나타내서 하기
+            Projectile_move();
         }
-        //여기에 이동하는 로직
-    }
-    private void OnEnable()
-    {
-        Trans_init();
-    }
-    public void Trans_init()
-    {
-        transform.position = init_pos;
-        transform.localScale = init_scale;
-        transform.rotation = init_rotation;
-        if (!Managers.Barrage.addtional_option)
-        {
-            addtion_mode = false;
-        }
-        else
-        {
-            addtion_mode = true;
-            if (addtion_mode == true)
-            {
-
-            }
-        }
-        
-        init_complete = true;
     }
     private void OnDisable()
     {
-        init_complete = false;
+        time = 0;
+        init = false;
+    }
+    private void OnEnable()
+    {
+
+    }
+    public void Projectile_move()
+    {
+        switch (moving_mode)
+        {
+            case Projectile_moving_mode.GENERAL:
+                General_move();
+                break;
+            case Projectile_moving_mode.GUIDED_X:
+                Guided('x');
+                break;
+            case Projectile_moving_mode.GUIDED_Y:
+                Guided('y');
+                break;
+            case Projectile_moving_mode.NON:
+                Debug.LogError("모드 설정을 안했음");
+                break;
+            default:
+                break;
+        }
+    }
+    public void General_move()
+    {
+        transform.Translate(transform.up * (speed * Time.deltaTime));
+    }
+    public void Guided(char dir)
+    {
+        switch (dir)
+        {
+            case 'x':
+                break;
+            case 'y':
+                break;
+        }
     }
 }

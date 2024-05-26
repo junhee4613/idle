@@ -12,6 +12,8 @@ public class Barrage_manager
 public enum Projectile_moving_mode
 {
     GENERAL,
+    GUIDED_X,
+    GUIDED_Y,
     NON
 }
 public enum Spawner_mode
