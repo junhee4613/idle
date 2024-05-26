@@ -17,13 +17,11 @@ public class Chapter2_general_stage1 : BossController
     // Start is called before the first frame update
     void Start()
     {
-        
-        //Chapter2_general1_cactus_climb_up_data
         cactus_climb_up.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Chapter2_general1_cactus_climb_up_data").text);
         fruit_barrage.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Chapter2_general1_fruit_cactus_data").text);
+        cactus_thorn.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Chapter2_general1_cactus_thorn_data").text);
         Managers.GameManager.game_start = true;
     }
-
     // Update is called once per frame
 
     public override void Pattern_processing()
@@ -34,8 +32,9 @@ public class Chapter2_general_stage1 : BossController
         {
             Fruit_spawner();
         }
+        Pattern_function(ref cactus_thorn.pattern_data, ref cactus_thorn.pattern_ending, ref cactus_thorn.duration, ref cactus_thorn.pattern_count, Cactus_thorn_pattern);
     }
-    
+
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
@@ -167,7 +166,83 @@ public class Chapter2_general_stage1 : BossController
     }
     void Cactus_thorn_pattern()
     {
-
+        switch (cactus_thorn.pattern_data[cactus_thorn.pattern_count].action_num)
+        {
+            case 0:
+                //선인장 생성 및 가시 생성
+                cactus_thorn.cactus = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Cactus_thorn")).transform;
+                cactus_thorn.cactus.position = cactus_thorn.cactus_pos;
+                cactus_thorn.cactus.DOScale(Vector3.one * 1.2f, 0.2f).OnComplete(() =>
+                {
+                    cactus_thorn.cactus.DOScale(Vector3.one, 0.2f);
+                });
+                break;
+            case 1:     //쏘고난 후 가시 생성 1
+                GameObject child1 = cactus_thorn.cactus.transform.GetChild(1).gameObject;
+                child1.SetActive(true);
+                for (int i = 0; i < child1.transform.childCount; i++)
+                {
+                    cactus_thorn.thorn_barrage_1.Add(child1.transform.GetChild(i));
+                }
+                foreach (var item in cactus_thorn.thorn_barrage_1)
+                {
+                    item.GetChild(0).DOLocalMoveY(0.13f, 0.2f);
+                }
+                break;
+            case 2:
+                GameObject child1_1 = cactus_thorn.cactus.transform.GetChild(1).gameObject;
+                child1_1.SetActive(true);
+                for (int i = 0; i < child1_1.transform.childCount; i++)
+                {
+                    cactus_thorn.thorn_barrage_1.Add(child1_1.transform.GetChild(i));
+                }
+                foreach (var item in cactus_thorn.thorn_barrage_1)
+                {
+                    item.GetChild(0).DOLocalMoveY(0.13f, 0.2f);
+                }
+                GameObject child2 = cactus_thorn.cactus.transform.GetChild(2).gameObject;
+                child2.SetActive(true);
+                for (int i = 0; i < child2.transform.childCount; i++)
+                {
+                    cactus_thorn.thorn_barrage_2.Add(child2.transform.GetChild(i));
+                }
+                foreach (var item in cactus_thorn.thorn_barrage_1)
+                {
+                    item.GetChild(0).DOLocalMoveY(0.13f, 0.2f);
+                }
+                break;
+            case 3:     //가시 발사
+                if(cactus_thorn.thorn_barrage_2.Count != 0)
+                {
+                    foreach (var item in cactus_thorn.thorn_barrage_1)
+                    {
+                        GameObject temp = new GameObject();
+                        temp.transform.position = item.transform.position;
+                        temp.transform.rotation = item.transform.rotation;
+                        temp.GetOrAddComponent<Projectile_spawner>().Init(fruit_barrage.barrage_bullet_num, 1, 0, cactus_thorn.thorn_speed, 15, Color.white,
+                            Managers.Resource.Load<GameObject>("Thorn_projectile"), Spawner_mode.REPEAT_END, Projectile_moving_mode.GUIDED_Y, temp.transform.position, temp.transform.rotation.eulerAngles, Vector3.one * 2, Managers.Resource.Load<GameObject>("Empty_obj").transform, 30);
+                        item.GetChild(0).localPosition = new Vector3(0, -0.1f, 0);
+                    }
+                    
+                }
+                if (cactus_thorn.thorn_barrage_1.Count != 0)
+                {
+                    foreach (var item in cactus_thorn.thorn_barrage_2)
+                    {
+                        GameObject temp = new GameObject();
+                        temp.transform.position = item.transform.position;
+                        temp.transform.rotation = item.transform.rotation;
+                        temp.GetOrAddComponent<Projectile_spawner>().Init(fruit_barrage.barrage_bullet_num, 1, 0, cactus_thorn.thorn_speed, 15, Color.white,
+                            Managers.Resource.Load<GameObject>("Thorn_projectile"), Spawner_mode.REPEAT_END, Projectile_moving_mode.GUIDED_Y, temp.transform.position, temp.transform.rotation.eulerAngles, Vector3.one * 0.7f, Managers.Resource.Load<GameObject>("Empty_obj").transform, 30);
+                        item.GetChild(0).localPosition = new Vector3(0, -0.1f, 0);
+                    }
+                }
+                break;
+            case 4:     //가시 제거
+                break;
+            case 5:
+                break;
+        }
     }
     [Serializable]
     public class Cactus_climb_up : Pattern_base_data
@@ -198,7 +273,11 @@ public class Chapter2_general_stage1 : BossController
     [Serializable]
     public class Cactus_thorn : Pattern_base_data
     {
-
+        public List<Transform> thorn_barrage_2 = new List<Transform>();
+        public List<Transform> thorn_barrage_1 = new List<Transform>();
+        public Transform cactus;
+        public Vector3 cactus_pos;
+        public float thorn_speed = 5;
     }
 
 }
