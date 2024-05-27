@@ -16,12 +16,12 @@ public class Projectile_spawner : MonoBehaviour
     Color projectile_color = Color.red;
     Vector3 projectile_pos;
     Vector3 projectile_scale;
-    Transform projectile_parent;
+    Vector3 init_rot;
     GameObject projectile_obj;
     Projectile_moving_mode moving_mode = Projectile_moving_mode.NON;
 
     public void Init(int projectile_spawn_count, int repeat, float spawn_time, float projectile_speed, float projectile_push_time, Color projectile_color, 
-        GameObject obj, Spawner_mode spawner_mode, Projectile_moving_mode moving_mode, Vector3 spanw_pos, Vector3 projectile_rot, Vector3 projectile_scale, Transform parent)
+        GameObject obj, Spawner_mode spawner_mode, Projectile_moving_mode moving_mode, Vector3 spanw_pos, Vector3 projectile_rot, Vector3 projectile_scale, Vector3 rotation)
     {
         this.projectile_spawn_count = projectile_spawn_count;
         this.repeat = repeat;
@@ -32,13 +32,13 @@ public class Projectile_spawner : MonoBehaviour
         this.moving_mode = moving_mode;
         this.projectile_pos = spanw_pos;
         this.projectile_scale = projectile_scale;
-        projectile_parent = parent;
         push_time = projectile_push_time;
+        init_rot = rotation;
         init_end = true;
 
     }
     public void Init(int projectile_spawn_count, int repeat, float spawn_time, float projectile_speed, float projectile_push_time, Color projectile_color,
-        GameObject obj, Spawner_mode spawner_mode, Projectile_moving_mode moving_mode, Vector3 spanw_pos, Vector3 projectile_rot, Vector3 projectile_scale, Transform parent, float rot_speed)
+        GameObject obj, Spawner_mode spawner_mode, Projectile_moving_mode moving_mode, Vector3 spanw_pos, Vector3 projectile_rot, Vector3 projectile_scale, float rot_speed,Vector3 rotation)
     {
         this.projectile_spawn_count = projectile_spawn_count;
         this.repeat = repeat;
@@ -49,9 +49,9 @@ public class Projectile_spawner : MonoBehaviour
         this.moving_mode = moving_mode;
         this.projectile_pos = spanw_pos;
         this.projectile_scale = projectile_scale;
-        projectile_parent = parent;
         push_time = projectile_push_time;
         this.rot_speed = rot_speed;
+        init_rot = rotation;
         init_end = true;
     }
     // Start is called before the first frame update
@@ -66,7 +66,7 @@ public class Projectile_spawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (repeat >= repeat_count)
+        if (repeat > repeat_count)
         {
             if (spawn_time < time && init_end)
             {
@@ -92,7 +92,6 @@ public class Projectile_spawner : MonoBehaviour
     }
     void Projectile_spawn()
     {
-        projectile_parent = Managers.Pool.Pop(projectile_parent.gameObject).transform;
 
         switch (moving_mode)
         {
@@ -101,9 +100,8 @@ public class Projectile_spawner : MonoBehaviour
                 {
                     GameObject projectile = Managers.Pool.Pop(this.projectile_obj);
                     projectile.GetComponent<SpriteRenderer>().color = projectile_color;
-                    projectile.transform.parent = projectile_parent;
                     projectile.transform.position = projectile_pos;
-                    projectile.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, projectile_parent.rotation.z + (360 / projectile_spawn_count) * i));
+                    projectile.transform.localRotation = Quaternion.Euler(init_rot + new Vector3(0, 0, (360 / projectile_spawn_count) * i));
                     projectile.transform.localScale = projectile_scale;
                     projectile.GetOrAddComponent<Base_projectile>().Init(push_time, projectile_speed, moving_mode);
                 }
@@ -113,21 +111,20 @@ public class Projectile_spawner : MonoBehaviour
                 {
                     GameObject projectile = Managers.Pool.Pop(this.projectile_obj);
                     projectile.GetComponent<SpriteRenderer>().color = projectile_color;
-                    projectile.transform.parent = projectile_parent;
                     projectile.transform.position = projectile_pos;
-                    projectile.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, projectile_parent.rotation.z + (360 / projectile_spawn_count) * i));
+                    projectile.transform.localRotation = Quaternion.Euler(init_rot + new Vector3(0, 0, (360 / projectile_spawn_count) * i));
                     projectile.transform.localScale = projectile_scale;
                     projectile.GetOrAddComponent<Base_projectile>().Init(push_time, projectile_speed, rot_speed, moving_mode);
                 }
                 break;
             case Projectile_moving_mode.GUIDED_Y:
+                Debug.Log("º“»Ø");
                 for (int i = 0; i < projectile_spawn_count; i++)
                 {
                     GameObject projectile = Managers.Pool.Pop(this.projectile_obj);
                     projectile.GetComponent<SpriteRenderer>().color = projectile_color;
-                    projectile.transform.parent = projectile_parent;
                     projectile.transform.position = projectile_pos;
-                    projectile.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, projectile_parent.rotation.z + (360 / projectile_spawn_count) * i));
+                    projectile.transform.localRotation = Quaternion.Euler(init_rot + new Vector3(0, 0, (360 / projectile_spawn_count) * i));
                     projectile.transform.localScale = projectile_scale;
                     projectile.GetOrAddComponent<Base_projectile>().Init(push_time, projectile_speed, rot_speed, moving_mode);
                 }
@@ -137,6 +134,5 @@ public class Projectile_spawner : MonoBehaviour
             default:
                 break;
         }
-        
     }
 }

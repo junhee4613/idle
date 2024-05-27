@@ -90,7 +90,7 @@ MonoBehaviour:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2d8b15f6b89cf53408077a20074aa734
-    m_Address: Empty_obj
+    m_Address: Projectile_spawner
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad

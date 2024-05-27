@@ -822,8 +822,10 @@ MonoBehaviour:
     duration: 0
     thorn_barrage_2: []
     thorn_barrage_1: []
+    thorn_barrage1_pos: {fileID: 0}
+    thorn_barrage2_pos: {fileID: 0}
     cactus: {fileID: 0}
-    cactus_pos: {x: 0, y: -5, z: 0}
+    cactus_pos: {x: 0, y: -5.25, z: 0}
     thorn_speed: 5
 --- !u!4 &1140541581
 Transform:

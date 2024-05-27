@@ -77,7 +77,6 @@ public class Base_projectile : MonoBehaviour
     }
     void General_move()
     {
-        //transform.Translate((transform.up * speed) * Time.deltaTime, Space.Self);
         rb.velocity = transform.up * speed;
     }
     void Guided(char dir)
@@ -102,6 +101,5 @@ public class Base_projectile : MonoBehaviour
         {
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(transform.rotation.x, transform.rotation.y, Look_at_target(Managers.GameManager.Player_character.transform.position)), rot_speed * Time.deltaTime);
         }
-
     }
 }

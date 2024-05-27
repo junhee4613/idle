@@ -42,7 +42,6 @@ public class Chapter2_general_stage1 : BossController
     }
     void Cactus_climb_up_pattern()
     {
-
         switch (cactus_climb_up.pattern_data[cactus_climb_up.pattern_count].action_num)
         {
             case 0:
@@ -105,11 +104,11 @@ public class Chapter2_general_stage1 : BossController
                 break;
             case 2:
                 // 열매 터짐
-                GameObject temp = new GameObject();
+                GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Projectile_spawner"));
                 temp.transform.position = fruit_barrage.fully_grown[fruit_barrage.random_num].transform.position;
                 temp.transform.rotation = fruit_barrage.fully_grown[fruit_barrage.random_num].transform.rotation;
                 temp.GetOrAddComponent<Projectile_spawner>().Init(fruit_barrage.barrage_bullet_num, 1, 0, fruit_barrage.projectile_speed, 15, warning_color,
-                    Managers.Resource.Load<GameObject>("Circle"), Spawner_mode.REPEAT_END, Projectile_moving_mode.GENERAL, temp.transform.position, temp.transform.rotation.eulerAngles, Vector3.one * 0.7f, Managers.Resource.Load<GameObject>("Empty_obj").transform);
+                    Managers.Resource.Load<GameObject>("Circle"), Spawner_mode.REPEAT_END, Projectile_moving_mode.GENERAL, temp.transform.position, temp.transform.rotation.eulerAngles, Vector3.one * 0.7f, Vector3.zero);
                 Managers.Main_camera.Shake_move();
                 fruit_barrage.dop_fruit.gravityScale = 0;
                 fruit_barrage.fully_grown[fruit_barrage.random_num].transform.localScale = Vector3.zero;
@@ -162,7 +161,6 @@ public class Chapter2_general_stage1 : BossController
         {
             fruit_barrage.time += Time.deltaTime;
         }
-
     }
     void Cactus_thorn_pattern()
     {
@@ -178,35 +176,44 @@ public class Chapter2_general_stage1 : BossController
                 });
                 break;
             case 1:     //쏘고난 후 가시 생성 1
-                GameObject child1 = cactus_thorn.cactus.transform.GetChild(1).gameObject;
-                child1.SetActive(true);
-                for (int i = 0; i < child1.transform.childCount; i++)
+                if(cactus_thorn.thorn_barrage1_pos == null)
                 {
-                    cactus_thorn.thorn_barrage_1.Add(child1.transform.GetChild(i));
+                    cactus_thorn.thorn_barrage1_pos = cactus_thorn.cactus.transform.GetChild(1);
+                    cactus_thorn.thorn_barrage1_pos.gameObject.SetActive(true);
+                    for (int i = 0; i < cactus_thorn.thorn_barrage1_pos.childCount; i++)
+                    {
+                        cactus_thorn.thorn_barrage_1.Add(cactus_thorn.thorn_barrage1_pos.GetChild(i));
+                    }
                 }
                 foreach (var item in cactus_thorn.thorn_barrage_1)
                 {
                     item.GetChild(0).DOLocalMoveY(0.13f, 0.2f);
                 }
                 break;
-            case 2:
-                GameObject child1_1 = cactus_thorn.cactus.transform.GetChild(1).gameObject;
-                child1_1.SetActive(true);
-                for (int i = 0; i < child1_1.transform.childCount; i++)
+            case 2: //쏘고 난 후 가시 생성 2
+                if (cactus_thorn.thorn_barrage1_pos == null)
                 {
-                    cactus_thorn.thorn_barrage_1.Add(child1_1.transform.GetChild(i));
+                    cactus_thorn.thorn_barrage1_pos = cactus_thorn.cactus.transform.GetChild(1);
+                    cactus_thorn.thorn_barrage1_pos.gameObject.SetActive(true);
+                    for (int i = 0; i < cactus_thorn.thorn_barrage1_pos.childCount; i++)
+                    {
+                        cactus_thorn.thorn_barrage_1.Add(cactus_thorn.thorn_barrage1_pos.GetChild(i));
+                    }
                 }
                 foreach (var item in cactus_thorn.thorn_barrage_1)
                 {
                     item.GetChild(0).DOLocalMoveY(0.13f, 0.2f);
                 }
-                GameObject child2 = cactus_thorn.cactus.transform.GetChild(2).gameObject;
-                child2.SetActive(true);
-                for (int i = 0; i < child2.transform.childCount; i++)
+                if (cactus_thorn.thorn_barrage2_pos == null)
                 {
-                    cactus_thorn.thorn_barrage_2.Add(child2.transform.GetChild(i));
+                    cactus_thorn.thorn_barrage2_pos = cactus_thorn.cactus.transform.GetChild(2);
+                    cactus_thorn.thorn_barrage2_pos.gameObject.SetActive(true);
+                    for (int i = 0; i < cactus_thorn.thorn_barrage2_pos.childCount; i++)
+                    {
+                        cactus_thorn.thorn_barrage_2.Add(cactus_thorn.thorn_barrage2_pos.GetChild(i));
+                    }
                 }
-                foreach (var item in cactus_thorn.thorn_barrage_1)
+                foreach (var item in cactus_thorn.thorn_barrage_2)
                 {
                     item.GetChild(0).DOLocalMoveY(0.13f, 0.2f);
                 }
@@ -214,33 +221,44 @@ public class Chapter2_general_stage1 : BossController
             case 3:     //가시 발사
                 if(cactus_thorn.thorn_barrage_2.Count != 0)
                 {
-                    foreach (var item in cactus_thorn.thorn_barrage_1)
+                    foreach (var item in cactus_thorn.thorn_barrage_2)
                     {
-                        GameObject temp = new GameObject();
+                        GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Projectile_spawner"));
                         temp.transform.position = item.transform.position;
                         temp.transform.rotation = item.transform.rotation;
-                        temp.GetOrAddComponent<Projectile_spawner>().Init(fruit_barrage.barrage_bullet_num, 1, 0, cactus_thorn.thorn_speed, 15, Color.white,
-                            Managers.Resource.Load<GameObject>("Thorn_projectile"), Spawner_mode.REPEAT_END, Projectile_moving_mode.GUIDED_Y, temp.transform.position, temp.transform.rotation.eulerAngles, Vector3.one * 2, Managers.Resource.Load<GameObject>("Empty_obj").transform, 30);
+                        temp.GetOrAddComponent<Projectile_spawner>().Init(1, 1, 0, cactus_thorn.thorn_speed, 7, Color.white,
+                            Managers.Resource.Load<GameObject>("Thorn_projectile"), Spawner_mode.REPEAT_END, Projectile_moving_mode.GUIDED_Y, temp.transform.position, temp.transform.rotation.eulerAngles, Vector3.one * 2, 30, temp.transform.eulerAngles);
                         item.GetChild(0).localPosition = new Vector3(0, -0.1f, 0);
                     }
-                    
                 }
                 if (cactus_thorn.thorn_barrage_1.Count != 0)
                 {
-                    foreach (var item in cactus_thorn.thorn_barrage_2)
+                    foreach (var item in cactus_thorn.thorn_barrage_1)
                     {
-                        GameObject temp = new GameObject();
+                        GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Projectile_spawner"));
                         temp.transform.position = item.transform.position;
                         temp.transform.rotation = item.transform.rotation;
-                        temp.GetOrAddComponent<Projectile_spawner>().Init(fruit_barrage.barrage_bullet_num, 1, 0, cactus_thorn.thorn_speed, 15, Color.white,
-                            Managers.Resource.Load<GameObject>("Thorn_projectile"), Spawner_mode.REPEAT_END, Projectile_moving_mode.GUIDED_Y, temp.transform.position, temp.transform.rotation.eulerAngles, Vector3.one * 0.7f, Managers.Resource.Load<GameObject>("Empty_obj").transform, 30);
+                        temp.GetOrAddComponent<Projectile_spawner>().Init(1, 1, 0, cactus_thorn.thorn_speed, 7, Color.white,
+                            Managers.Resource.Load<GameObject>("Thorn_projectile"), Spawner_mode.REPEAT_END, Projectile_moving_mode.GUIDED_Y, temp.transform.position, temp.transform.rotation.eulerAngles, Vector3.one * 2, 45, temp.transform.eulerAngles);
                         item.GetChild(0).localPosition = new Vector3(0, -0.1f, 0);
                     }
                 }
                 break;
             case 4:     //가시 제거
+                foreach (var item in cactus_thorn.thorn_barrage_1)
+                {
+                    item.GetChild(0).DOLocalMoveY(-0.1f, 0.2f);
+                }
+                foreach (var item in cactus_thorn.thorn_barrage_2)
+                {
+                    item.GetChild(0).DOLocalMoveY(-0.1f, 0.2f);
+                }
                 break;
-            case 5:
+            case 5:     //선인장 제거
+                cactus_thorn.cactus.DOMoveY(-5f, 0.2f).SetEase(Ease.OutQuad).OnComplete(() => 
+                {
+                    cactus_thorn.cactus.DOMoveY(-9.5f, 0.4f).SetEase(Ease.InQuad);
+                });
                 break;
         }
     }
@@ -275,9 +293,10 @@ public class Chapter2_general_stage1 : BossController
     {
         public List<Transform> thorn_barrage_2 = new List<Transform>();
         public List<Transform> thorn_barrage_1 = new List<Transform>();
+        public Transform thorn_barrage1_pos;
+        public Transform thorn_barrage2_pos;
         public Transform cactus;
         public Vector3 cactus_pos;
         public float thorn_speed = 5;
     }
-
 }
