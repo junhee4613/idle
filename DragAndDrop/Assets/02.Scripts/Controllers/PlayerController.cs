@@ -53,9 +53,10 @@ public class PlayerController : playerData
     // Update is called once per frame
     void Update()
     {
-        if (!Managers.GameManager.option_window_on)
+        if (!Managers.GameManager.option_window_on && Managers.GameManager.operate)
         {
             //Interaction_obj();
+            Debug.Log(1);
             Key_operate();
         }
         

@@ -4,10 +4,10 @@ using UnityEngine;
 using System;
 using DG.Tweening;
 
-public abstract class BossController : Stage_base_controller
+public abstract class BossController : Stage_base_controller        //time	action_num	duration
 {
     protected Dictionary<GameObject, Animator> anim_end_push_objs = new Dictionary<GameObject, Animator>();
-    protected Dictionary<GameObject, SpriteRenderer> general_warning_box_sr = new Dictionary<GameObject, SpriteRenderer>();
+    protected Dictionary<GameObject, SpriteRenderer> general_warning_box_sr = new Dictionary<GameObject, SpriteRenderer>();     //이거 왜 넣었는지 까먹음
     protected override void Awake()
     {
         base.Awake();
@@ -17,7 +17,7 @@ public abstract class BossController : Stage_base_controller
         if (Managers.GameManager.game_start)
         {
             Pattern_processing();
-            if (Managers.Sound.bgSound.time >= Managers.Sound.bgSound.clip.length - 0.2f)
+            if (Managers.Sound.bgSound .loop == true && Managers.Sound.bgSound.time >= Managers.Sound.bgSound.clip.length - 0.2f)
             {
                 Game_clear();
             }
@@ -181,6 +181,32 @@ public abstract class BossController : Stage_base_controller
         }
         general_warning_box_sr[warning_box].color = color;
         return Managers.Pool.Pop(warning_box);
+    }
+    public void Doscale_y__warning_box(Vector3 init_size, Vector3 box1_pos,Vector3 box2_pos, Color color, Color color2, float action_time)
+    {
+        GameObject warning_box = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
+        warning_box.transform.position = box1_pos;
+        warning_box.transform.localScale = init_size;
+        if (!general_warning_box_sr.ContainsValue(warning_box.GetComponent<SpriteRenderer>()))
+        {
+            general_warning_box_sr.Add(warning_box, warning_box.GetComponent<SpriteRenderer>());
+        }
+        general_warning_box_sr[warning_box].color = color;
+
+        GameObject warning_box2 = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box2"));
+        warning_box2.transform.localScale = new Vector3(init_size.x, 0, init_size.z);
+        warning_box2.transform.GetChild(0).transform.localPosition = new Vector3(0, -0.5f, 0);
+        warning_box2.transform.position = box2_pos;
+        if (!general_warning_box_sr.ContainsValue(warning_box2.transform.GetChild(0).GetComponent<SpriteRenderer>()))
+        {
+            general_warning_box_sr.Add(warning_box2, warning_box2.transform.GetChild(0).GetComponent<SpriteRenderer>());
+        }
+        general_warning_box_sr[warning_box2].color = color2;
+        warning_box2.transform.DOScaleY(init_size.y, action_time).OnComplete(() =>
+        {
+            Managers.Pool.Push(warning_box2);
+            Managers.Pool.Push(warning_box);
+        });
     }
     public void Game_clear()
     {

@@ -25,9 +25,10 @@ public class GameManager
     public bool splash = false;             //스플레시 화면일 때 쓰는 불값
     public string scene_name;
     public bool load_end = false;
+    public bool operate = false;
     public bool option_window_on = false;
     public Dictionary<string, bool> stage_clear = new Dictionary<string, bool>() 
-    { {"Chapter1_boss_stage", false}, { "Chapter2_boss_stage", false }, { "Chapter2_general_stage1", false }, { "Stage4", false } };
+    { {"Chapter1_boss_stage", false}, { "Chapter2_boss_stage", false }, { "Chapter2_general_stage1", false }, { "Tutorial_stage", false } };
 
     public PlayerController Player 
     { 
@@ -74,23 +75,22 @@ public class GameManager
             {
                 Managers.Sound.BGMSound(temp, true);
             }
-            else
+            else if(scene.name != "Tutorial_stage")
             {
                 Managers.Sound.BGMSound(temp, false);
+
             }
         }
         Managers.Pool.Clear();
-        /*switch (scene_name)
+        switch (scene_name)
         {
-            case "Stage1":
-                Stage1();
+            case "Tutorial_stage":
+                operate = false;
                 break;
             default:
+                operate = true;
                 break;
         }
-        if (scene_name.Contains("Stage"))
-        {
-        }*/
         Sound_init(scene, mode);
         Managers.UI_jun.option_window_on = false;           //FIX : 이거 왜 있는지 모르겠음 
         if (Managers.UI_jun.UI_window_on["Game_over"].activeSelf)

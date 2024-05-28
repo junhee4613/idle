@@ -113,12 +113,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bcce12c541265774b828891b5a33702c
-    m_Address: Warning_box
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 623d9a9996daa904098a68327029a8b1
     m_Address: Stage1_rush_pattern_data
     m_ReadOnly: 0

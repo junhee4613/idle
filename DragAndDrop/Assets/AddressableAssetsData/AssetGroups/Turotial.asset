@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Turotial
+  m_EditorClassIdentifier: 
+  m_GroupName: Turotial
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 4d6cd07380e7ecc449846fdfa18b48af
+  m_SerializeEntries:
+  - m_GUID: 8eb6fb74174808a4e91656c3a4fb61e4
+    m_Address: Hammer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4da8d9b39f5d9ae419b60b1c8bc3e082
+    m_Address: Tutorial_stage
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8278be90c9d4dd24a85f1ec5675c4a75
+    m_Address: Tutorial_hammer_data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: ca7e6c5fcf72e2642944e03c7574a351, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: bb3a6b1c67e7a8041a9b76cf3ab3329c, type: 2}
+    - {fileID: 11400000, guid: 85f97051546a6344497041652e571863, type: 2}

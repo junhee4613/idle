@@ -20,5 +20,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/01.Scenes/Chapters/2/Chapter2_general_stage1.unity
     guid: ee38dbffb11ad2d4aab3faad6cb5b4cc
+  - enabled: 1
+    path: Assets/01.Scenes/Chapters/Tutorial/Tutorial_stage.unity
+    guid: 9e54b29a4685e25498e890578b1e708f
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: e73d4f16ff7ba5d42954ec1351e2db34, type: 2}
