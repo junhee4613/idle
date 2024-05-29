@@ -17,7 +17,7 @@ public abstract class BossController : Stage_base_controller        //time	actio
         if (Managers.GameManager.game_start)
         {
             Pattern_processing();
-            if (Managers.Sound.bgSound .loop == true && Managers.Sound.bgSound.time >= Managers.Sound.bgSound.clip.length - 0.2f)
+            if (Managers.Sound.bgSound .loop == false && Managers.Sound.bgSound.time >= Managers.Sound.bgSound.clip.length - 0.2f)
             {
                 Game_clear();
             }

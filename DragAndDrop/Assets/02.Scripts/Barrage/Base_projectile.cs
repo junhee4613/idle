@@ -32,7 +32,7 @@ public class Base_projectile : MonoBehaviour
     }
     private void Update()
     {
-        if(time > push_time)
+        if(time > push_time || Mathf.Abs(transform.position.x) > 11 || Mathf.Abs(transform.position.y) > 7)
         {
             Managers.Pool.Push(this.gameObject);
         }
