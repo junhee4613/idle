@@ -36,6 +36,10 @@ public class Base_projectile : MonoBehaviour
         {
             Managers.Pool.Push(this.gameObject);
         }
+        else
+        {
+            time += Time.deltaTime;
+        }
     }
     private void FixedUpdate()
     {

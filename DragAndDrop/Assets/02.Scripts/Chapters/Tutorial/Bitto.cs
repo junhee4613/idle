@@ -41,19 +41,16 @@ public class Bitto : BossController
         {
             if(tutorial.tutorial_end == false)
             {
-                Debug.Log(1);
                 StartCoroutine(Bitto_appearence());
                 tutorial.tutorial_end = true;
             }
-        }
-        else if(test)
-        {
-            Managers.GameManager.operate = true;
-            Debug.Log(1);
-            Debug.Log(Managers.GameManager.option_window_on);
-            if (Input.GetMouseButtonUp(0))
+            else if (test)
             {
-                tutorial.player_move = true;
+                Managers.GameManager.operate = true;
+                if (Input.GetMouseButtonUp(0))
+                {
+                    tutorial.player_move = true;
+                }
             }
         }
     }
@@ -109,8 +106,8 @@ public class Bitto : BossController
                         });
                         break;
                 }
-                Doscale_y__warning_box(Vector3.one * 5, new Vector3(-2.5f * hammer.dir, -2, 0), new Vector3(-2.5f * hammer.dir, 0.5f, 0), color[0], color[1], 1);
                 hammer.dir *= -1;
+                Doscale_y__warning_box(Vector3.one * 5, new Vector3(-2.5f * hammer.dir, -2, 0), new Vector3(-2.5f * hammer.dir, 0.5f, 0), color[0], color[1], 1);
                 break;
             case 3:     //해머만 휘두름
                 switch (hammer.dir)
