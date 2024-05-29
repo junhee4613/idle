@@ -56,7 +56,6 @@ public class PlayerController : playerData
         if (!Managers.GameManager.option_window_on && Managers.GameManager.operate)
         {
             //Interaction_obj();
-            Debug.Log(1);
             Key_operate();
         }
         
