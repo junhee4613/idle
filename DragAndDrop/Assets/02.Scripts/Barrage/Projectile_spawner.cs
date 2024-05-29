@@ -118,7 +118,6 @@ public class Projectile_spawner : MonoBehaviour
                 }
                 break;
             case Projectile_moving_mode.GUIDED_Y:
-                Debug.Log("º“»Ø");
                 for (int i = 0; i < projectile_spawn_count; i++)
                 {
                     GameObject projectile = Managers.Pool.Pop(this.projectile_obj);

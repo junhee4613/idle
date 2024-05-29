@@ -6,8 +6,9 @@ using DG.Tweening;
 
 public abstract class BossController : Stage_base_controller        //time	action_num	duration
 {
-    protected Dictionary<GameObject, Animator> anim_end_push_objs = new Dictionary<GameObject, Animator>();
-    protected Dictionary<GameObject, SpriteRenderer> general_warning_box_sr = new Dictionary<GameObject, SpriteRenderer>();     //이거 왜 넣었는지 까먹음
+    protected Dictionary<GameObject, Animator> anim_ongoing_obj = new Dictionary<GameObject, Animator>();
+    protected Dictionary<GameObject, SpriteRenderer> general_warning_box_sr = new Dictionary<GameObject, SpriteRenderer>();
+    protected HashSet<GameObject> anim_end_push_objs = new HashSet<GameObject>();
     protected override void Awake()
     {
         base.Awake();
@@ -216,15 +217,21 @@ public abstract class BossController : Stage_base_controller        //time	actio
     public abstract void Pattern_processing();
     public void Anim_end_push()
     {
-        if(anim_end_push_objs.Count != 0)
+        if(anim_ongoing_obj.Count != 0)
         {
-            foreach (var item in anim_end_push_objs)
+            foreach (var item in anim_ongoing_obj)
             {
                 if(item.Value.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
                 {
                     Managers.Pool.Push(item.Key);
+                    anim_end_push_objs.Add(item.Key);
                 }
             }
+            foreach (var item in anim_end_push_objs)
+            {
+                anim_ongoing_obj.Remove(item);
+            }
+            anim_end_push_objs.Clear();
         }
     }
 }

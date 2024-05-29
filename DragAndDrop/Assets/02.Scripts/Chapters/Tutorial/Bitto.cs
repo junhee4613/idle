@@ -75,9 +75,9 @@ public class Bitto : BossController
         {
             case 0:     //처음 플레이어 박스 및 해머 생성
                 Managers.GameManager.Player.transform.position = new Vector3(0, -2, 0);
-               /* ParticleSystem warp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warp")).GetComponent<ParticleSystem>();
+                ParticleSystem warp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warp")).GetComponent<ParticleSystem>();
                 warp.transform.position = Managers.GameManager.Player_character.position;
-                warp.Play();*/
+                warp.Play();
                 for (int i = 0; i < 2; i++)
                 {
                     hammer.hammer_action[i] = Managers.Pool.Pop(hammer.hammer_obj).transform;

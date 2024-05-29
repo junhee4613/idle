@@ -38,7 +38,6 @@ public class Chapter2_general_stage1 : BossController
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        //여기에 열매 떨어지는 로직
     }
     void Cactus_climb_up_pattern()
     {
@@ -243,6 +242,7 @@ public class Chapter2_general_stage1 : BossController
                         item.GetChild(0).localPosition = new Vector3(0, -0.1f, 0);
                     }
                 }
+                cactus_thorn.cactus.DOPunchScale(new Vector3(0.1f, 0.1f), 0.1f);
                 break;
             case 4:     //가시 제거
                 foreach (var item in cactus_thorn.thorn_barrage_1)
