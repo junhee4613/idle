@@ -66,6 +66,7 @@ public class Bitto : BossController
     IEnumerator Mouse_cursor_appearence()
     {
         test = true;
+        Cursor.visible = true;
         yield return null;
     }
     public void Hammer_pattern()
@@ -74,6 +75,9 @@ public class Bitto : BossController
         {
             case 0:     //처음 플레이어 박스 및 해머 생성
                 Managers.GameManager.Player.transform.position = new Vector3(0, -2, 0);
+               /* ParticleSystem warp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warp")).GetComponent<ParticleSystem>();
+                warp.transform.position = Managers.GameManager.Player_character.position;
+                warp.Play();*/
                 for (int i = 0; i < 2; i++)
                 {
                     hammer.hammer_action[i] = Managers.Pool.Pop(hammer.hammer_obj).transform;
@@ -110,21 +114,21 @@ public class Bitto : BossController
                 Doscale_y__warning_box(Vector3.one * 5, new Vector3(-2.5f * hammer.dir, -2, 0), new Vector3(-2.5f * hammer.dir, 0.5f, 0), color[0], color[1], 1);
                 break;
             case 3:     //해머만 휘두름
+                Debug.Log(1);
                 switch (hammer.dir)
                 {
                     case 1:
                         hammer.hammer_action[0].rotation = Quaternion.Euler(new Vector3(0, 0, 90));
-                        hammer.hammer_action[0].DORotate(new Vector3(0, 0, 90), 1).OnComplete(() =>
+                        hammer.hammer_action[0].DORotate(new Vector3(0, 0, -90), 1).OnComplete(() =>
                         {
                             Managers.Main_camera.Move_y(-0.1f, 0.1f, 0, 0.1f);
                         });
                         break;
                     case -1:
                         hammer.hammer_action[1].rotation = Quaternion.Euler(new Vector3(0, 0, 90));
-                        hammer.hammer_action[1].DORotate(new Vector3(0, 0, -90), 1).OnComplete(() =>
+                        hammer.hammer_action[1].DORotate(new Vector3(0, 0, 270), 1).OnComplete(() =>
                         {
                             Managers.Main_camera.Move_y(-0.1f, 0.1f, 0, 0.1f);
-
                         });
                         break;
                 }

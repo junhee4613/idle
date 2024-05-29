@@ -58,11 +58,6 @@ public class PlayerController : playerData
             //Interaction_obj();
             Key_operate();
         }
-        else if (!Managers.GameManager.operate)
-        {
-            Debug.Log(1);
-        }
-        
     }
     public void Mouse_button_down()
     {
