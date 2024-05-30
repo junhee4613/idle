@@ -6,6 +6,7 @@ using DG.Tweening;
 using Newtonsoft.Json;
 using System.Runtime.InteropServices;
 using Random = UnityEngine.Random;
+using static The_most_angry_gunman;
 
 public class The_most_angry_gunman : BossController
 {
@@ -19,7 +20,7 @@ public class The_most_angry_gunman : BossController
     Dictionary<string, Anim_stage_state> right_hand_state = new Dictionary<string, Anim_stage_state>();
     Dictionary<string, Anim_stage_state> left_hand_state = new Dictionary<string, Anim_stage_state>();
     string[] anims = new string[] {"idle", "reload", "right_move","right_shot","left_move", "left_shot", "stage2_dead", "dynamite_throw", "change_weapon", "right_dynamite_throw", "left_dynamite_throw" };
-    string[] weapon_anims = new string[] {"gun_idle", "reload", "shot", "look_on", "gun_shot_init", "dynamite_idle", "dynamite_boom", "dynamite_instance", "gun_base" };
+    string[] weapon_anims = new string[] { "gun_idle", "reload", "shot", "look_on", "gun_shot_init", "dynamite_idle", "dynamite_boom", "dynamite_instance", "gun_base", "change_weapon" };
     protected override void Awake()
     {
         weapon_anim_controller[0] = hands[0].GetComponent<Animator>();
@@ -36,6 +37,8 @@ public class The_most_angry_gunman : BossController
     // Start is called before the first frame update
     void Start()
     {
+        Anim_state_machin2(right_hand_state["gun_idle"], true);
+        Anim_state_machin2(left_hand_state["gun_idle"], true);
         Anim_state_machin2(anim_state["idle"], true);
     }
 
@@ -135,7 +138,9 @@ public class The_most_angry_gunman : BossController
                 gun_shoot.aims[0].transform.DOScale(Vector3.zero, 0.35f).OnComplete(() =>
                 {
                     gun_shoot.aims[0].SetActive(false);
-                    
+
+                    Anim_state_machin2(right_hand_state["change_weapon"], false);
+                    Anim_state_machin2(left_hand_state["change_weapon"], false);
                     Anim_state_machin2(anim_state["change_weapon"], false);
                     gun_shoot.aims[1].transform.DOScale(Vector3.zero, 0.35f).OnComplete(() => gun_shoot.aims[1].SetActive(false));
                 });
@@ -315,12 +320,14 @@ public class The_most_angry_gunman : BossController
                     case 1:
                         //다이너마이트 다시 생기는 애니메이션 작동
                         dynamite.throw_dynamite.transform.localScale = new Vector3(1, 1, 1);
+                        dynamite.throw_dynamite.transform.position = hands[1].transform.position;
                         Anim_state_machin2(left_hand_state["dynamite_instance"], false);
                         Anim_state_machin2(anim_state["left_dynamite_throw"], false);
                         sequence.Join(dynamite.throw_dynamite.transform.DOLocalJump(new Vector3(dynamite.dynamite_landing_pos_x, -3, 0), 5, 1, 0.5f).SetEase(Ease.InSine));
                         sequence.Join(dynamite.throw_dynamite.transform.DORotate(new Vector3(0, 0, 360), 0.25f, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetLoops(2));
                         break;
                     case -1:
+                        dynamite.throw_dynamite.transform.position = hands[0].transform.position;
                         dynamite.throw_dynamite.transform.localScale = new Vector3(-1, 1, 1);
                         Anim_state_machin2(right_hand_state["dynamite_instance"], false);
                         Anim_state_machin2(anim_state["right_dynamite_throw"], false);
@@ -335,8 +342,10 @@ public class The_most_angry_gunman : BossController
                 if (!anim_ongoing_obj.ContainsKey(dynamite.throw_dynamite))
                 {
                     anim_ongoing_obj.Add(dynamite.throw_dynamite, dynamite.throw_dynamite.GetComponent<Animator>());
-                }
+                }                   //애니메이션이 다음 프레임에 실행됨
                 anim_ongoing_obj[dynamite.throw_dynamite].Play("dynamite_boom");
+                /*AnimatorClipInfo[] clipInfos = anim_ongoing_obj[dynamite.throw_dynamite].GetCurrentAnimatorClipInfo(0);
+                Debug.Log(clipInfos[0].clip.name);*/        // 이 코드 이용해서 하기
                 Managers.Main_camera.Shake_move();
                 Managers.Pool.Push(dynamite.throw_dynamite);
                 break;
@@ -350,6 +359,11 @@ public class The_most_angry_gunman : BossController
                 break;
             default:
                 break;
+        }
+        if(anim_ongoing_obj.ContainsKey(dynamite.throw_dynamite))
+        {
+            if()
+            Anim_end_push("dynamite_boom", anim_ongoing_obj[dynamite.throw_dynamite].GetCurrentAnimatorClipInfo(0));
         }
     }
     public void Beat_box_size_up()

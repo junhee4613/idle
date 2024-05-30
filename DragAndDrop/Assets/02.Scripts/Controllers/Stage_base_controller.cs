@@ -34,7 +34,7 @@ public class Stage_base_controller : MonoBehaviour
         }
 
     }
-    public void Anim_state_machin2(Anim_stage_state clip_name, bool anim_until_the_end, bool same_name_action = false)
+    public void Anim_state_machin2(Anim_stage_state clip_name, bool anim_until_the_end, bool anim_again = false)
     {
         if (now_anim != clip_name)
         {
@@ -54,7 +54,7 @@ public class Stage_base_controller : MonoBehaviour
                 clip_name.On_state_enter();
             } 
         }
-        else if (same_name_action)
+        else if (anim_again)
         {
             if (anim_until_the_end)
             {

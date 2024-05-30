@@ -22,7 +22,6 @@ public abstract class BossController : Stage_base_controller        //time	actio
             {
                 Game_clear();
             }
-            Anim_end_push();
         }
     }
     protected virtual void FixedUpdate()
@@ -215,23 +214,30 @@ public abstract class BossController : Stage_base_controller        //time	actio
         Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Main_screen", 1);
     }
     public abstract void Pattern_processing();
-    public void Anim_end_push()
+    public void Anim_end_push(string anim_name, AnimatorClipInfo[] clip_info)
     {
-        if(anim_ongoing_obj.Count != 0)
+        if(clip_info.Length != 0)
         {
-            foreach (var item in anim_ongoing_obj)
+            if (anim_name == clip_info[0].clip.name)
             {
-                if(item.Value.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+                if (anim_ongoing_obj.Count != 0)
                 {
-                    Managers.Pool.Push(item.Key);
-                    anim_end_push_objs.Add(item.Key);
+                    foreach (var item in anim_ongoing_obj)
+                    {
+                        if (item.Value.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+                        {
+                            Managers.Pool.Push(item.Value.gameObject);
+                            anim_end_push_objs.Add(item.Key);
+                        }
+                    }
+                    foreach (var item in anim_end_push_objs)
+                    {
+                        anim_ongoing_obj.Remove(item);
+                    }
+                    anim_end_push_objs.Clear();
                 }
             }
-            foreach (var item in anim_end_push_objs)
-            {
-                anim_ongoing_obj.Remove(item);
-            }
-            anim_end_push_objs.Clear();
         }
+        
     }
 }
