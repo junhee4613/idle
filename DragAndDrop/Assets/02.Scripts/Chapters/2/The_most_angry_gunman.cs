@@ -37,8 +37,8 @@ public class The_most_angry_gunman : BossController
     // Start is called before the first frame update
     void Start()
     {
-        Anim_state_machin2(right_hand_state["gun_idle"], true);
-        Anim_state_machin2(left_hand_state["gun_idle"], true);
+        Anim_state_machin2(right_hand_state["gun_idle"], true, true);
+        Anim_state_machin2(left_hand_state["gun_idle"], true, true);
         Anim_state_machin2(anim_state["idle"], true);
     }
 
@@ -314,6 +314,7 @@ public class The_most_angry_gunman : BossController
             case 2:     //다이너 마이트 생성 애니메이션
                 dynamite.throw_dynamite = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Dynamite"));
                 dynamite.dynamite_landing_pos_x = Random.Range(transform.position.x, 3.5f * dynamite.dir);
+                Charging_doscale_center_warning_box(new Vector3(2, 5), new Vector3(dynamite.dynamite_landing_pos_x, -1.5f), new Vector3(dynamite.dynamite_landing_pos_x, -1.5f), color, 0.7f);
                 DG.Tweening.Sequence sequence = DOTween.Sequence();
                 switch (dynamite.dir)
                 {                   //FIX : 수정
@@ -321,7 +322,7 @@ public class The_most_angry_gunman : BossController
                         //다이너마이트 다시 생기는 애니메이션 작동
                         dynamite.throw_dynamite.transform.localScale = new Vector3(1, 1, 1);
                         dynamite.throw_dynamite.transform.position = hands[1].transform.position;
-                        Anim_state_machin2(left_hand_state["dynamite_instance"], false);
+                        Anim_state_machin2(left_hand_state["dynamite_instance"], false, true);
                         Anim_state_machin2(anim_state["left_dynamite_throw"], false);
                         sequence.Join(dynamite.throw_dynamite.transform.DOLocalJump(new Vector3(dynamite.dynamite_landing_pos_x, -3, 0), 5, 1, 0.5f).SetEase(Ease.InSine));
                         sequence.Join(dynamite.throw_dynamite.transform.DORotate(new Vector3(0, 0, 360), 0.25f, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetLoops(2));
@@ -329,25 +330,25 @@ public class The_most_angry_gunman : BossController
                     case -1:
                         dynamite.throw_dynamite.transform.position = hands[0].transform.position;
                         dynamite.throw_dynamite.transform.localScale = new Vector3(-1, 1, 1);
-                        Anim_state_machin2(right_hand_state["dynamite_instance"], false);
+                        Anim_state_machin2(right_hand_state["dynamite_instance"], false, true);
                         Anim_state_machin2(anim_state["right_dynamite_throw"], false);
                         sequence.Join(dynamite.throw_dynamite.transform.DOLocalJump(new Vector3(dynamite.dynamite_landing_pos_x, -3, 0), 5, 1, 0.5f).SetEase(Ease.InSine));
-                        sequence.Join(dynamite.throw_dynamite.transform.DORotate(new Vector3(0, 0, -360), 0.25f, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetLoops(2));
                         break;
                 }
-                //경고판 생성하는 로직 추가
                 break;
             case 3:     //다이너마이트 터짐
+                if(Managers.GameManager.Player_character.transform.position.x < dynamite.throw_dynamite.transform.position.x + 1 && Managers.GameManager.Player_character.transform.position.x > dynamite.throw_dynamite.transform.position.x - 1)
+                {
+                    Managers.GameManager.Player.Hit();
+                }
                 dynamite.throw_dynamite.transform.rotation = Quaternion.identity;
+                dynamite.throw_dynamite.transform.position = new Vector3(dynamite.throw_dynamite.transform.position.x, -1.5f);
                 if (!anim_ongoing_obj.ContainsKey(dynamite.throw_dynamite))
                 {
                     anim_ongoing_obj.Add(dynamite.throw_dynamite, dynamite.throw_dynamite.GetComponent<Animator>());
                 }                   //애니메이션이 다음 프레임에 실행됨
                 anim_ongoing_obj[dynamite.throw_dynamite].Play("dynamite_boom");
-                /*AnimatorClipInfo[] clipInfos = anim_ongoing_obj[dynamite.throw_dynamite].GetCurrentAnimatorClipInfo(0);
-                Debug.Log(clipInfos[0].clip.name);*/        // 이 코드 이용해서 하기
                 Managers.Main_camera.Shake_move();
-                Managers.Pool.Push(dynamite.throw_dynamite);
                 break;
             case 4:     //섬광탄 던져서 0.7 터짐 위치 :(0, 0, 0) 스케일 : (1.5, 1.5, 1.5)
                 GameObject flash_bang = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Flashbang"));
@@ -359,10 +360,6 @@ public class The_most_angry_gunman : BossController
                 break;
             default:
                 break;
-        }
-        if(anim_ongoing_obj.ContainsKey(dynamite.throw_dynamite))
-        {
-            Anim_end_push("dynamite_boom", anim_ongoing_obj[dynamite.throw_dynamite].GetCurrentAnimatorClipInfo(0));
         }
     }
     public void Beat_box_size_up()
@@ -434,8 +431,6 @@ public class The_most_angry_gunman : BossController
                         Vertical_tumble(Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Vertical_tumbleweed")), pos_x);
                     });
                 break;
-            default:
-                break;
         }
     }
     public void Vertical_tumble(GameObject temp, float pos_x)
@@ -468,8 +463,6 @@ public class The_most_angry_gunman : BossController
                             if (item.position.x == temp.transform.position.x && !powder_keg.boom.Contains(item))
                             {
                                 Warning_box_fade(new Vector3(5f, 7.5f, 0), new Vector3(item.position.x, 0, 0), true, 3, 0.23f,() => Powder_keg_pattern_boom(item, temp, true));
-
-                                //FIX : 나중엔 여길 터지는 애니메이션 작동되게 변경
                             }
                             else if (item.position.y == temp.transform.position.y && !powder_keg.boom.Contains(item))
                             {
@@ -513,14 +506,17 @@ public class The_most_angry_gunman : BossController
         powder_keg.boom.Add(temp.transform);
         foreach (var item2 in powder_keg.boom)
         {
-            if (!anim_ongoing_obj.ContainsKey(item2.gameObject))
+            Managers.Pool.Push(item2.gameObject);
+            GameObject boom = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Powder_keg_boom"));
+            boom.transform.position = item2.position;
+            if (!anim_ongoing_obj.ContainsKey(boom.gameObject))
             {
-                anim_ongoing_obj.Add(item2.gameObject, item2.GetComponent<Animator>());
+                anim_ongoing_obj.Add(boom, boom.GetComponent<Animator>());
             }
-            anim_ongoing_obj[item2.gameObject].Play("Powder_keg_boom");
             powder_keg.deployable_pos.Add(item2.position);
             powder_keg.objs.Remove(item2);
         }
+        //여기에 터지는 애니메이션 추가
         powder_keg.boom.Clear();
     }
     

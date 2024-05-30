@@ -9,14 +9,16 @@ public abstract class BossController : Stage_base_controller        //time	actio
     protected Dictionary<GameObject, Animator> anim_ongoing_obj = new Dictionary<GameObject, Animator>();
     protected Dictionary<GameObject, SpriteRenderer> general_warning_box_sr = new Dictionary<GameObject, SpriteRenderer>();
     protected HashSet<GameObject> anim_end_push_objs = new HashSet<GameObject>();
+    public Color[] color = new Color[2];
     protected override void Awake()
     {
         base.Awake();
     }
-    public void Update()
+    protected void Update()
     {
         if (Managers.GameManager.game_start)
         {
+            Anim_end_push();
             Pattern_processing();
             if (Managers.Sound.bgSound .loop == false && Managers.Sound.bgSound.time >= Managers.Sound.bgSound.clip.length - 0.2f)
             {
@@ -177,12 +179,21 @@ public abstract class BossController : Stage_base_controller        //time	actio
         if (!general_warning_box_sr.ContainsValue(warning_box.GetComponent<SpriteRenderer>()))
         {
             general_warning_box_sr.Add(warning_box, warning_box.GetComponent<SpriteRenderer>());
-
         }
         general_warning_box_sr[warning_box].color = color;
         return Managers.Pool.Pop(warning_box);
     }
-    public void Doscale_y__warning_box(Vector3 init_size, Vector3 box1_pos,Vector3 box2_pos, Color color, Color color2, float action_time)
+    /// <summary>
+    /// 0.5 단위로 피봇값 설정 양의 Y축이면 0.5로 설정
+    /// </summary>
+    /// <param name="init_size"></param>
+    /// <param name="box1_pos"></param>
+    /// <param name="box2_pos"></param>
+    /// <param name="pivot"></param> 
+    /// <param name="color"></param>
+    /// <param name="color2"></param>
+    /// <param name="action_time"></param>
+    public void Charging_doscale_y_warning_box(Vector3 init_size, Vector3 box1_pos,Vector3 box2_pos, Warning_box_pivots pivot, Color[] color, float action_time)
     {
         GameObject warning_box = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
         warning_box.transform.position = box1_pos;
@@ -191,18 +202,83 @@ public abstract class BossController : Stage_base_controller        //time	actio
         {
             general_warning_box_sr.Add(warning_box, warning_box.GetComponent<SpriteRenderer>());
         }
-        general_warning_box_sr[warning_box].color = color;
-
+        general_warning_box_sr[warning_box].color = color[0];
         GameObject warning_box2 = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box2"));
         warning_box2.transform.localScale = new Vector3(init_size.x, 0, init_size.z);
-        warning_box2.transform.GetChild(0).transform.localPosition = new Vector3(0, -0.5f, 0);
+        switch (pivot)
+        {
+            case Warning_box_pivots.UP:
+                warning_box2.transform.GetChild(0).transform.localPosition = new Vector3(0, -0.5f, 0);
+                break;
+            case Warning_box_pivots.DOWN:
+                warning_box2.transform.GetChild(0).transform.localPosition = new Vector3(0, 0.5f, 0);
+                break;
+        }
         warning_box2.transform.position = box2_pos;
         if (!general_warning_box_sr.ContainsValue(warning_box2.transform.GetChild(0).GetComponent<SpriteRenderer>()))
         {
             general_warning_box_sr.Add(warning_box2, warning_box2.transform.GetChild(0).GetComponent<SpriteRenderer>());
         }
-        general_warning_box_sr[warning_box2].color = color2;
+        general_warning_box_sr[warning_box2].color = color[1];
         warning_box2.transform.DOScaleY(init_size.y, action_time).OnComplete(() =>
+        {
+            Managers.Pool.Push(warning_box2);
+            Managers.Pool.Push(warning_box);
+        });
+    }
+    public void Charging_doscale_x_warning_box(Vector3 init_size, Vector3 box1_pos, Vector3 box2_pos, Warning_box_pivots pivot, Color[] color, float action_time)
+    {
+        GameObject warning_box = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
+        warning_box.transform.position = box1_pos;
+        warning_box.transform.localScale = init_size;
+        if (!general_warning_box_sr.ContainsValue(warning_box.GetComponent<SpriteRenderer>()))
+        {
+            general_warning_box_sr.Add(warning_box, warning_box.GetComponent<SpriteRenderer>());
+        }
+        general_warning_box_sr[warning_box].color = color[0];
+        GameObject warning_box2 = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box2"));
+        warning_box2.transform.localScale = new Vector3(0, init_size.y, init_size.z);
+        switch (pivot)
+        {
+            case Warning_box_pivots.LEFT:
+                warning_box2.transform.GetChild(0).transform.localPosition = new Vector3(-0.5f, 0,  0);
+                break;
+            case Warning_box_pivots.RIGHT:
+                warning_box2.transform.GetChild(0).transform.localPosition = new Vector3(0.5f, 0,  0);
+                break;
+        }
+        warning_box2.transform.position = box2_pos;
+        if (!general_warning_box_sr.ContainsValue(warning_box2.transform.GetChild(0).GetComponent<SpriteRenderer>()))
+        {
+            general_warning_box_sr.Add(warning_box2, warning_box2.transform.GetChild(0).GetComponent<SpriteRenderer>());
+        }
+        general_warning_box_sr[warning_box2].color = color[1];
+        warning_box2.transform.DOScaleX(init_size.y, action_time).OnComplete(() =>
+        {
+            Managers.Pool.Push(warning_box2);
+            Managers.Pool.Push(warning_box);
+        });
+    }
+    public void Charging_doscale_center_warning_box(Vector3 init_size, Vector3 box1_pos, Vector3 box2_pos, Color[] color, float action_time)
+    {
+        GameObject warning_box = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
+        warning_box.transform.position = box1_pos;
+        warning_box.transform.localScale = init_size;
+        if (!general_warning_box_sr.ContainsValue(warning_box.GetComponent<SpriteRenderer>()))
+        {
+            general_warning_box_sr.Add(warning_box, warning_box.GetComponent<SpriteRenderer>());
+        }
+        general_warning_box_sr[warning_box].color = color[0];
+        GameObject warning_box2 = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box2"));
+        warning_box2.transform.localScale = new Vector3(0, 0, init_size.z);
+        warning_box2.transform.GetChild(0).transform.localPosition = new Vector3(0, 0, 0);
+        warning_box2.transform.position = box2_pos;
+        if (!general_warning_box_sr.ContainsValue(warning_box2.transform.GetChild(0).GetComponent<SpriteRenderer>()))
+        {
+            general_warning_box_sr.Add(warning_box2, warning_box2.transform.GetChild(0).GetComponent<SpriteRenderer>());
+        }
+        general_warning_box_sr[warning_box2].color = color[1];
+        warning_box2.transform.DOScale(init_size, action_time).OnComplete(() =>
         {
             Managers.Pool.Push(warning_box2);
             Managers.Pool.Push(warning_box);
@@ -214,30 +290,31 @@ public abstract class BossController : Stage_base_controller        //time	actio
         Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Main_screen", 1);
     }
     public abstract void Pattern_processing();
-    public void Anim_end_push(string anim_name, AnimatorClipInfo[] clip_info)
+    public void Anim_end_push()
     {
-        if(clip_info.Length != 0)
+        if (anim_ongoing_obj.Count != 0)
         {
-            if (anim_name == clip_info[0].clip.name)
+            foreach (var item in anim_ongoing_obj)
             {
-                if (anim_ongoing_obj.Count != 0)
+                if (item.Value.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
                 {
-                    foreach (var item in anim_ongoing_obj)
-                    {
-                        if (item.Value.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
-                        {
-                            Managers.Pool.Push(item.Value.gameObject);
-                            anim_end_push_objs.Add(item.Key);
-                        }
-                    }
-                    foreach (var item in anim_end_push_objs)
-                    {
-                        anim_ongoing_obj.Remove(item);
-                    }
-                    anim_end_push_objs.Clear();
+                    Debug.Log(item.Value.GetCurrentAnimatorStateInfo(0).normalizedTime);
+                    Managers.Pool.Push(item.Value.gameObject);
+                    anim_end_push_objs.Add(item.Key);
                 }
             }
+            foreach (var item in anim_end_push_objs)
+            {
+                anim_ongoing_obj.Remove(item);
+            }
+            anim_end_push_objs.Clear();
         }
-        
+    }
+    public enum Warning_box_pivots
+    {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT,
     }
 }

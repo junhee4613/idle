@@ -488,6 +488,9 @@ MonoBehaviour:
   an: {fileID: 328899423}
   simple_pattern_num: 4
   hard_pattern_num: 4
+  color:
+  - {r: 0.39215687, g: 0.039215688, b: 0.11764706, a: 1}
+  - {r: 0.69803923, g: 0.078431375, b: 0.18823531, a: 1}
   gun_shoot:
     pattern_count: 0
     pattern_ending: 0
