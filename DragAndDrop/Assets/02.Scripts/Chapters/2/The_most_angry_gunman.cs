@@ -362,7 +362,6 @@ public class The_most_angry_gunman : BossController
         }
         if(anim_ongoing_obj.ContainsKey(dynamite.throw_dynamite))
         {
-            if()
             Anim_end_push("dynamite_boom", anim_ongoing_obj[dynamite.throw_dynamite].GetCurrentAnimatorClipInfo(0));
         }
     }
