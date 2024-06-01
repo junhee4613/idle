@@ -447,14 +447,18 @@ public class The_most_angry_gunman : BossController
         switch (powder_keg.pattern_data[powder_keg.pattern_count].action_num)
         {
             case 0:     //화약통 생성 후 조건 충족 시 폭발
-                powder_keg.num = Random.Range(0, powder_keg.deployable_pos.Count - 1);
-                GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Powder_keg"));
-                temp.transform.localScale = Vector3.zero;
-                temp.transform.position = powder_keg.deployable_pos[powder_keg.num];
-                temp.transform.DOScale(Vector3.one, 0.35f);
-                powder_keg.deployable_pos.RemoveAt(powder_keg.num);
-                powder_keg.objs.Add(temp.transform);
-                if (powder_keg.objs.Count != 0)
+                for (int i = 0; i < 2; i++)
+                {
+                    powder_keg.num = Random.Range(0, powder_keg.deployable_pos.Count - 1);
+                    GameObject temp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Powder_keg"));
+                    temp.transform.localScale = Vector3.zero;
+                    temp.transform.position = powder_keg.deployable_pos[powder_keg.num];
+                    temp.transform.DOScale(Vector3.one, 0.35f);
+                    powder_keg.deployable_pos.RemoveAt(powder_keg.num);
+                    powder_keg.objs.Add(temp.transform);
+                    Placed_obj(temp.transform.position, temp.transform);
+                }
+                /*if (powder_keg.objs.Count != 0)
                 {
                     foreach (var item in powder_keg.objs)
                     {
@@ -462,15 +466,13 @@ public class The_most_angry_gunman : BossController
                         {
                             if (item.position.x == temp.transform.position.x && !powder_keg.boom.Contains(item))
                             {
-                                Warning_box_fade(new Vector3(5f, 7.5f, 0), new Vector3(item.position.x, 0, 0), true, 3, 0.23f,() => Powder_keg_pattern_boom(item, temp, true));
                             }
                             else if (item.position.y == temp.transform.position.y && !powder_keg.boom.Contains(item))
                             {
-                                Warning_box_fade(new Vector3(15f, 2.5f, 0), new Vector3(0, item.position.y, 0), true, 3, 0.23f,() => Powder_keg_pattern_boom(item, temp, false));
                             }
                         }
                     }
-                }
+                }*/
                 break;
             case 1:     //화약통 다 사라짐 0.4초 dotween 그리고 박스 작아짐: 0, -1.5, 0의 위치와 1의 스케일
                 foreach (var item in powder_keg.objs)
@@ -499,27 +501,69 @@ public class The_most_angry_gunman : BossController
         }
         Anim_state_machin2(anim_state["stage2_dead"], false);
     }
-    public void Powder_keg_pattern_boom(Transform item, GameObject temp, bool criteria_pos_x)
+    public void Placed_obj(Vector3 pos, Transform obj)
+    {
+        if (powder_keg.boom.ContainsKey(pos.x + "x"))
+        {
+            powder_keg.boom[pos.x + "x"].Add(obj);
+            if (powder_keg.boom[pos.x + "x"].Count == 3)
+            {
+                Warning_box_fade(new Vector3(5f, 7.5f, 0), new Vector3(pos.x, 0, 0), true, 3, 0.23f, () => Powder_keg_pattern_boom(pos.x + "x", powder_keg.boom));
+            }
+        }
+        else
+        {
+            powder_keg.boom.Add(pos.x + "x", new List<Transform>());
+            powder_keg.boom[pos.x + "x"].Add(obj);
+
+        }
+
+        if (powder_keg.boom.ContainsKey(pos.y + "y"))
+        {
+            powder_keg.boom[pos.y + "y"].Add(obj);
+            if (powder_keg.boom[pos.y + "y"].Count == 3)
+            {
+                Warning_box_fade(new Vector3(15f, 2.5f, 0), new Vector3(0, pos.y, 0), true, 3, 0.23f, () => Powder_keg_pattern_boom(pos.y + "y", powder_keg.boom));
+            }
+        }
+        else
+        {
+            powder_keg.boom.Add(pos.y + "y", new List<Transform>());
+            powder_keg.boom[pos.y + "y"].Add(obj);
+        }
+    }
+    public void Powder_keg_pattern_boom(string pos, Dictionary<string, List<Transform>> temp)
     {
         Managers.Main_camera.Shake_move();
-        powder_keg.boom.Add(item);
-        powder_keg.boom.Add(temp.transform);
-        foreach (var item2 in powder_keg.boom)
+        foreach (var item2 in temp[pos])
         {
-            Managers.Pool.Push(item2.gameObject);
             GameObject boom = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Powder_keg_boom"));
-            boom.transform.position = item2.position;
             if (!anim_ongoing_obj.ContainsKey(boom.gameObject))
             {
                 anim_ongoing_obj.Add(boom, boom.GetComponent<Animator>());
             }
+            boom.transform.position = item2.position;
+            Managers.Pool.Push(item2.gameObject);
             powder_keg.deployable_pos.Add(item2.position);
             powder_keg.objs.Remove(item2);
+            
         }
-        //여기에 터지는 애니메이션 추가
-        powder_keg.boom.Clear();
+        Managers.Sound.bgSound.Pause();
+        foreach (var item in temp)
+        {
+            for (int i = 0; i < temp[pos].Count; i++)
+            {
+                if(item.Key != pos)
+                {
+                    item.Value.Remove(temp[pos][i]);
+                }
+            }
+        }
+        temp[pos].Clear();
+        Managers.Sound.bgSound.UnPause();
+
     }
-    
+
     [Serializable]
     public class Gun_shoot : Pattern_base_data
     {
@@ -566,7 +610,7 @@ public class The_most_angry_gunman : BossController
     {
         public List<Vector3> deployable_pos = new List<Vector3>();      //배치 가능한 위치
         public HashSet<Transform> objs = new HashSet<Transform>();            //배치된 오브젝트들
-        public HashSet<Transform> boom = new HashSet<Transform>();          //터진 오브젝트들
+        public Dictionary<string, List<Transform>> boom = new Dictionary<string, List<Transform>>();          //터질 오브젝트들
         public int num;                     //List(deployable_pos)에 있는 값들중 랜덤으로 고르기 위한 변수
     }
 }

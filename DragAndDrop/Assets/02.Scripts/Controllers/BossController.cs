@@ -298,7 +298,6 @@ public abstract class BossController : Stage_base_controller        //time	actio
             {
                 if (item.Value.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
                 {
-                    Debug.Log(item.Value.GetCurrentAnimatorStateInfo(0).normalizedTime);
                     Managers.Pool.Push(item.Value.gameObject);
                     anim_end_push_objs.Add(item.Key);
                 }
