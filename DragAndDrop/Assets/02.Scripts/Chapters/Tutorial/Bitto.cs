@@ -30,6 +30,7 @@ public class Bitto : BossController
         hammer.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Tutorial_hammer_data").text);
         ping_pong.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Tutorial_bitto_ping_pong_data").text);
         bitto_trnasform.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Tutorial_bitto_transform_data").text);
+        obstacle.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Tutorial_bitto_obstacle_data").text);
         Cursor.visible = false;
         Managers.GameManager.game_start = true;
     }
@@ -80,6 +81,7 @@ public class Bitto : BossController
             Pattern_function(ref hammer.pattern_data, ref hammer.pattern_ending, ref hammer.duration,ref hammer.pattern_count, Hammer_pattern);
             Pattern_function(ref bitto_trnasform.pattern_data, ref bitto_trnasform.pattern_ending, ref bitto_trnasform.duration,ref bitto_trnasform.pattern_count, Bitto_transform_pattern);
             Pattern_function(ref ping_pong.pattern_data, ref ping_pong.pattern_ending, ref ping_pong.duration,ref ping_pong.pattern_count, Bitto_ping_pong_pattern);
+            Pattern_function(ref obstacle.pattern_data, ref obstacle.pattern_ending, ref obstacle.duration,ref obstacle.pattern_count, Obstacle_pattern);
         }
         else if (!Managers.UI_jun.fade_start)
         {
@@ -245,19 +247,19 @@ public class Bitto : BossController
     {
         switch (obstacle.pattern_data[obstacle.pattern_count].action_num)
         {
-            case 0:     //눈과 입이 또 사라짐
-                Anim_state_machin2(bitto_box_anim_state["blank_face"], false);
+            case 0:     //새로로 있는 장애물
                 break;
-            case 1:     //장애물 1개씩 나옴
+            case 1:     //가로로 있는 장애물
                 break;
-            case 2:     //4개씩 나옴 랜덤한 위치로
+            case 2:     //화면이 떨리고
                 break;
-            case 3:     //화면이 떨리고
+            case 3:     //비토 얼굴이 등장
                 break;
-            case 4:     //화면이 전환
+            case 4:     //비토랑 플레이어 박스가 점점 투명해짐
                 break;
             case 5:     //비토 등장
                 break;
+
         }
     }
     [Serializable]

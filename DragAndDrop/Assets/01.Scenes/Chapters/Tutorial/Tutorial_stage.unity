@@ -505,7 +505,6 @@ MonoBehaviour:
     - {fileID: 932726252}
     ping_pong_obj: {fileID: 882468313}
     start: 0
-    turn: 1
     ball_cc: {fileID: 1104936750}
     bounce: 0
   obstacle:
