@@ -55,7 +55,7 @@ public class PlayerController : playerData
     {
         if (!Managers.GameManager.option_window_on && Managers.GameManager.operate)
         {
-            //Interaction_obj();
+            Interaction_obj();
             Key_operate();
         }
     }
@@ -125,18 +125,19 @@ public class PlayerController : playerData
     public void Drag()
     {
         drag_dis = new Vector3(mouse_click_pos.x - mouse_current_pos.x, mouse_click_pos.y - mouse_current_pos.y, 0) * drag_dis_magnification;
-        if (drag_dis != Vector2.zero)
+        if (drag_dis.sqrMagnitude > Vector2.one.sqrMagnitude * 0.5f)
         {
             player_rotation_z = Mathf.Atan2(drag_dis.normalized.y, drag_dis.normalized.x) * Mathf.Rad2Deg;
+            shoot_power_range = Mathf.Clamp(drag_dis.magnitude, Mathf.Abs(slow_speed), Mathf.Abs(shoot_speed));
         }
         else
         {
             drag_min_shoot_dir = new Vector2(mouse_click_pos.x - transform.position.x, mouse_click_pos.y - transform.position.y).normalized;
             player_rotation_z = Mathf.Atan2(drag_min_shoot_dir.y, drag_min_shoot_dir.x) * Mathf.Rad2Deg;
+            shoot_power_range = 3;
         }
         transform.rotation = Quaternion.Euler(0, 0, player_rotation_z - 90);
         animator.SetBool("Drag", true);
-        //character.transform.localScale = new Vector3(character.transform.localScale.x, Mathf.Clamp(player_size + (drag_dis.magnitude / player_size_magnification), player_size, player_size + (shoot_speed / player_size_magnification)));
         if (Input.GetMouseButtonUp(0))
         {
             animator.SetTrigger("Shoot");
@@ -146,7 +147,6 @@ public class PlayerController : playerData
                 break_num = 1;
             }
             shoot_dir_image.SetActive(false);
-            shoot_power_range = Mathf.Clamp(drag_dis.magnitude, Mathf.Abs(slow_speed), Mathf.Abs(shoot_speed));
             animator.speed = 5f / shoot_power_range;
             transform.rotation = arrow_rotation_base.rotation;
             rb.velocity = Vector2.zero;
@@ -198,7 +198,7 @@ public class PlayerController : playerData
     {
         if (!hit_statu)
         {
-            interation_obj = Physics2D.OverlapCircleAll(Managers.GameManager.Player_character.transform.position, cc.radius, 1 << 8);
+            interation_obj = Physics2D.OverlapCircleAll(Managers.GameManager.Player_character.transform.position, cc.radius, 1 << 14);
             foreach (var item in interation_obj)
             {
                 if (item.TryGetComponent<IInteraction_obj>(out IInteraction_obj interaction_obj))

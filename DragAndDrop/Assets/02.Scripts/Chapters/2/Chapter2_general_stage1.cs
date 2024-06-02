@@ -35,10 +35,6 @@ public class Chapter2_general_stage1 : BossController
         Pattern_function(ref cactus_thorn.pattern_data, ref cactus_thorn.pattern_ending, ref cactus_thorn.duration, ref cactus_thorn.pattern_count, Cactus_thorn_pattern);
     }
 
-    protected override void FixedUpdate()
-    {
-        base.FixedUpdate();
-    }
     void Cactus_climb_up_pattern()
     {
         switch (cactus_climb_up.pattern_data[cactus_climb_up.pattern_count].action_num)

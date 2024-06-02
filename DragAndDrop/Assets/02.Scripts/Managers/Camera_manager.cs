@@ -18,9 +18,19 @@ public class Camera_manager
             return main_camera; 
         }
     }
-    public void Shake_move()
+    public void Shake_move(float duration = 0.3f, float strength = 0.3f, int vibrato = 100, float randomness = 90, bool snapping = false, bool fade_out = true)
     {
-        Main_camera.transform.DOShakePosition(0.3f, 0.3f, 100, 90, false, true);
+        if(snapping == false)
+        {
+            Main_camera.transform.DOShakePosition(duration, strength, vibrato, randomness, snapping, fade_out).OnComplete(() =>
+            {
+                Main_camera.transform.DOMove(new Vector3(0, 0, Main_camera.transform.position.z), 1f / vibrato);
+            });
+        }
+        else
+        {
+            Main_camera.transform.DOShakePosition(duration, strength, vibrato, randomness, snapping, fade_out);
+        }
     }
     public void Move_y(float move_pos,float move_pos_time, float go_back_pos, float go_back_pos_time)
     {
