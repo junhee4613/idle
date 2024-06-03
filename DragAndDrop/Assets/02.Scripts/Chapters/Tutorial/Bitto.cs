@@ -4,6 +4,8 @@ using UnityEngine;
 using Newtonsoft.Json;
 using System;
 using DG.Tweening;
+using Random = UnityEngine.Random;
+using static Bitto;
 
 public class Bitto : BossController
 {
@@ -17,7 +19,7 @@ public class Bitto : BossController
     public GameObject bitto_obj;
     public Bitto_box bitto_box;
     string[] anims = new string[] { "idle", "left_hammer", "right_hammer", "face_trans", "angry_right_hammer", "angry_left_hammer", "angry_bitto_idle" };
-    string[] bitto_box_anims = new string[] { "face_angry_trans", "face_nomal_trans", "face_on", "trans_ping_pong", "blank_face", "ping_pong_change_normal" };
+    string[] bitto_box_anims = new string[] { "face_angry_trans", "face_nomal_trans", "face_on", "trans_ping_pong", "blank_face", "ping_pong_change_normal", "blank_box_face_on" };
     public GameObject player_box;       //FIX : 여기 나중에 풀링으로 수정
     protected Dictionary<string, Anim_stage_state> bitto_box_anim_state = new Dictionary<string, Anim_stage_state>();
 
@@ -122,10 +124,14 @@ public class Bitto : BossController
         switch (hammer.pattern_data[hammer.pattern_count].action_num)
         {
             case 0:     //처음 플레이어 박스 및 해머 생성
-                Managers.GameManager.Player.transform.position = new Vector3(0, -2, 0);
-                ParticleSystem warp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warp")).GetComponent<ParticleSystem>();
-                warp.transform.position = Managers.GameManager.Player_character.position;
-                warp.Play();
+                Managers.GameManager.Player.transform.DOScale(Vector3.zero, 0.3f).OnComplete(() =>
+                {
+                    Managers.GameManager.Player.transform.localScale = Vector3.one;
+                    Managers.GameManager.Player.transform.position = new Vector3(0, -2, 0);
+                    ParticleSystem warp = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warp")).GetComponent<ParticleSystem>();
+                    warp.transform.position = Managers.GameManager.Player_character.position;
+                    warp.Play();
+                });
                 for (int i = 0; i < 2; i++)
                 {
                     hammer.hammer_action[i] = Managers.Pool.Pop(hammer.hammer_obj).transform;
@@ -248,16 +254,34 @@ public class Bitto : BossController
         switch (obstacle.pattern_data[obstacle.pattern_count].action_num)
         {
             case 0:     //새로로 있는 장애물
+                GameObject vertical_pillar = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Vertical_pillar"));
+                vertical_pillar.transform.position = new Vector3(10, obstacle.spawn_pos_y[obstacle.num]);
+                vertical_pillar.transform.DOMoveX(-10, 2.5f).SetEase(Ease.Linear).OnComplete(() => Managers.Pool.Push(vertical_pillar));
+                obstacle.num = obstacle.num == 1 ? 0 : 1;
                 break;
-            case 1:     //가로로 있는 장애물
+            case 1:     //가로로 있는 장애물 X축 12에서 시작
+                GameObject horizontal_pillar = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Horizontal_pillar"));
+                int num = Random.Range(0, obstacle.horizontal_pillar.Count - 1);
+                horizontal_pillar.transform.position = new Vector3(12, obstacle.spawn_pos_y[num]);
+                obstacle.horizontal_pillar.RemoveAt(num);
+                horizontal_pillar.transform.DOMoveX(-12, 2.5f).SetEase(Ease.Linear).OnComplete(() => 
+                {
+                    obstacle.horizontal_pillar.Add(horizontal_pillar.transform.position.y);
+                    Managers.Pool.Push(horizontal_pillar);
+                });
                 break;
             case 2:     //화면이 떨리고
+                Managers.Main_camera.Shake_move();
                 break;
             case 3:     //비토 얼굴이 등장
+                Anim_state_machin2(anim_state["blank_box_face_on"], false);
                 break;
             case 4:     //비토랑 플레이어 박스가 점점 투명해짐
+                bitto_box.obj.GetComponent<SpriteRenderer>().DOFade(0, 2).OnComplete(() => bitto_box.obj.SetActive(false));
+                player_box.GetComponent<SpriteRenderer>().DOFade(0, 2).OnComplete(() => player_box.SetActive(false));
                 break;
             case 5:     //비토 등장
+                bitto_obj.SetActive(true);
                 break;
 
         }
@@ -303,7 +327,9 @@ public class Bitto : BossController
     [Serializable]
     public class Obstacle : Pattern_base_data
     {
-
+        internal int num = 1;
+        internal float[] spawn_pos_y = new float[2] {3, -4};
+        internal List<float> horizontal_pillar = new List<float>() {2, 0.75f, -0.5f, -1.75f, -3};
     }
     [Serializable]
     public class Bitto_box 
