@@ -35,6 +35,23 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 74dfdfef5f32616458e70062f2321613
+    m_Address: Boss_appearence_ball
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8d1d6d21959c2ed4083ff5aa78bd706a
+    m_Address: Boss_warp
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c8afc26e7a5bdc440a658bfec9b5f164
+    m_Address: Hammer_particle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: ca7e6c5fcf72e2642944e03c7574a351, type: 2}
   m_SchemaSet:

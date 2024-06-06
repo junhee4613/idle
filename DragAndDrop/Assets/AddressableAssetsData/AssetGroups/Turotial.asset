@@ -47,7 +47,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4d7418f9b7e3ae14cb4467ea6fc08625
+  - m_GUID: 8b94c62a411606d4f8039082c3f4e204
     m_Address: Tutorial_bitto_obstacle_data
     m_ReadOnly: 0
     m_SerializedLabels:
@@ -65,8 +65,20 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5d68ee5d6178c3147a90ed98a63584da
+  - m_GUID: 19ff2c1fa542b514f8eacec8f1fde29f
     m_Address: Operation_tutorial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: caafeb2ff1fb725429997e684c600b42
+    m_Address: Tutorial_operation_data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8d2957cd0b77fb84fa6fa9310fa918bc
+    m_Address: Hit_box
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad

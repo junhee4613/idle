@@ -10,6 +10,7 @@ using static Bitto;
 public class Bitto : BossController
 {
     public Tutorial tutorial;
+    public Operation operation;
     public Hammer hammer;
     public Bitto_trnasform bitto_trnasform;
     public Ping_pong ping_pong;
@@ -18,22 +19,27 @@ public class Bitto : BossController
     Collider2D[] censer;
     public GameObject bitto_obj;
     public Bitto_box bitto_box;
-    string[] anims = new string[] { "idle", "left_hammer", "right_hammer", "face_trans", "angry_right_hammer", "angry_left_hammer", "angry_bitto_idle" };
-    string[] bitto_box_anims = new string[] { "face_angry_trans", "face_nomal_trans", "face_on", "trans_ping_pong", "blank_face", "ping_pong_change_normal", "blank_box_face_on"};
+    string[] anims = new string[] { "idle", "left_hammer", "right_hammer", "face_trans", "angry_right_hammer", "angry_left_hammer", "angry_bitto_idle", "both_hit_box", "angry_both_hammer"};
+    string[] bitto_box_anims = new string[] { "face_angry_trans", "face_nomal_trans", "face_on1", "face_on2", "trans_ping_pong", "blank_face", "ping_pong_change_normal", "blank_box_face_on"};
     public GameObject player_box;       //FIX : 여기 나중에 풀링으로 수정
     protected Dictionary<string, Anim_stage_state> bitto_box_anim_state = new Dictionary<string, Anim_stage_state>();
     bool base_tutorial_end = false;
     bool tutorial_bgm_start = false;
+    bool rurotial_operation_bgm_start = false;
+    AudioClip tutorial_clip;
     // Start is called before the first frame update
     protected override void Awake()
     {
         anim_state.Anim_processing2(ref an, anims);
         bitto_box_anim_state.Anim_processing2(ref bitto_box.an, bitto_box_anims);
+        operation.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Tutorial_operation_data").text);
         hammer.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Tutorial_hammer_data").text);
         ping_pong.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Tutorial_bitto_ping_pong_data").text);
         bitto_trnasform.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Tutorial_bitto_transform_data").text);
         obstacle.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Tutorial_bitto_obstacle_data").text);
         Cursor.visible = false;
+        tutorial_clip = Managers.Resource.Load<AudioClip>("Operation_tutorial");
+        Managers.GameManager.tutorial = true;
         Managers.GameManager.game_start = true;
     }
     void Start()
@@ -80,7 +86,6 @@ public class Bitto : BossController
     {
         if (!tutorial.player_move)
         {
-
             if (!Managers.UI_jun.fade_start)
             {
                 if (tutorial.tutorial_start == false)
@@ -100,14 +105,32 @@ public class Bitto : BossController
         }
         else if (!base_tutorial_end)
         {
-            Tutorial_pattern();
+            if (!rurotial_operation_bgm_start)
+            {
+                rurotial_operation_bgm_start = true;
+                Managers.Sound.BGMSound(tutorial_clip, true);
+            }
+            else if (Managers.GameManager.tutorial_hit && !operation.pattern_ending)         //튜토리얼 진행 중 한대라도 맞으면 다시 노래 시작
+            {
+                
+                bitto_obj.transform.DOMoveX(0, 0.1f).SetDelay(0.25f).OnComplete(() => 
+                {
+                    Managers.GameManager.tutorial_hit = false;
+                    operation.pattern_count = 0;
+                    Managers.Sound.BGMSound(tutorial_clip, true);
+                });
+            }
+            else
+            {
+                Pattern_function(ref operation.pattern_data, ref operation.pattern_ending, ref operation.duration, ref operation.pattern_count, Operation_pattern);
+            }
         }
         else
         {
             if(!tutorial_bgm_start)
             {
                 tutorial_bgm_start = true;
-                Debug.Log(1);
+                Managers.GameManager.tutorial = false;
                 Managers.Sound.BGMSound(Managers.Resource.Load<AudioClip>("Tutorial_stage"), false);
             }
             Boss_pattern_start();
@@ -120,17 +143,79 @@ public class Bitto : BossController
         Pattern_function(ref ping_pong.pattern_data, ref ping_pong.pattern_ending, ref ping_pong.duration, ref ping_pong.pattern_count, Bitto_ping_pong_pattern);
         Pattern_function(ref obstacle.pattern_data, ref obstacle.pattern_ending, ref obstacle.duration, ref obstacle.pattern_count, Obstacle_pattern);
     }
-    public void Tutorial_pattern()
+    public void Operation_pattern()     //이 패턴이 끝날 때까지 안맞아야 성공
     {
-        base_tutorial_end = true;
+        switch (operation.pattern_data[operation.pattern_count].action_num)
+        {
+            case 0:
+                //왼쪽 오른쪽 번갈아가면서 패턴 나오기
+                bitto_obj.transform.DOMoveX(-2 * operation.num, 0.1f).SetDelay(0.25f).OnComplete(() =>
+                {
+                    switch (operation.num)
+                    {
+                        case 1:
+                            Anim_state_machin2(anim_state["right_hammer"], false);
+                            break;
+                        case -1:
+                            Anim_state_machin2(anim_state["left_hammer"], false);
+                            break;
+                    }
+                    GameObject hit_box = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Hit_box"));
+                    Hit_box_appearence(hit_box, 4.5f * operation.num);
+                    hit_box.transform.DOScaleY(2, 0.55f).SetEase(Ease.OutQuint).OnComplete(() =>
+                    {
+                        hit_box.transform.DOScaleY(12, 0.1f).OnComplete(() =>
+                        {
+                            Managers.Main_camera.Move_y(1f, 0.1f, 0, 0.1f);
+                            CoroutineManager.StartCoroutine(Hit_box_push(hit_box, 0.25f));
+                        });
+                    });
+                });
+                break;
+            case 1:
+                //가운데로 나와서 비토 맞고 고장나기
+                bitto_obj.transform.DOMoveX(0, 0.1f).SetDelay(0.25f).OnComplete(() => 
+                {
+                    Anim_state_machin2(anim_state["both_hit_box"], false);
+                    GameObject hit_box2 = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Hit_box"));
+                    Hit_box_appearence(hit_box2, 0);
+                    hit_box2.transform.DOScaleY(2, 0.55f).SetEase(Ease.OutQuint).OnComplete(() =>
+                    {
+                        hit_box2.transform.DOScaleY(12, 0.1f).OnComplete(() =>
+                        {
+                            Anim_state_machin2(anim_state["angry_bitto_idle"], false);
+                            Managers.Main_camera.Move_y(1f, 0.1f, 0, 0.1f);
+                            CoroutineManager.StartCoroutine(Hit_box_push(hit_box2, 0.25f));
+                            base_tutorial_end = true;
+                        });
+                    });
+                });
+                break;
+        }
+    }
+    public void Hit_box_appearence(GameObject obj, float pos_x)
+    {
+        obj.transform.localScale = new Vector3(9, 0, 0);
+        obj.transform.position = new Vector3(pos_x, 6, 0);
+        operation.num *= -1;
+
+    }
+    IEnumerator Hit_box_push(GameObject temp, float time)
+    {
+        yield return new WaitForSeconds(time);
+        Managers.Pool.Push(temp);
     }
     IEnumerator Bitto_appearence()
     {
         yield return new WaitForSeconds(tutorial.bitto_appearence_wait_time);
+        GameObject particle1 = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Boss_warp"));
+        GameObject particle2 = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Boss_appearence_ball"));
+        particle1.transform.position = bitto_obj.transform.position;
+        particle2.transform.position = bitto_obj.transform.position;
+        particle1.GetComponent<ParticleSystem>().Play();
+        particle2.GetComponent<ParticleSystem>().Play();
+        yield return new WaitForSeconds(1);
         bitto_obj.SetActive(true);
-        Debug.Log(1);
-        Managers.Sound.BGMSound(Managers.Resource.Load<AudioClip>("Operation_tutorial"), true);
-        //파티클 넣기
         yield return new WaitForSeconds(tutorial.mouse_cursor_appearence_wait_time);
         StartCoroutine(Mouse_cursor_appearence());
     }
@@ -163,6 +248,7 @@ public class Bitto : BossController
                 hammer.hammer_action[0].position = new Vector3(-12.5f, -2, 0);
                 hammer.hammer_action[1].position = new Vector3(12.5f, -2, 0);
                 player_box.SetActive(true);
+                Managers.Main_camera.Shake_move();
                 break;
             case 1:     //처음 경고장판 생성
                 Charging_doscale_y_warning_box(Vector3.one * 5, new Vector3(-2.5f * hammer.dir, -2, 0), new Vector3(-2.5f * hammer.dir, 0.5f, 0),Warning_box_pivots.UP, color, 1);
@@ -178,14 +264,21 @@ public class Bitto : BossController
                 break;
         }
     }
-    public void Hammer_swing(Transform[] hammer, float right_hammer_rot = 270, float left_hammer_rot = -90, float duration = 1, Action action = null)
+    public void Hammer_swing(Transform[] hammer, float right_hammer_rot = 270, float left_hammer_rot = -90, float duration = 1, Action anim_start = null, Action action = null)
     {
         switch (this.hammer.dir)
         {
             case 1:
-                Anim_state_machin2(anim_state["angry_left_hammer"], false);
+                if (anim_start == null)
+                {
+                    Anim_state_machin2(anim_state["angry_left_hammer"], false);
+                }
+                else
+                {
+                    anim_start();
+                }
                 hammer[0].rotation = Quaternion.Euler(new Vector3(0, 0, 90));
-                hammer[0].DORotate(new Vector3(0, 0, left_hammer_rot), duration).OnComplete(() =>
+                hammer[0].DORotate(new Vector3(0, 0, left_hammer_rot), duration).SetEase(Ease.InCubic).OnComplete(() =>
                 {
                     Managers.Main_camera.Move_y(-0.1f, 0.1f, 0, 0.1f);
                     if(action != null)
@@ -195,9 +288,16 @@ public class Bitto : BossController
                 });
                 break;
             case -1:
-                Anim_state_machin2(anim_state["angry_right_hammer"], false);
+                if (anim_start == null)
+                {
+                    Anim_state_machin2(anim_state["angry_right_hammer"], false);
+                }
+                else
+                {
+                    anim_start();
+                }
                 hammer[1].rotation = Quaternion.Euler(new Vector3(0, 0, 90));
-                hammer[1].DORotate(new Vector3(0, 0, right_hammer_rot), duration).OnComplete(() =>
+                hammer[1].DORotate(new Vector3(0, 0, right_hammer_rot), duration).SetEase(Ease.InCubic).OnComplete(() =>
                 {
                     Managers.Main_camera.Move_y(-0.1f, 0.1f, 0, 0.1f);
                     if (action != null)
@@ -215,8 +315,9 @@ public class Bitto : BossController
             case 0:     //비토가 망치에 맞고 사라짐 (회전값 줘서 1초 동안 주기)
                 hammer.hammer_action[1].position = new Vector3(10, 4);
                 hammer.hammer_action[1].rotation = Quaternion.Euler(new Vector3(0, 0, 90));
-                Hammer_swing(hammer.hammer_action,-180, 180, 0.5f, () => 
-                { 
+                Hammer_swing(hammer.hammer_action,-180, 180, 0.5f, () => Anim_state_machin2(anim_state["angry_both_hammer"], false), () => 
+                {
+                    Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Hammer_particle"));
                     bitto_obj.SetActive(false);
                     hammer.hammer_action[1].DORotate(new Vector3(0, 0, 90), 1).SetDelay(0.5f).OnComplete(() => 
                     {
@@ -234,7 +335,11 @@ public class Bitto : BossController
                 break;
             case 2:     //비토 얼굴 등장하면서
                 bitto_box.obj.SetActive(true);
-                Anim_state_machin2(bitto_box_anim_state["face_on"], false);
+                Anim_state_machin2(bitto_box_anim_state["face_on1"], false);
+                bitto_box.obj.GetComponent<SpriteRenderer>().DOFade(1, 4);
+                break;
+            case 3:
+                Anim_state_machin2(bitto_box_anim_state["face_on2"], false);
                 break;
         }
     }
@@ -302,7 +407,15 @@ public class Bitto : BossController
                 bitto_box.obj.GetComponent<SpriteRenderer>().DOFade(0, 2).OnComplete(() => bitto_box.obj.SetActive(false));
                 player_box.transform.GetChild(0).GetComponent<SpriteRenderer>().DOFade(0, 2).OnComplete(() => player_box.SetActive(false));
                 break;
-            case 5:     //비토 등장
+            case 5:
+                GameObject particle1 = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Boss_warp"));
+                GameObject particle2 = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Boss_appearence_ball"));
+                particle1.transform.position = bitto_obj.transform.position;
+                particle2.transform.position = bitto_obj.transform.position;
+                particle1.GetComponent<ParticleSystem>().Play();
+                particle2.GetComponent<ParticleSystem>().Play();
+                break;
+            case 6:     //비토 등장
                 bitto_obj.SetActive(true);
                 Anim_state_machin2(anim_state["idle"], false);
                 break;
@@ -322,9 +435,9 @@ public class Bitto : BossController
 
     }
     [Serializable]
-    public class practical_pattern : Pattern_base_data 
+    public class Operation : Pattern_base_data 
     {
-        
+        internal sbyte num = 1;
     }
     [Serializable]
     public class Hammer : Pattern_base_data

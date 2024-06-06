@@ -177,7 +177,14 @@ public class PlayerController : playerData
             hit_statu = true;
             if (!Managers.invincibility)
             {
-                player_life -= 1;
+                if (!Managers.GameManager.tutorial)
+                {
+                    player_life -= 1;
+                }
+                else if(!Managers.GameManager.tutorial_hit)
+                {
+                    Managers.GameManager.tutorial_hit = true;
+                }
                 //Managers.UI_jun.player_hp[player_life].SetActive(false);
             }
 

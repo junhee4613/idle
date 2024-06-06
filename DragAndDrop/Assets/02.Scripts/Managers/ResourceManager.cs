@@ -28,7 +28,6 @@ public class ResourceManager
         }
         return null;
     }
-
     public GameObject Instantiate(string key, Transform parent = null, bool pooling = false)        //이걸로 오브젝트를 소환하면 됨 
     {
         GameObject prefab = Load<GameObject>($"{key}");
@@ -81,7 +80,6 @@ public class ResourceManager
         OpHandle.Completed += (op) =>
         {
             int loadCount = 0;
-
             int totalCount = op.Result.Count;
 
             foreach (var result in op.Result)
@@ -99,7 +97,6 @@ public class ResourceManager
                     LoadAsync<T>(result.PrimaryKey, (obj) =>
                     {
                         loadCount++;
-                        //result.PrimaryKey <- 이건 오브젝트 이름임           
                         callback?.Invoke(result.PrimaryKey, loadCount, totalCount);
                     });
                 }

@@ -61,24 +61,29 @@ public class GameManager
     public bool game_start = false;
     public sbyte pattern_num;
     public bool game_stop = false;
+    public bool tutorial = false;
+    public bool tutorial_hit = false;
     public void Init()
     {
     }
     // Start is called before the first frame update
     public void Next_sceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        AudioClip temp = Managers.Resource.Load<AudioClip>(scene.name);
         scene_name = scene.name;
-        if (temp != null)
+        if (!string.IsNullOrEmpty(scene_name))
         {
             if(scene.name == "Main_screen")
             {
-                Managers.Sound.BGMSound(temp, true);
+                Managers.Sound.BGMSound(Managers.Resource.Load<AudioClip>(scene.name), true);
+                 
             }
             else if(scene.name != "Tutorial_stage")
             {
-                Managers.Sound.BGMSound(temp, false);
-
+                Managers.Sound.BGMSound(Managers.Resource.Load<AudioClip>(scene.name), false);
+            }
+            else
+            {
+                Managers.Sound.bgSound.Stop();
             }
         }
         Managers.Pool.Clear();
