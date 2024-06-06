@@ -50,7 +50,8 @@ MonoBehaviour:
   - m_GUID: c8afc26e7a5bdc440a658bfec9b5f164
     m_Address: Hammer_particle
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: ca7e6c5fcf72e2642944e03c7574a351, type: 2}

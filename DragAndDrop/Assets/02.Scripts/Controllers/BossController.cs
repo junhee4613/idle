@@ -20,10 +20,14 @@ public abstract class BossController : Stage_base_controller        //time	actio
         {
             Anim_end_push();
             Pattern_processing();
-            if (Managers.Sound.bgSound .loop == false && Managers.Sound.bgSound.time >= Managers.Sound.bgSound.clip.length - 0.2f)
+            if(Managers.Sound.bgSound.clip != null && Managers.Sound.bgSound)
             {
-                Game_clear();
+                if (Managers.Sound.bgSound.loop == false && Managers.Sound.bgSound.time >= Managers.Sound.bgSound.clip.length - 0.2f)
+                {
+                    Game_clear();
+                }
             }
+            
         }
     }
     protected virtual void FixedUpdate()
@@ -287,6 +291,13 @@ public abstract class BossController : Stage_base_controller        //time	actio
     public void Game_clear()
     {
         Managers.GameManager.game_start = false;
+        if (!string.IsNullOrEmpty(Managers.GameManager.scene_name) && !Managers.GameManager.stage_clear[Managers.GameManager.scene_name])          //전에 있던 스테이지가 어떤 스테이지인지 알기 위해 scene_name이 변수에 할당 하기 전에 먼저 실행
+        {
+            if (Managers.GameManager.stage_clear.TryGetValue(Managers.GameManager.scene_name, out bool is_clear))
+            {
+                Managers.GameManager.stage_clear[Managers.GameManager.scene_name] = !is_clear;
+            }
+        }
         Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Main_screen", 1);
     }
     public abstract void Pattern_processing();

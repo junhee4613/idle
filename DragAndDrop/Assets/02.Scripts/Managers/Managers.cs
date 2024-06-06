@@ -18,13 +18,9 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
             if (count == totalCount)
             {
                 UI_jun.Init();
-                GameManager.Init();
                 Sound.mixer = Resource.Load<AudioMixer>("Sound_option.mixer");
                 SceneManager.sceneLoaded += GameManager.Next_sceneLoaded;
-                //SceneManager.sceneLoaded += Sound.OnSceneLoaded;
-                //SceneManager.sceneLoaded += UI_jun.UI_on_scene_loaded;
                 Sound.bgSound = gameObject.GetOrAddComponent<AudioSource>();
-                GameManager.scene_name = SceneManager.GetActiveScene().name;
                 GameManager.gameover += Sound.Game_over_sound;
                 GameManager.gameover += UI_jun.Game_over_ui;
                 if(invincibility)
@@ -34,7 +30,7 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
                 GameManager.load_end = true;
             }
         });
-        Grid._grid = gameObject.GetOrAddComponent<Grid>();
+        //Grid._grid = gameObject.GetOrAddComponent<Grid>(); //ÀÌ°Å ¾ÆÁ÷ »ç¿ë ¾ÈÇÏ´ÂÁß
     }
     private void Start()
     {
@@ -61,7 +57,7 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
             if (!GameManager.splash && Input.GetKeyDown(KeyCode.Tab))
             {
                 GameManager.splash = true;
-                UI_jun.Fade_out_next_in("Black", 0, 1f, "Main_screen", 1f);
+                UI_jun.Fade_out_next_in("Black", 0, 1f, "Tutorial_stage", 1f);
             }
             if (Input.GetKeyDown(KeyCode.Escape) && GameManager.splash && !UI_jun.fade_start)       //FIX : ³ªÁß¿¡ ¿©±â ¼öÁ¤ÇØ¾ßµÊ
             {

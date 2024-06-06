@@ -27,9 +27,8 @@ public class GameManager
     public bool load_end = false;
     public bool operate = false;
     public bool option_window_on = false;
-    public Dictionary<string, bool> stage_clear = new Dictionary<string, bool>() 
-    { {"Chapter1_boss_stage", false}, { "Chapter2_boss_stage", false }, { "Chapter2_general_stage1", false }, { "Tutorial_stage", false } };
-
+    public Dictionary<string, bool> stage_clear = new Dictionary<string, bool>()
+    { { "Tutorial_stage", false },  {"Chapter1_boss_stage", false}, { "Chapter2_boss_stage", false }, { "Chapter2_general_stage1", false }};
     public PlayerController Player 
     { 
         get { 
@@ -53,50 +52,55 @@ public class GameManager
     }
 
     public GameObject boss;
-    public bool boss_die = false;
     public bool player_die = false;
     public Action gameover;
-    public float beat;
-    public float bgm_length;        //음악 진행 시간
     public bool game_start = false;
-    public sbyte pattern_num;
     public bool game_stop = false;
     public bool tutorial = false;
     public bool tutorial_hit = false;
-    public void Init()
-    {
-    }
+    //public event Action portal_init;
     // Start is called before the first frame update
     public void Next_sceneLoaded(Scene scene, LoadSceneMode mode)
     {
         scene_name = scene.name;
         if (!string.IsNullOrEmpty(scene_name))
         {
-            if(scene.name == "Main_screen")
-            {
-                Managers.Sound.BGMSound(Managers.Resource.Load<AudioClip>(scene.name), true);
-                 
-            }
-            else if(scene.name != "Tutorial_stage")
-            {
-                Managers.Sound.BGMSound(Managers.Resource.Load<AudioClip>(scene.name), false);
-            }
-            else
-            {
-                Managers.Sound.bgSound.Stop();
-            }
+            Sound_init(scene_name);
         }
-        Managers.Pool.Clear();
-        switch (scene_name)
+        if (scene_name == "Tutorial_stage")
         {
-            case "Tutorial_stage":
-                operate = false;
-                break;
-            default:
-                operate = true;
-                break;
+            operate = false;
         }
-        Sound_init(scene, mode);
+        else
+        {
+            operate = true;
+        }
+        Stage_setting();
+        UI_init();
+    }
+    
+    public void Stage1()
+    {
+        //FIX : 나중에 여기에 플레이어 박스 파츠들 변경하는 로직 넣기
+    }
+    public void Sound_init(string scene_name)
+    {
+        if (scene_name == "Main_screen")
+        {
+            Managers.Sound.BGMSound(Managers.Resource.Load<AudioClip>(scene_name), true);
+
+        }
+        else if (scene_name != "Tutorial_stage")
+        {
+            Managers.Sound.BGMSound(Managers.Resource.Load<AudioClip>(scene_name), false);
+        }
+        else
+        {
+            Managers.Sound.bgSound.Stop();
+        }
+    }
+    public void UI_init()
+    {
         Managers.UI_jun.option_window_on = false;           //FIX : 이거 왜 있는지 모르겠음 
         if (Managers.UI_jun.UI_window_on["Game_over"].activeSelf)
         {
@@ -110,12 +114,9 @@ public class GameManager
             }
         }
     }
-    public void Stage1()
+    public void Stage_setting()
     {
-        //FIX : 나중에 여기에 플레이어 박스 파츠들 변경하는 로직 넣기
-    }
-    public void Sound_init(Scene arg0, LoadSceneMode arg1)
-    {
-        
+        Managers.Pool.Clear();
+        //portal_init?.Invoke();
     }
 }
