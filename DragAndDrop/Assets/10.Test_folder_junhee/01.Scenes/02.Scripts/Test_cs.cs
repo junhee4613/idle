@@ -10,7 +10,8 @@ using Random = UnityEngine.Random;
 public class Test_cs : MonoBehaviour
 {
     public GameObject target;
-    public float rot_speed;
+    float rot_speed = 2;
+    public sbyte num = 1;
     HashSet<int> test = new HashSet<int>();
 
     private void Awake()
@@ -18,17 +19,15 @@ public class Test_cs : MonoBehaviour
     }
     public void FixedUpdate()
     {
-        if(Input.GetKeyDown(KeyCode.Backspace))
-        {
-            int num = Random.Range(0, 4);
-            test.Add(num);
-            Debug.Log(test.Count);
-            Debug.Log(num);
-
-        }
+        
     }
     public void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            transform.DOMoveX(rot_speed * num, 1).SetEase(Ease.OutQuad);
+            num *= -1;
+        }
     }
     
 }

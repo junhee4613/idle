@@ -9,7 +9,7 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
 {
     public bool invincibility = false;
     static Managers _instance;
-
+    public string last_stage = "Chapter2_boss_stage";
     public static Managers instance { get { Init(); return _instance; } }
     private void Awake()
     {
@@ -57,7 +57,14 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
             if (!GameManager.splash && Input.GetKeyDown(KeyCode.Tab))
             {
                 GameManager.splash = true;
-                UI_jun.Fade_out_next_in("Black", 0, 1f, "Tutorial_stage", 1f);
+                if (invincibility)
+                {
+                    UI_jun.Fade_out_next_in("Black", 0, 1f, "Main_screen", 1f);
+                }
+                else
+                {
+                    UI_jun.Fade_out_next_in("Black", 0, 1f, "Tutorial_stage", 1f);
+                }
             }
             if (Input.GetKeyDown(KeyCode.Escape) && GameManager.splash && !UI_jun.fade_start)       //FIX : ³ªÁß¿¡ ¿©±â ¼öÁ¤ÇØ¾ßµÊ
             {
@@ -85,15 +92,14 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
                     UI_jun.UI_window_off.Push(UI_jun.UI_window_on["Option"]);
 
                 }
-                //StartCoroutine(Option_window());
+            }
+            if (GameManager.scene_name == "Main_screen")
+            {
+
             }
         }
     }
-    /*IEnumerator Option_window()
-    {
-
-        yield return null;
-    }*/
+    
     public void Game_system_stop()
     {
 

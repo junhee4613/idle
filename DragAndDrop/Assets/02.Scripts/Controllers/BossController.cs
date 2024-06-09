@@ -288,7 +288,7 @@ public abstract class BossController : Stage_base_controller        //time	actio
             Managers.Pool.Push(warning_box);
         });
     }
-    public void Game_clear()
+    void Game_clear()
     {
         Managers.GameManager.game_start = false;
         if (!string.IsNullOrEmpty(Managers.GameManager.scene_name) && !Managers.GameManager.stage_clear[Managers.GameManager.scene_name])          //전에 있던 스테이지가 어떤 스테이지인지 알기 위해 scene_name이 변수에 할당 하기 전에 먼저 실행
@@ -298,7 +298,26 @@ public abstract class BossController : Stage_base_controller        //time	actio
                 Managers.GameManager.stage_clear[Managers.GameManager.scene_name] = !is_clear;
             }
         }
-        Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Main_screen", 1);
+        if(Managers.GameManager.stage_clear.TryGetValue(Managers.instance.last_stage, out bool is_init))
+        {
+            if (is_init == true)
+            {
+                Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Lobby_screen", 1, stage_clear_init);
+            }
+            else
+            {
+                Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Main_screen", 1);
+            }
+        }
+        
+    }
+    void stage_clear_init()
+    {
+        foreach (var item in Managers.GameManager.stage_clear)
+        {
+            Managers.GameManager.stage_clear[item.Key] = false;
+        }
+        
     }
     public abstract void Pattern_processing();
     public void Anim_end_push()

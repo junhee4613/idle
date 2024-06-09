@@ -41,7 +41,6 @@ public class Portal : MonoBehaviour, IInteraction_obj
     }
     public void Setting()
     {
-        Debug.Log(1);
         if (Managers.GameManager.stage_clear[this.gameObject.name])
         {
             if (index + 1 < portals .childCount)

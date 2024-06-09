@@ -117,6 +117,18 @@ public class GameManager
     public void Stage_setting()
     {
         Managers.Pool.Clear();
-        //portal_init?.Invoke();
+        switch (scene_name)
+        {
+            case "Main_screen":
+                Setting_main_stage();
+                break;
+            default:
+                break;
+        }
     }
+    void Setting_main_stage()
+    {
+
+    }
+
 }

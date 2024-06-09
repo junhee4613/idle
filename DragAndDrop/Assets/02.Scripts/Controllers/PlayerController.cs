@@ -58,6 +58,32 @@ public class PlayerController : playerData
             Interaction_obj();
             Key_operate();
         }
+        if (Managers.GameManager.scene_name == "Main_screen" && (Mathf.Abs(Managers.Main_camera.Main_camera.transform.position.x) - Mathf.Abs(transform.position.x) < 9.5f 
+            || Mathf.Abs(Managers.Main_camera.Main_camera.transform.position.y) - Mathf.Abs(transform.position.y) < 5.25f))
+        {
+            //Camera_focus_processing();
+        }
+    }
+    void Camera_focus_processing()
+    {
+        if (Managers.Main_camera.Main_camera.transform.position.x - 9.5f > transform.position.x)       //왼쪽으로 넘어감
+        {
+            Managers.Main_camera.Focus_move(new Vector3(Managers.Main_camera.Main_camera.transform.position.x - 18, 0, Managers.Main_camera.Main_camera.transform.position.z));
+        }
+        else if (Managers.Main_camera.Main_camera.transform.position.x + 9.5f < transform.position.x)      //오른쪽으로 넘어감
+        {
+            Managers.Main_camera.Focus_move(new Vector3(Managers.Main_camera.Main_camera.transform.position.x + 18, 0, Managers.Main_camera.Main_camera.transform.position.z));
+        }
+
+        if (Managers.Main_camera.Main_camera.transform.position.y + 5.25f < transform.position.y)       //위쪽으로 넘어감
+        {
+            Managers.Main_camera.Focus_move(new Vector3(Managers.Main_camera.Main_camera.transform.position.x + 10, 0, Managers.Main_camera.Main_camera.transform.position.z));
+        }
+        else if (Managers.Main_camera.Main_camera.transform.position.y - 5.25f > transform.position.y)      //아래쪽으로 넘어감
+        {
+            Managers.Main_camera.Focus_move(new Vector3(Managers.Main_camera.Main_camera.transform.position.x - 10, 0, Managers.Main_camera.Main_camera.transform.position.z));
+        }
+        
     }
     public void Mouse_button_down()
     {

@@ -66,6 +66,7 @@ namespace Test_boss
     }
 
 }
+
 interface IInteraction_obj
 {
     void practice();

@@ -6,8 +6,9 @@ using System;
 
 public class Camera_manager
 {
-    float time;
     Camera main_camera;
+    float time;
+    
     public Camera Main_camera { 
         get 
         {
@@ -43,6 +44,11 @@ public class Camera_manager
         Sequence sequence = DOTween.Sequence();
         sequence.Append(Main_camera.DOOrthoSize(expansion, time));
         sequence.Append(Main_camera.DOOrthoSize(reduction, time));
+    }
+    
+    public void Focus_move(Vector3 pos)
+    {
+        Main_camera.transform.DOMove(pos, 0.5f).SetEase(Ease.OutQuint);
     }
     /*public void Fade_out_in(string color,float out_delay, float out_duration, float in_delay, float in_duration, Action first_delay = null, Action second_delay = null)
     {
