@@ -35,7 +35,7 @@ public abstract class BossController : Stage_base_controller        //time	actio
         
     }
     public void Pattern_function(ref List<Pattern_json_date> pattern_json_data, ref bool pattern_ending, ref float pattern_duration_time, ref sbyte pattern_count, 
-         Action not_duration_pattern, bool pattern_duration_obj_enable = false, float pattern_time = 0f, float time = 0f, Action duration_pattern = null)
+         Action not_duration_pattern)
     {
         if (!pattern_ending)
         {
@@ -45,7 +45,31 @@ public abstract class BossController : Stage_base_controller        //time	actio
                 {
                     pattern_duration_time = pattern_json_data[pattern_count].duration;
                 }
-                
+                not_duration_pattern();
+                pattern_duration_time = Mathf.Clamp(pattern_duration_time - Time.fixedDeltaTime, 0, pattern_json_data[pattern_count].duration);
+                if (pattern_duration_time == 0)
+                {
+                    pattern_count++;
+                    if (pattern_json_data.Count == pattern_count)
+                    {
+                        pattern_ending = true;
+                    }
+                }
+            }
+        }
+    }
+    public void Pattern_function(ref List<Pattern_json_date> pattern_json_data, ref bool pattern_ending, ref float pattern_duration_time, ref sbyte pattern_count,
+         ref float pattern_time, Action not_duration_pattern, bool pattern_duration_obj_enable = false, float time = 0f, Action duration_pattern = null)
+    {
+        if (!pattern_ending)
+        {
+            if ((pattern_json_data[pattern_count].time <= Managers.Sound.bgSound.time || pattern_duration_time != 0))
+            {
+                if (pattern_duration_time == 0)
+                {
+                    pattern_duration_time = pattern_json_data[pattern_count].duration;
+                }
+
                 if (pattern_duration_obj_enable)
                 {
                     pattern_time -= Time.fixedDeltaTime;

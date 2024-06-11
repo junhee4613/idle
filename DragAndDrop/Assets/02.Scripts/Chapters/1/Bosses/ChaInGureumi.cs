@@ -47,7 +47,8 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     }
     public override void Pattern_processing()
     {
-        if (!rain_storm.pattern_ending)
+        Pattern_function(ref rain_storm.pattern_data, ref rain_storm.pattern_ending, ref rain_storm.duration, ref rain_storm.pattern_count,ref rain_storm.time, Rain_storm_rotation, true, 0.375f, Rain_storm);
+        /*if (!rain_storm.pattern_ending)
         {
             if ((rain_storm.pattern_data[rain_storm.pattern_count].time <= Managers.Sound.bgSound.time || rain_storm.duration != 0))
             {
@@ -72,8 +73,10 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                     }
                 }
             } 
-        }
-        if (!shower.pattern_ending)
+        }*/
+        Pattern_function(ref shower.pattern_data, ref shower.pattern_ending, ref shower.duration, ref shower.pattern_count, Shower);
+
+        /*if (!shower.pattern_ending)
         {
             if ((shower.pattern_data[shower.pattern_count].time <= Managers.Sound.bgSound.time || shower.duration != 0))
             {
@@ -93,7 +96,9 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                     }
                 }
             } 
-        }
+        }*/
+        Pattern_function(ref shower.pattern_data, ref shower.pattern_ending, ref shower.duration, ref shower.pattern_count, Shower);
+
         if (!rush.pattern_ending)
         {
             if ((rush.pattern_data[rush.pattern_count].time <= Managers.Sound.bgSound.time || rush.duration != 0))
@@ -123,7 +128,9 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 Lightning();
             }
         }
-        if (!phase_2.pattern_ending)
+        Pattern_function(ref phase_2.pattern_data, ref phase_2.pattern_ending, ref phase_2.duration, ref phase_2.pattern_count, Phase_2);
+
+        /*if (!phase_2.pattern_ending)
         {
             if ((phase_2.pattern_data[phase_2.pattern_count].time <= Managers.Sound.bgSound.time || phase_2.duration != 0))
             {
@@ -144,7 +151,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 }
             }
                 
-        }
+        }*/
         if (!electric_ball_pattern.pattern_ending)
         {
             if ((electric_ball_pattern.pattern_data[electric_ball_pattern.pattern_count].time <= Managers.Sound.bgSound.time || electric_ball_pattern.duration != 0))
