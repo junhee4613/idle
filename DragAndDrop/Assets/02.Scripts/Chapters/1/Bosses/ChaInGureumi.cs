@@ -48,78 +48,8 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     public override void Pattern_processing()
     {
         Pattern_function(ref rain_storm.pattern_data, ref rain_storm.pattern_ending, ref rain_storm.duration, ref rain_storm.pattern_count,ref rain_storm.time, Rain_storm_rotation, true, 0.375f, Rain_storm);
-        /*if (!rain_storm.pattern_ending)
-        {
-            if ((rain_storm.pattern_data[rain_storm.pattern_count].time <= Managers.Sound.bgSound.time || rain_storm.duration != 0))
-            {
-                if (rain_storm.duration == 0)
-                {
-                    rain_storm.duration = rain_storm.pattern_data[rain_storm.pattern_count].duration;
-                }
-                rain_storm.time -= Time.fixedDeltaTime;
-                if (rain_storm.time <= 0)
-                {
-                    rain_storm.time += 0.375f;
-                    Rain_storm();
-                }
-                Rain_storm_rotation();
-                rain_storm.duration = Mathf.Clamp(rain_storm.duration - Time.fixedDeltaTime, 0, rain_storm.pattern_data[rain_storm.pattern_count].duration);
-                if (rain_storm.duration == 0)
-                {
-                    rain_storm.pattern_count++;
-                    if (rain_storm.pattern_data.Count == rain_storm.pattern_count)
-                    {
-                        rain_storm.pattern_ending = true;
-                    }
-                }
-            } 
-        }*/
         Pattern_function(ref shower.pattern_data, ref shower.pattern_ending, ref shower.duration, ref shower.pattern_count, Shower);
-
-        /*if (!shower.pattern_ending)
-        {
-            if ((shower.pattern_data[shower.pattern_count].time <= Managers.Sound.bgSound.time || shower.duration != 0))
-            {
-                if (shower.duration == 0)
-                {
-                    shower.duration = shower.pattern_data[shower.pattern_count].duration;
-                }
-                shower.duration = Mathf.Clamp(shower.duration - Time.fixedDeltaTime, 0, shower.pattern_data[shower.pattern_count].duration);
-                Shower();
-                if (shower.duration == 0)
-                {
-                    shower.pattern_count++;
-                    if (shower.pattern_data.Count == shower.pattern_count)
-                    {
-                        
-                        shower.pattern_ending = true;
-                    }
-                }
-            } 
-        }*/
-        Pattern_function(ref shower.pattern_data, ref shower.pattern_ending, ref shower.duration, ref shower.pattern_count, Shower);
-
-        if (!rush.pattern_ending)
-        {
-            if ((rush.pattern_data[rush.pattern_count].time <= Managers.Sound.bgSound.time || rush.duration != 0))
-            {
-                if (rush.duration == 0)
-                {
-                    rush.duration = rush.pattern_data[rush.pattern_count].duration;
-                }
-                rush.duration = Mathf.Clamp(rush.duration - Time.fixedDeltaTime, 0, rush.pattern_data[rush.pattern_count].duration);
-                Rush();
-                if (rush.duration == 0)
-                {
-                    rush.pattern_count++;
-                    if (rush.pattern_data.Count == rush.pattern_count)
-                    {
-                        Anim_state_machin(anim_state["1_phase_idle"]);
-                        rush.pattern_ending = true;
-                    }
-                }
-            }
-        }
+        Pattern_function(ref rush.pattern_data, ref rush.pattern_ending, ref rush.duration, ref rush.pattern_count, Rush);
         if (!lightning.pattern_ending)
         {
             if(lightning.pattern_data[lightning.pattern_count].time <= Managers.Sound.bgSound.time)
@@ -129,74 +59,8 @@ public class ChaInGureumi : BossController          //비트는 80dlek
             }
         }
         Pattern_function(ref phase_2.pattern_data, ref phase_2.pattern_ending, ref phase_2.duration, ref phase_2.pattern_count, Phase_2);
-
-        /*if (!phase_2.pattern_ending)
-        {
-            if ((phase_2.pattern_data[phase_2.pattern_count].time <= Managers.Sound.bgSound.time || phase_2.duration != 0))
-            {
-                if (phase_2.duration == 0)
-                {
-                    phase_2.duration = phase_2.pattern_data[phase_2.pattern_count].duration;
-                }
-                Phase_2();
-                phase_2.duration = Mathf.Clamp(phase_2.duration - Time.fixedDeltaTime, 0, phase_2.pattern_data[phase_2.pattern_count].duration);
-                if (phase_2.duration == 0)
-                {
-                    phase_2.pattern_count++;
-                    if (phase_2.pattern_data.Count == phase_2.pattern_count)
-                    {
-                        //아이들 애니메이션
-                        phase_2.pattern_ending = true;
-                    }
-                }
-            }
-                
-        }*/
-        if (!electric_ball_pattern.pattern_ending)
-        {
-            if ((electric_ball_pattern.pattern_data[electric_ball_pattern.pattern_count].time <= Managers.Sound.bgSound.time || electric_ball_pattern.duration != 0))
-            {
-                if (electric_ball_pattern.duration == 0)
-                {
-                    electric_ball_pattern.duration = electric_ball_pattern.pattern_data[electric_ball_pattern.pattern_count].duration;
-                }
-                Electric_ball();
-                electric_ball_pattern.duration = Mathf.Clamp(electric_ball_pattern.duration - Time.fixedDeltaTime, 0, electric_ball_pattern.pattern_data[electric_ball_pattern.pattern_count].duration);
-                if (electric_ball_pattern.duration == 0)
-                {
-                    electric_ball_pattern.pattern_count++;
-                    if (electric_ball_pattern.pattern_data.Count == electric_ball_pattern.pattern_count)
-                    {
-                        //아이들 애니메이션
-                        electric_ball_pattern.pattern_ending = true;
-                    }
-                }
-            }
-
-        }
-        if (!electric_ball_rotation_pattern.pattern_ending)
-        {
-            if ((electric_ball_rotation_pattern.pattern_data[electric_ball_rotation_pattern.pattern_count].time <= Managers.Sound.bgSound.time || electric_ball_rotation_pattern.duration != 0))
-            {
-                if (electric_ball_rotation_pattern.duration == 0)
-                {
-                    electric_ball_rotation_pattern.duration = electric_ball_rotation_pattern.pattern_data[electric_ball_rotation_pattern.pattern_count].duration;
-                }
-                Electric_ball_rotation();
-                electric_ball_rotation_pattern.duration = Mathf.Clamp(electric_ball_rotation_pattern.duration - Time.fixedDeltaTime, 0, electric_ball_rotation_pattern.pattern_data[electric_ball_rotation_pattern.pattern_count].duration);
-                if (electric_ball_rotation_pattern.duration == 0)
-                {
-                    electric_ball_rotation_pattern.pattern_count++;
-                    if (electric_ball_rotation_pattern.pattern_data.Count == electric_ball_rotation_pattern.pattern_count)
-                    {
-                        //아이들 애니메이션
-                        electric_ball_rotation_pattern.pattern_ending = true;
-                    }
-                }
-            }
-
-        }
-
+        Pattern_function(ref electric_ball_pattern.pattern_data, ref electric_ball_pattern.pattern_ending, ref electric_ball_pattern.duration, ref electric_ball_pattern.pattern_count, Electric_ball);
+        Pattern_function(ref electric_ball_rotation_pattern.pattern_data, ref electric_ball_rotation_pattern.pattern_ending, ref electric_ball_rotation_pattern.duration, ref electric_ball_rotation_pattern.pattern_count, Electric_ball_rotation);
     }
     public void Rain_storm_rotation()
     {
@@ -510,8 +374,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 }
                 break;
             case 10:
-                break;
-            default:
+                Anim_state_machin(anim_state["1_phase_idle"]);
                 break;
         }
     }
