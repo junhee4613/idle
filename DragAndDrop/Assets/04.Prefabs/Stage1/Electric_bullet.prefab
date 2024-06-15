@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7876234817106863729}
   - component: {fileID: 6755873675583697519}
-  - component: {fileID: 6808162749182931196}
+  - component: {fileID: 6599156666769100871}
   m_Layer: 8
   m_Name: Electric_bullet
   m_TagString: Untagged
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 704105179
   m_SortingLayer: 8
   m_SortingOrder: 0
-  m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
+  m_Sprite: {fileID: 21300000, guid: be6c328d2e712b34c9b032cb595a84d7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -85,8 +85,8 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!70 &6808162749182931196
-CapsuleCollider2D:
+--- !u!58 &6599156666769100871
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -114,9 +114,9 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.8, y: 1.6}
-  m_Direction: 0
+  serializedVersion: 2
+  m_Radius: 0.4

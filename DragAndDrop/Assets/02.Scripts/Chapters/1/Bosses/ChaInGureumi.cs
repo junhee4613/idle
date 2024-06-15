@@ -328,7 +328,6 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 transform.DOMoveX(rush.target_rush_pos_x * rush.dir, 0.75f);
                 Anim_state_machin(anim_state["simple_pattern0"]);
 
-                //transform.position = Vector3.MoveTowards(transform.position, new Vector3(rush.target_rush_pos_x * rush.dir, rush.pos_y, 0), 40f * Time.fixedDeltaTime);
                 if (rush.duration == 0)
                 {
                     rush.rush_start = false;
@@ -360,8 +359,6 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 {
                     rush.pos_y = -2.75f;
                 }
-                //여기 수정해야됨 
-                //Warning_box(new Vector3(8, Mathf.Abs(4 - (Mathf.Abs(rush.pos_y) - 2)), 0), new Vector3(0, rush.pos_y - (rush.pos_y / 2f -1), 0), 3, 0.25f);
                 Warning_box_fade(new Vector3(8, Mathf.Abs(4 - Mathf.Abs(rush.pos_y + 2)), 0), new Vector3(0, (rush.pos_y / 2f - 1), 0), true, 3, 0.25f);
                 break;
             case 9:
@@ -443,11 +440,6 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 break;
             case 4:
                 electric_ball_pattern.electric_line.SetActive(true);
-
-                /*sequence.Append(electric_ball_pattern.electric_line.transform.DOScale(Vector3.one * 0.5f, 0.1f)).OnComplete(() =>
-                {
-                }); ;
-                sequence.Append(electric_ball_pattern.electric_ball_obj.transform.DOScale(Vector3.one, 0.1f));*/
                 break;
             case 5:
                 electric_ball_pattern.ball.DOScale(new Vector3(electric_ball_pattern.ball.localScale.x + 0.1f, electric_ball_pattern.ball.localScale.y + 0.1f, electric_ball_pattern.ball.localScale.z), 0.2f);
