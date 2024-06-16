@@ -45,8 +45,8 @@ public abstract class BossController : Stage_base_controller        //time	actio
                 {
                     pattern_duration_time = pattern_json_data[pattern_count].duration;
                 }
+                pattern_duration_time = Mathf.Clamp(pattern_duration_time - Time.deltaTime, 0, pattern_json_data[pattern_count].duration);
                 not_duration_pattern();
-                pattern_duration_time = Mathf.Clamp(pattern_duration_time - Time.fixedDeltaTime, 0, pattern_json_data[pattern_count].duration);
                 if (pattern_duration_time == 0)
                 {
                     pattern_count++;
@@ -72,15 +72,15 @@ public abstract class BossController : Stage_base_controller        //time	actio
 
                 if (pattern_duration_obj_enable)
                 {
-                    pattern_time -= Time.fixedDeltaTime;
+                    pattern_time -= Time.deltaTime;
                     if (pattern_time <= 0)
                     {
                         pattern_time += time;
                         duration_pattern();
                     }
                 }
+                pattern_duration_time = Mathf.Clamp(pattern_duration_time - Time.deltaTime, 0, pattern_json_data[pattern_count].duration);
                 not_duration_pattern();
-                pattern_duration_time = Mathf.Clamp(pattern_duration_time - Time.fixedDeltaTime, 0, pattern_json_data[pattern_count].duration);
                 if (pattern_duration_time == 0)
                 {
                     pattern_count++;
@@ -319,20 +319,22 @@ public abstract class BossController : Stage_base_controller        //time	actio
         {
             if (Managers.GameManager.stage_clear.TryGetValue(Managers.GameManager.scene_name, out bool is_clear))
             {
-                Managers.GameManager.stage_clear[Managers.GameManager.scene_name] = !is_clear;
+                is_clear = true;
+                Managers.GameManager.stage_clear[Managers.GameManager.scene_name] = is_clear;
+                if (Managers.GameManager.stage_clear.TryGetValue(Managers.GameManager.last_stage, out bool is_init))
+                {
+                    if (is_init == true)
+                    {
+                        Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Lobby_screen", 1, stage_clear_init);
+                    }
+                    else
+                    {
+                        Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Main_screen", 1);
+                    }
+                }
             }
         }
-        if(Managers.GameManager.stage_clear.TryGetValue(Managers.instance.last_stage, out bool is_init))
-        {
-            if (is_init == true)
-            {
-                Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Lobby_screen", 1, stage_clear_init);
-            }
-            else
-            {
-                Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Main_screen", 1);
-            }
-        }
+        
         
     }
     void stage_clear_init()

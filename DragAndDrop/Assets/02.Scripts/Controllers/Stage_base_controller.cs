@@ -24,16 +24,6 @@ public class Stage_base_controller : MonoBehaviour
     {
 
     }
-    public void Anim_state_machin(Anim_stage_state clip_name)       //FIX : 나중에 여기 리팩토링 해야됨
-    {
-        if (an.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1 && now_anim != clip_name)
-        {
-            clip_name.On_state_exit();
-            now_anim = clip_name;
-            clip_name.On_state_enter();
-        }
-
-    }
     public void Anim_state_machin2(Anim_stage_state clip_name, bool anim_until_the_end, bool anim_again = false)
     {
         if (now_anim != clip_name)

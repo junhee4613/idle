@@ -9,7 +9,6 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
 {
     public bool invincibility = false;
     static Managers _instance;
-    public string last_stage = "Chapter2_boss_stage";
     public static Managers instance { get { Init(); return _instance; } }
     private void Awake()
     {

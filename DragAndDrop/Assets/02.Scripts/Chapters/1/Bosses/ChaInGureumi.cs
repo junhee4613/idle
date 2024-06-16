@@ -43,22 +43,22 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     }
     public void Start()
     {
-        Anim_state_machin(anim_state["idle"]);
         Managers.GameManager.game_start = true;
+        Anim_state_machin2(anim_state["idle"], true);
     }
     public override void Pattern_processing()
     {
         Pattern_function(ref rain_storm.pattern_data, ref rain_storm.pattern_ending, ref rain_storm.duration, ref rain_storm.pattern_count,ref rain_storm.time, Rain_storm_rotation, true, 0.375f, Rain_storm);
         Pattern_function(ref shower.pattern_data, ref shower.pattern_ending, ref shower.duration, ref shower.pattern_count, Shower);
         Pattern_function(ref rush.pattern_data, ref rush.pattern_ending, ref rush.duration, ref rush.pattern_count, Rush);
-        if (!lightning.pattern_ending)
+        /*if (!lightning.pattern_ending)
         {
             if(lightning.pattern_data[lightning.pattern_count].time <= Managers.Sound.bgSound.time)
             {
-                Anim_state_machin(anim_state["idle2"]);
+                Anim_state_machin2(anim_state["idle2"],true, true);
                 Lightning();
             }
-        }
+        }*/
         Pattern_function(ref phase_2.pattern_data, ref phase_2.pattern_ending, ref phase_2.duration, ref phase_2.pattern_count, Phase_2);
         Pattern_function(ref electric_ball_pattern.pattern_data, ref electric_ball_pattern.pattern_ending, ref electric_ball_pattern.duration, ref electric_ball_pattern.pattern_count, Electric_ball);
         Pattern_function(ref electric_ball_rotation_pattern.pattern_data, ref electric_ball_rotation_pattern.pattern_ending, ref electric_ball_rotation_pattern.duration, ref electric_ball_rotation_pattern.pattern_count, Electric_ball_rotation);
@@ -68,14 +68,14 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         switch (rain_storm.pattern_data[rain_storm.pattern_count].action_num)
         {
             case 0:         //가운데(바람 빨아들이는 애니메이션)
-                Anim_state_machin(anim_state["breathe_in"]);
+                Anim_state_machin2(anim_state["breathe_in"], true, true);
                 if (rain_storm.pos_x_critaria != 0)
                 {
                     rain_storm.pos_x_critaria = 0;
                 }
                 if (rain_storm.rain_trans[rain_storm.rain_trans.Count - 1].rotation.eulerAngles.z != 0)
                 {
-                    rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.identity, rain_storm.rotation_speed * Time.fixedDeltaTime);
+                    rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.identity, rain_storm.rotation_speed * Time.deltaTime);
                     foreach (var item in rain_storm.rain_trans)
                     {
                         item.rotation = rain_storm.criteria;
@@ -83,7 +83,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 }
                 break;
             case 1:         //왼쪽(왼쪽 방향으로 부는 애니메이션)
-                Anim_state_machin(anim_state["breathe_out"]);
+                Anim_state_machin2(anim_state["breathe_out"],true,true);
                 if (boss_trans.transform.localScale.x != -1)
                 {
                     boss_trans.transform.localScale = new Vector3(-1f, 1f, 0f);
@@ -95,7 +95,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 if (rain_storm.rain_trans[rain_storm.rain_trans.Count - 1].rotation.eulerAngles.z != 315)
                 {
 
-                    rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.Euler(0, 0, 315), rain_storm.rotation_speed * Time.fixedDeltaTime);
+                    rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.Euler(0, 0, 315), rain_storm.rotation_speed * Time.deltaTime);
                     foreach (var item in rain_storm.rain_trans)
                     {
                         item.rotation = rain_storm.criteria;
@@ -103,7 +103,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 }
                 break;
             case 2:     //오른쪽(오른쪽으로 부는 애니메이션)
-                Anim_state_machin(anim_state["breathe_out"]);
+                Anim_state_machin2(anim_state["breathe_out"], true, true);
                 if (boss_trans.transform.localScale.x != 1)
                 {
                     boss_trans.transform.localScale = new Vector3(1f, 1f, 0f);
@@ -114,7 +114,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 }
                 if (rain_storm.rain_trans[rain_storm.rain_trans.Count - 1].rotation.eulerAngles.z != 45)
                 {
-                    rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.Euler(0, 0, 45), rain_storm.rotation_speed * Time.fixedDeltaTime);
+                    rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.Euler(0, 0, 45), rain_storm.rotation_speed * Time.deltaTime);
                     foreach (var item in rain_storm.rain_trans)
                     {
                         item.rotation = rain_storm.criteria;
@@ -122,14 +122,14 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 }
                 break;
             case 3:
-                Anim_state_machin(anim_state["breathe_out"]);
+                Anim_state_machin2(anim_state["breathe_out"], true, true);
                 if (rain_storm.pos_x_critaria != 0)
                 {
                     rain_storm.pos_x_critaria = 0;
                 }
                 if (rain_storm.rain_trans[rain_storm.rain_trans.Count - 1].rotation.eulerAngles.z != 0)
                 {
-                    rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.identity, rain_storm.rotation_speed * Time.fixedDeltaTime);
+                    rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.identity, rain_storm.rotation_speed * Time.deltaTime);
                     foreach (var item in rain_storm.rain_trans)
                     {
                         item.rotation = rain_storm.criteria;
@@ -137,14 +137,14 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 }
                 break;
             case 4:
-                Anim_state_machin(anim_state["idle2"]);
+                Anim_state_machin2(anim_state["idle2"], true, true);
                 if (rain_storm.pos_x_critaria != 0)
                 {
                     rain_storm.pos_x_critaria = 0;
                 }
                 if (rain_storm.rain_trans[rain_storm.rain_trans.Count - 1].rotation.eulerAngles.z != 0)
                 {
-                    rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.identity, rain_storm.rotation_speed * Time.fixedDeltaTime);
+                    rain_storm.criteria = Quaternion.RotateTowards(rain_storm.criteria, Quaternion.identity, rain_storm.rotation_speed * Time.deltaTime);
                     foreach (var item in rain_storm.rain_trans)
                     {
                         item.rotation = rain_storm.criteria;
@@ -158,7 +158,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
    
     public void Idle()
     {
-        Anim_state_machin(anim_state["move"]);
+        Anim_state_machin2(anim_state["move"], true, true);
     }
     public void Rain_storm()
     {
@@ -226,24 +226,24 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         {
             case 0:
                 //빨간 박스 생김
-                Anim_state_machin(anim_state["cry"]);
-                Warning_box_fade(new Vector3(6.5f, 4, 0), new Vector3(0.75f, -2, 0), true, 3, 0.25f);
+                Anim_state_machin2(anim_state["cry"], true, true);
+                Charging_doscale_x_warning_box(new Vector3(8, 5, 0), new Vector3(1, -2, 0), new Vector3(5, -2f), Warning_box_pivots.RIGHT, color, 0.75f);
                 break;
             case 1:
                 //울면서 플레이어 박스 끝쪽으로 이동
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(2.5f, 2.4f), 2.5f * Time.fixedDeltaTime);
-                Anim_state_machin(anim_state["cry"]);
-                if (!shower.shower_obj.activeSelf && transform.position.x == 2.5f)
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(3, transform.position.y), 2.5f * Time.deltaTime);
+                Anim_state_machin2(anim_state["cry"], true, true);
+                if (!shower.shower_obj.activeSelf && transform.position.x == 3f)
                 {
                     shower.shower_obj.SetActive(true);
                 }
                 break;
             case 2:
-                Anim_state_machin(anim_state["move"]);
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(-1f, transform.position.y), 12 * Time.fixedDeltaTime);
+                Anim_state_machin2(anim_state["move"], true, true);
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(-1f, transform.position.y), 12 * Time.deltaTime);
                 if (shower.duration == 0)
                 {
-                    Anim_state_machin(anim_state["idle"]);
+                    Anim_state_machin2(anim_state["idle"], true, true);
                     shower.shower_obj.SetActive(false);
                 }
                 if (transform.localScale.x != -1)
@@ -253,7 +253,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 //지정한 위치까지 돌진 후 소나기 사라짐
                 break;
             case 3:
-                transform.Translate(Vector3.up * Time.fixedDeltaTime * 12);
+                transform.Translate(Vector3.up * Time.deltaTime * 12);
                 break;
             default:
                 break;
@@ -265,12 +265,20 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         switch (rush.pattern_data[rush.pattern_count].action_num)
         {
             case 0:
-                //Warning_box(new Vector3(8, Mathf.Abs(4 - (Mathf.Abs(Mathf.Abs(rush.pos_y) - 2) * 2)), 0), new Vector3(0, rush.pos_y, 0), 3, 0.25f);
-                //여기 수정해야됨 
-                Warning_box_fade(new Vector3(8, Mathf.Abs(4 - (Mathf.Abs(rush.pos_y) - 2)), 0), new Vector3(0, (rush.pos_y / 2f - 1), 0), true, 3, 0.25f);
-                //Warning_box(new Vector3(8, Mathf.Abs(4 - (Mathf.Abs(Mathf.Abs(rush.pos_y) - 2))), 0), new Vector3(0, rush.pos_y + Mathf.Abs(rush.pos_y / 2f - 1), 0), 3, 0.25f);
+                transform.DOMoveY(rush.rush_pos_y[rush.count], 0.5f);
+                switch (rush.count)
+                {
+                    case 0:
+                        Charging_doscale_x_warning_box(new Vector3(10, 3.5f, 0), new Vector3(0, rush.rush_pos_y[rush.count], 0), new Vector3(5, rush.rush_pos_y[rush.count]), Warning_box_pivots.RIGHT, color, 0.75f);
+                        break;
+                    case 1:
+                        Charging_doscale_x_warning_box(new Vector3(10, 3.5f, 0), new Vector3(0, rush.rush_pos_y[rush.count], 0), new Vector3(-5, rush.rush_pos_y[rush.count]), Warning_box_pivots.LEFT, color, 0.75f);
+                        break;
+                }
+                rush.count++;
+                //여기에 돌진 높이를 정해주기 0.75초 뒤에 출발함 -1 ,-3 0.5초 만에
                 break;
-            case 1:
+            case 1:         //사라지고 위치 초기화
                 if (!rush.rush_start)
                 {
                     transform.localScale = new Vector3(rush.dir, 1, 0);
@@ -278,23 +286,23 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                     transform.position = new Vector3(rush.init_pos_x * rush.dir, -2f);
                 }
                 transform.DOMoveX(rush.target_pos_x * rush.dir, 0.5f);
-                if (Managers.GameManager.Player.transform.position.y != transform.position.y)
+                if (Managers.GameManager.Player.transform.position.y + 1.3f != transform.position.y)
                 {
-                    transform.position = new Vector3(transform.position.x, Mathf.Lerp(transform.position.y, Managers.GameManager.Player.transform.position.y, Time.fixedDeltaTime * 3), 0);
+                    transform.position = new Vector3(transform.position.x, Mathf.Lerp(transform.position.y, Managers.GameManager.Player.transform.position.y + 1.3f, Time.deltaTime * 3), 0);
                     rush.pos_y = transform.position.y;
                 }
                 break;
-            case 2:
-                Anim_state_machin(anim_state["idle"]);
-                if (Managers.GameManager.Player.transform.position.y != transform.position.y)
+            case 2:             //플레이어 위치로 이동
+                Anim_state_machin2(anim_state["idle"], true, true);
+                if (Managers.GameManager.Player.transform.position.y + 1.3 != transform.position.y)
                 {
-                    transform.position = new Vector3(transform.position.x, Mathf.Lerp(transform.position.y, Managers.GameManager.Player.transform.position.y, Time.fixedDeltaTime * 2), 0);
+                    transform.position = new Vector3(transform.position.x, Mathf.Lerp(transform.position.y, Managers.GameManager.Player.transform.position.y + 1.3f, Time.deltaTime * 2), 0);
                     rush.pos_y = transform.position.y;
                 }
                 break;
-            case 3:
+            case 3:                     //물방울 발사 후 돌진 2번
                 transform.DOMoveX(rush.target_rush_pos_x * rush.dir, 0.75f);
-                Anim_state_machin(anim_state["move"]);
+                Anim_state_machin2(anim_state["move"], true, true);
 
                 if (rush.duration == 0)
                 {
@@ -304,9 +312,9 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 //돌진
 
                 break;
-            case 4:
+            case 4:             //방울 발사
                 //여기 수정해야됨 
-                Anim_state_machin(anim_state["spit"]);
+                Anim_state_machin2(anim_state["spit"], true, true);
                 //탄환
                 GameObject bullet = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Rain_bullet"));
                 bullet.transform.position = rush.rain_muzzle.position;
@@ -319,7 +327,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                     temp.push_time = rush.bullet_push_time;
                 }
                 break;
-            case 5:
+            case 5:             //연속 돌진 5번
                 if (!rush.rush_start)
                 {
                     rush.rush_start = true;
@@ -327,7 +335,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                     transform.position = new Vector3(rush.init_pos_x * rush.dir, rush.pos_y);
                 }
                 transform.DOMoveX(rush.target_rush_pos_x * rush.dir, 0.75f);
-                Anim_state_machin(anim_state["move"]);
+                Anim_state_machin2(anim_state["move"], true, true);
 
                 if (rush.duration == 0)
                 {
@@ -336,35 +344,34 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 }
                 //돌진
                 break;
-            case 6:
+            case 6:         //위에서 달려가다 잠시 멈추기 위한 로직 1
                 if (!rush.rush_start)
                 {
                     rush.rush_start = true;
                     transform.localScale = new Vector3(rush.dir, 1, 0);
-                    Anim_state_machin(anim_state["move"]);
+                    Anim_state_machin2(anim_state["move"], true, true);
 
                     transform.position = new Vector3(rush.init_pos_x * rush.dir, 2.7f);
                 }
                 transform.DOMoveX(0, 0.4f);
-                //11.5에서 시작 상단 돌진
                 break;
-            case 7:
-                Anim_state_machin(anim_state["form_trans"]);
+            case 7:         //위에서 달려가다 잠시 멈추기 위한 로직 2
+                Anim_state_machin2(anim_state["form_trans"], true, true);
                 break;
-            case 8:
-                if(Managers.GameManager.Player.transform.position.y >= -2)
+            case 8:             //연속 돌진 경고 장판
+                if(rush.pos_y == -3f)
                 {
-                    rush.pos_y = -1.25f;
+                    rush.pos_y = -1f;
                 }
                 else
                 {
-                    rush.pos_y = -2.75f;
+                    rush.pos_y = -3f;
                 }
                 Warning_box_fade(new Vector3(8, Mathf.Abs(4 - Mathf.Abs(rush.pos_y + 2)), 0), new Vector3(0, (rush.pos_y / 2f - 1), 0), true, 3, 0.25f);
                 break;
-            case 9:
+            case 9:             //위에서 달려가다 잠시 멈추기 위한 로직 3
                 transform.DOMoveX(rush.target_rush_pos_x * rush.dir, 0.4f);
-                Anim_state_machin(anim_state["move"]);
+                Anim_state_machin2(anim_state["move"], true, true);
                 if (rush.duration == 0)
                 {
                     rush.rush_start = false;
@@ -372,7 +379,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 }
                 break;
             case 10:
-                Anim_state_machin(anim_state["idle"]);
+                Anim_state_machin2(anim_state["idle"], true, true);
                 break;
         }
     }
@@ -381,13 +388,13 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         switch (electric_ball_rotation_pattern.pattern_data[electric_ball_rotation_pattern.pattern_count].action_num)
         {
             case 0:
-                electric_ball_rotation_pattern.lightning_ball.Rotate(0, 0, electric_ball_rotation_pattern.electric_bullet_rotation_speed * Time.fixedDeltaTime);
+                electric_ball_rotation_pattern.lightning_ball.Rotate(0, 0, electric_ball_rotation_pattern.electric_bullet_rotation_speed * Time.deltaTime);
                 break;
             case 1:
-                electric_ball_rotation_pattern.lightning_ball.Rotate(0, 0, electric_ball_rotation_pattern.electric_bullet_reverse_rotation_speed * Time.fixedDeltaTime);
+                electric_ball_rotation_pattern.lightning_ball.Rotate(0, 0, electric_ball_rotation_pattern.electric_bullet_reverse_rotation_speed * Time.deltaTime);
                 break;
             case 2:
-                electric_ball_rotation_pattern.lightning_ball.Rotate(0, 0, -electric_ball_rotation_pattern.electric_bullet_rotation_speed * Time.fixedDeltaTime);
+                electric_ball_rotation_pattern.lightning_ball.Rotate(0, 0, -electric_ball_rotation_pattern.electric_bullet_rotation_speed * Time.deltaTime);
                 break;
             default:
                 break;
@@ -489,16 +496,16 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         switch (phase_2.pattern_data[phase_2.pattern_count].action_num)
         {
             case 0:
-                transform.position = new Vector3(1.5f, 8, 0);
+                transform.position = new Vector3(0, 8, 0);
                 break;
             case 1:
-                transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y - Time.fixedDeltaTime * phase_2.speed, 2.7f, 8), 0);
+                transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y - Time.deltaTime * phase_2.speed, 2.7f, 8), 0);
                 break;
             case 2:
-            Anim_state_machin(anim_state["form_trans"]);
+                Anim_state_machin2(anim_state["form_trans"], true, true);
                 break;
             case 3:
-            Anim_state_machin(anim_state["idle2"]);
+                Anim_state_machin2(anim_state["idle2"], true, true);
                 Managers.Main_camera.Shake_move();
                 break;
             default:
@@ -568,7 +575,8 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         public Transform rain_muzzle;
         public GameObject[] bullets;
         public HashSet<string> temp;
-        public int temp2 = 0;
+        internal sbyte[] rush_pos_y = new sbyte[2] { -1, -3 };
+        internal byte count = 0;
 
     }
     [Serializable]

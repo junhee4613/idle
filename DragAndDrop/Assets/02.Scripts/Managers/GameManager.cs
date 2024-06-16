@@ -11,6 +11,7 @@ public class GameManager
     PlayerController player;
     Transform player_character;
     GameObject beat_box;
+    public string last_stage = "Chapter2_boss_stage";
     public GameObject Beat_box 
     { 
         get

@@ -492,8 +492,8 @@ MonoBehaviour:
   simple_pattern_num: 4
   hard_pattern_num: 4
   color:
-  - {r: 0, g: 0, b: 0, a: 0}
-  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0.09411766, g: 0.27058825, b: 0.5254902, a: 1}
+  - {r: 0.04705883, g: 0.5647059, b: 0.8862746, a: 1}
   boss_trans: {fileID: 1684009971}
   rain_storm:
     pattern_count: 0
@@ -528,7 +528,7 @@ MonoBehaviour:
     duration: 0
     pos_y: 0
     dir: 1
-    target_pos_x: -8
+    target_pos_x: -9
     init_pos_x: -12.5
     target_rush_pos_x: 18
     bullet_speed: 20
@@ -537,7 +537,6 @@ MonoBehaviour:
     bullet_push_time: 5
     rain_muzzle: {fileID: 663563852}
     bullets: []
-    temp2: 0
   lightning:
     pattern_count: 0
     pattern_ending: 0
@@ -724,11 +723,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2730576694993779675, guid: f054acdf6f51f484bb3b7536e528f45f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.28
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2730576694993779675, guid: f054acdf6f51f484bb3b7536e528f45f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.08
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 2730576694993779675, guid: f054acdf6f51f484bb3b7536e528f45f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -876,7 +875,7 @@ Transform:
   m_GameObject: {fileID: 443946468}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.33, y: -1.395, z: 0}
+  m_LocalPosition: {x: -1.33, y: -1.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -973,7 +972,7 @@ Transform:
   m_GameObject: {fileID: 787926608}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1, z: 0}
+  m_LocalPosition: {x: 0, y: -1.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1317,7 +1316,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 981472340}
-  - component: {fileID: 981472341}
   m_Layer: 0
   m_Name: Back_ground
   m_TagString: Untagged
@@ -1344,35 +1342,6 @@ Transform:
   - {fileID: 913716616}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &981472341
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 981472339}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96a937bd69938c74f92a73685b9d19c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  an: {fileID: 813696294}
-  simple_pattern_num: 4
-  hard_pattern_num: 4
-  middles:
-    trail_image1: {fileID: 2039003240}
-    trail_image2: {fileID: 1205811986}
-    trail_image3: {fileID: 2136951580}
-    clouds: {fileID: 1557206746}
-    fade_in_out_image: {fileID: 21300000, guid: 3ade4435fbd1f2c4eb5b6185d51d877b, type: 3}
-  back_ground_pattern:
-    pattern_count: 0
-    pattern_ending: 0
-    duration: 0
-    dark_clouds: {fileID: 1825094014}
-    thunders:
-    - {fileID: 1917658241}
-    - {fileID: 1935193287}
 --- !u!1 &1205811985
 GameObject:
   m_ObjectHideFlags: 0
