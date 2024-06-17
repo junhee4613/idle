@@ -28,6 +28,11 @@ public enum Player_statu
     DRAG,
     HIT,
 }
+public enum Camera_focus_state
+{
+    CHAPTER1,
+    CHAPTER2
+}
 public class slow_eligibility : MonoBehaviour
 {
     public float slow_speed;

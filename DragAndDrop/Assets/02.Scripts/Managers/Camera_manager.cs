@@ -8,7 +8,7 @@ public class Camera_manager
 {
     Camera main_camera;
     float time;
-    
+    public Camera_focus_state state;
     public Camera Main_camera { 
         get 
         {
@@ -48,7 +48,7 @@ public class Camera_manager
     
     public void Focus_move(Vector3 pos)
     {
-        Main_camera.transform.DOMove(pos, 0.5f).SetEase(Ease.OutQuint);
+        Main_camera.transform.DOMove(pos, 0.3f).SetEase(Ease.OutQuint);
     }
     /*public void Fade_out_in(string color,float out_delay, float out_duration, float in_delay, float in_duration, Action first_delay = null, Action second_delay = null)
     {

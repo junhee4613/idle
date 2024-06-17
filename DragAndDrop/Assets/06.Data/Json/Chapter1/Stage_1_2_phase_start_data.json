@@ -15,8 +15,13 @@
         "duration": "0"
     },
     {
-        "time": "64.5",
+        "time": "64",
         "action_num": "3",
+        "duration": "0"
+    },
+    {
+        "time": "64.5",
+        "action_num": "4",
         "duration": "0"
     }
 ]

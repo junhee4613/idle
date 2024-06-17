@@ -11,7 +11,7 @@ using DG.Tweening;
 public class ChaInGureumi : BossController          //비트는 80dlek
 {
     public Transform boss_trans;
-    string[] anims = new string[] { "form_trans", "cry", "idle", "breathe_in", "idle2", "move", "breathe_out", "spit" };
+    string[] anims = new string[] { "form_trans", "cry", "idle", "breathe_in", "idle2", "move", "breathe_out", "spit", "form_trans_lightning" };
     
     [Header("비바람 패턴")]
     public Rain_storm_pattern rain_storm;
@@ -51,14 +51,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
         Pattern_function(ref rain_storm.pattern_data, ref rain_storm.pattern_ending, ref rain_storm.duration, ref rain_storm.pattern_count,ref rain_storm.time, Rain_storm_rotation, true, 0.375f, Rain_storm);
         Pattern_function(ref shower.pattern_data, ref shower.pattern_ending, ref shower.duration, ref shower.pattern_count, Shower);
         Pattern_function(ref rush.pattern_data, ref rush.pattern_ending, ref rush.duration, ref rush.pattern_count, Rush);
-        /*if (!lightning.pattern_ending)
-        {
-            if(lightning.pattern_data[lightning.pattern_count].time <= Managers.Sound.bgSound.time)
-            {
-                Anim_state_machin2(anim_state["idle2"],true, true);
-                Lightning();
-            }
-        }*/
+        Pattern_function(ref lightning.pattern_data, ref lightning.pattern_ending, ref lightning.duration, ref lightning.pattern_count, Lightning);
         Pattern_function(ref phase_2.pattern_data, ref phase_2.pattern_ending, ref phase_2.duration, ref phase_2.pattern_count, Phase_2);
         Pattern_function(ref electric_ball_pattern.pattern_data, ref electric_ball_pattern.pattern_ending, ref electric_ball_pattern.duration, ref electric_ball_pattern.pattern_count, Electric_ball);
         Pattern_function(ref electric_ball_rotation_pattern.pattern_data, ref electric_ball_rotation_pattern.pattern_ending, ref electric_ball_rotation_pattern.duration, ref electric_ball_rotation_pattern.pattern_count, Electric_ball_rotation);
@@ -250,7 +243,6 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 {
                     transform.localScale = new Vector3(-1, 1, 0);
                 }
-                //지정한 위치까지 돌진 후 소나기 사라짐
                 break;
             case 3:
                 transform.Translate(Vector3.up * Time.deltaTime * 12);
@@ -269,14 +261,13 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 switch (rush.count)
                 {
                     case 0:
-                        Charging_doscale_x_warning_box(new Vector3(10, 3.5f, 0), new Vector3(0, rush.rush_pos_y[rush.count], 0), new Vector3(5, rush.rush_pos_y[rush.count]), Warning_box_pivots.RIGHT, color, 0.75f);
+                        Charging_doscale_x_warning_box(new Vector3(10, 3.5f, 0), new Vector3(0, rush.rush_pos_y[rush.count], 0), new Vector3(-5, rush.rush_pos_y[rush.count]), Warning_box_pivots.LEFT, color, 0.75f);
                         break;
                     case 1:
-                        Charging_doscale_x_warning_box(new Vector3(10, 3.5f, 0), new Vector3(0, rush.rush_pos_y[rush.count], 0), new Vector3(-5, rush.rush_pos_y[rush.count]), Warning_box_pivots.LEFT, color, 0.75f);
+                        Charging_doscale_x_warning_box(new Vector3(10, 3.5f, 0), new Vector3(0, rush.rush_pos_y[rush.count], 0), new Vector3(5, rush.rush_pos_y[rush.count]), Warning_box_pivots.RIGHT, color, 0.75f);
                         break;
                 }
                 rush.count++;
-                //여기에 돌진 높이를 정해주기 0.75초 뒤에 출발함 -1 ,-3 0.5초 만에
                 break;
             case 1:         //사라지고 위치 초기화
                 if (!rush.rush_start)
@@ -356,7 +347,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 transform.DOMoveX(0, 0.4f);
                 break;
             case 7:         //위에서 달려가다 잠시 멈추기 위한 로직 2
-                Anim_state_machin2(anim_state["form_trans"], true, true);
+                Anim_state_machin2(anim_state["idle"], true, true);
                 break;
             case 8:             //연속 돌진 경고 장판
                 if(rush.pos_y == -3f)
@@ -367,7 +358,15 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 {
                     rush.pos_y = -3f;
                 }
-                Warning_box_fade(new Vector3(8, Mathf.Abs(4 - Mathf.Abs(rush.pos_y + 2)), 0), new Vector3(0, (rush.pos_y / 2f - 1), 0), true, 3, 0.25f);
+                switch (rush.dir)
+                {
+                    case 1:     //오른쪽으로 이동
+                        Charging_doscale_x_warning_box(new Vector3(10, 3.5f, 0), new Vector3(0, rush.pos_y, 0), new Vector3(-5, rush.pos_y), Warning_box_pivots.LEFT, color, 0.75f);
+                        break;
+                    case -1:        //왼쪽으로 이동
+                        Charging_doscale_x_warning_box(new Vector3(10, 3.5f, 0), new Vector3(0, rush.pos_y, 0), new Vector3(5, rush.pos_y), Warning_box_pivots.RIGHT, color, 0.75f);
+                        break;
+                }
                 break;
             case 9:             //위에서 달려가다 잠시 멈추기 위한 로직 3
                 transform.DOMoveX(rush.target_rush_pos_x * rush.dir, 0.4f);
@@ -402,11 +401,11 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     }
     public void Electric_ball()
     {
-        
-
         switch (electric_ball_pattern.pattern_data[electric_ball_pattern.pattern_count].action_num)
         {
             case 0:
+                transform.GetChild(0).GetComponent<SpriteRenderer>().DOFade(1f, 0.75f);
+                transform.GetChild(0).transform.DOScale(1f, 0.75f);
                 Sequence sequence = DOTween.Sequence();
                 electric_ball_pattern.electric_ball_obj.SetActive(true);
                 sequence.Append(electric_ball_pattern.electric_ball_obj.transform.DOScale(Vector3.one * 1.5f, 0.5f));
@@ -464,11 +463,12 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     }
     public void Lightning()
     {
+        Anim_state_machin2(anim_state["idle2"], true, true);
         switch (lightning.pattern_data[lightning.pattern_count].action_num)
         {
             case 0:
                 GameObject single_lightning = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Single_lightning"));
-                single_lightning.transform.position = new Vector3(lightning.single_pos_x[lightning.single_count], 0.5f, 0);
+                single_lightning.transform.position = new Vector3(lightning.single_pos_x[lightning.single_count], 1f, 0);
                 if(lightning.single_count != lightning.single_pos_x.Length - 1)
                 {
                     lightning.single_count++;
@@ -476,7 +476,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 break;
             case 1:
                 GameObject board_lightning = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Broad_lightning"));
-                board_lightning.transform.position = new Vector3(lightning.board_pos_x[lightning.board_count], 0.5f, 0);
+                board_lightning.transform.position = new Vector3(lightning.board_pos_x[lightning.board_count], 1.5f, 0);
                 if (lightning.board_count != lightning.board_pos_x.Length - 1)
                 {
                     lightning.board_count++;
@@ -484,11 +484,6 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 break;
             default:
                 break;
-        }
-        lightning.pattern_count++;
-        if(lightning.pattern_data.Count == lightning.pattern_count)
-        {
-            lightning.pattern_ending = true;
         }
     }
     public void Phase_2()
@@ -505,12 +500,46 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 Anim_state_machin2(anim_state["form_trans"], true, true);
                 break;
             case 3:
-                Anim_state_machin2(anim_state["idle2"], true, true);
+                Anim_state_machin2(anim_state["form_trans_lightning"], true, true);
+                break;
+            case 4:
+                phase_2.lightning.SetActive(true);
+                StartCoroutine(Background_lightning());
                 Managers.Main_camera.Shake_move();
                 break;
             default:
                 break;
         }
+    }
+    IEnumerator Background_lightning()
+    {
+        yield return null;
+        for (int i = 0; i < 2; i++)
+        {
+            float time = 0.15f;
+            while (time > 0)
+            {
+                if(time < 0)
+                {
+                    phase_2.lightning.transform.localScale = new Vector3(phase_2.lightning.transform.localScale.x * -1, 1, 1);
+                }
+                else
+                {
+                    time -= Time.deltaTime;
+
+                }
+                yield return null;
+            }
+        }
+        phase_2.lightning.transform.GetChild(0).GetComponent<SpriteRenderer>().DOFade(0, 0.2f);
+        phase_2.lightning.transform.GetChild(1).GetComponent<SpriteRenderer>().DOFade(0, 0.2f).OnComplete(() => 
+        {
+            phase_2.lightning.SetActive(false);
+            Anim_state_machin2(anim_state["idle2"], true, true);
+            transform.GetChild(0).GetComponent<SpriteRenderer>().DOFade(0.25f,0.75f);
+            transform.GetChild(0).transform.DOScale(0.25f, 0.75f);
+        });
+
     }
     [Serializable]
     public class Lightning_pattern : Pattern_base_data
@@ -582,6 +611,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     [Serializable]
     public class Phase_2_pattern : Pattern_base_data
     {
+        public GameObject lightning;
         public float speed = 2;
     }
     [Serializable]

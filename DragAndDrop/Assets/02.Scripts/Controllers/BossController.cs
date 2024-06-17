@@ -268,10 +268,10 @@ public abstract class BossController : Stage_base_controller        //time	actio
         warning_box2.transform.localScale = new Vector3(0, init_size.y, init_size.z);
         switch (pivot)
         {
-            case Warning_box_pivots.LEFT:
+            case Warning_box_pivots.RIGHT:
                 warning_box2.transform.GetChild(0).transform.localPosition = new Vector3(-0.5f, 0,  0);
                 break;
-            case Warning_box_pivots.RIGHT:
+            case Warning_box_pivots.LEFT:
                 warning_box2.transform.GetChild(0).transform.localPosition = new Vector3(0.5f, 0,  0);
                 break;
         }
@@ -281,7 +281,7 @@ public abstract class BossController : Stage_base_controller        //time	actio
             general_warning_box_sr.Add(warning_box2, warning_box2.transform.GetChild(0).GetComponent<SpriteRenderer>());
         }
         general_warning_box_sr[warning_box2].color = color[1];
-        warning_box2.transform.DOScaleX(init_size.y, action_time).OnComplete(() =>
+        warning_box2.transform.DOScaleX(init_size.x, action_time).OnComplete(() =>
         {
             Managers.Pool.Push(warning_box2);
             Managers.Pool.Push(warning_box);
