@@ -30,7 +30,7 @@ public class Stage_base_controller : MonoBehaviour
         {
             if (anim_until_the_end)
             {
-                if (an.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1 )
+                if (clip_name.an.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1 )
                 {
                     clip_name.On_state_exit();
                     now_anim = clip_name;
@@ -48,7 +48,7 @@ public class Stage_base_controller : MonoBehaviour
         {
             if (anim_until_the_end)
             {
-                if (an.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+                if (clip_name.an.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
                 {
                     clip_name.On_state_exit();
                     now_anim = clip_name;

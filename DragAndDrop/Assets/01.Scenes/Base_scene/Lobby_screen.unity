@@ -154,7 +154,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   invincibility: 1
-  last_stage: Chapter2_boss_stage
 --- !u!4 &338457427
 Transform:
   m_ObjectHideFlags: 0

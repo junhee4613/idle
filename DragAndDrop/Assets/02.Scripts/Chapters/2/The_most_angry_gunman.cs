@@ -319,17 +319,18 @@ public class The_most_angry_gunman : BossController
                         //다이너마이트 다시 생기는 애니메이션 작동
                         dynamite.throw_dynamite.transform.localScale = new Vector3(1, 1, 1);
                         dynamite.throw_dynamite.transform.position = hands[1].transform.position;
-                        Anim_state_machin2(left_hand_state["dynamite_instance"], false, true);
-                        Anim_state_machin2(anim_state["left_dynamite_throw"], false);
+                        Anim_state_machin2(left_hand_state["dynamite_instance"], true, true);
+                        Anim_state_machin2(anim_state["left_dynamite_throw"], true, true);
                         sequence.Join(dynamite.throw_dynamite.transform.DOLocalJump(new Vector3(dynamite.dynamite_landing_pos_x, -3, 0), 5, 1, 0.5f).SetEase(Ease.InSine));
                         sequence.Join(dynamite.throw_dynamite.transform.DORotate(new Vector3(0, 0, 360), 0.25f, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetLoops(2));
                         break;
                     case -1:
                         dynamite.throw_dynamite.transform.position = hands[0].transform.position;
                         dynamite.throw_dynamite.transform.localScale = new Vector3(-1, 1, 1);
-                        Anim_state_machin2(right_hand_state["dynamite_instance"], false, true);
-                        Anim_state_machin2(anim_state["right_dynamite_throw"], false);
+                        Anim_state_machin2(right_hand_state["dynamite_instance"], true, true);
+                        Anim_state_machin2(anim_state["right_dynamite_throw"], true, true);
                         sequence.Join(dynamite.throw_dynamite.transform.DOLocalJump(new Vector3(dynamite.dynamite_landing_pos_x, -3, 0), 5, 1, 0.5f).SetEase(Ease.InSine));
+                        sequence.Join(dynamite.throw_dynamite.transform.DORotate(new Vector3(0, 0, -360), 0.25f, RotateMode.FastBeyond360).SetEase(Ease.Linear).SetLoops(2));
                         break;
                 }
                 break;
@@ -538,7 +539,7 @@ public class The_most_angry_gunman : BossController
         }
         else if (pos.Contains('x'))
         {
-            if (Managers.GameManager.Player_character.position.x > temp[pos][0].position.y - 2.5 && Managers.GameManager.Player_character.position.x < temp[pos][0].position.y + 2.5 &&
+            if (Managers.GameManager.Player_character.position.x > temp[pos][0].position.x - 2.5 && Managers.GameManager.Player_character.position.x < temp[pos][0].position.x + 2.5 &&
                    Managers.GameManager.Player_character.position.y > -3.75f && Managers.GameManager.Player_character.position.y < 3.75f)
             {
                 Managers.GameManager.Player.Hit();

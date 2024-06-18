@@ -54,25 +54,6 @@ public static class Extension //¿·¿¡´Â Á¤Àû Å¬·¡½ºÀÌ´Ù. ¾Æ·¡¿¡ ÀÖ´Â ¸Þ¼­µåµéÀº È
             list[n] = value;
         }
     }
-    public static void Anim_processing(this Dictionary<string, Anim_stage_state> dic, ref Animator anim, sbyte simplae_pattern_num, sbyte hard_pattern_num )
-    {           //FIX : ³ªÁß¿¡ ¿©±â ¸®ÆÑÅä¸µ ÇØ¾ßµÊ
-        if (anim == null)
-        {
-            Debug.LogError("¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ¾ø¾î");
-        }
-        Animator temp = anim;
-        dic.Add("1_phase_idle", new Phase1_idle(anim));
-        dic.Add("2_phase_idle", new Phase2_idle(anim));
-        for (int i = 0; i < simplae_pattern_num; i++)
-        {
-            dic.Add($"simple_pattern{i}", new Simple_pattern($"simple_pattern{i}", anim));
-        }
-        for (int i = 0; i < hard_pattern_num; i++)
-        {
-            dic.Add($"hard_pattern{i}", new Hard_pattern($"hard_pattern{i}", anim));
-
-        }
-    }
     public static void Anim_processing2(this Dictionary<string, Anim_stage_state> dic, ref Animator anim, string[] anims_name)
     {           //¹è¿­ Çü½ÄÀ¸·Î ¹Ù²ã¼­ ¾Ö´Ï¸ÞÀÌ¼Ç ÀÌ¸§À» ÆÐÅÏ°ú µ¿ÀÏÇÏ°Ô µÇµµ·Ï º¯°æ
 
@@ -80,7 +61,6 @@ public static class Extension //¿·¿¡´Â Á¤Àû Å¬·¡½ºÀÌ´Ù. ¾Æ·¡¿¡ ÀÖ´Â ¸Þ¼­µåµéÀº È
         {
             Debug.LogError("¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ¾ø¾î");
         }
-        Animator temp = anim;
         foreach (string s in anims_name)
         {
             dic.Add(s, new Pattern_anim(s, anim));
