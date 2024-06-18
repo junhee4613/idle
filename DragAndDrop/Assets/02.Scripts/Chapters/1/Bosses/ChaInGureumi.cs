@@ -12,7 +12,10 @@ public class ChaInGureumi : BossController          //비트는 80dlek
 {
     public Transform boss_trans;
     string[] anims = new string[] { "form_trans", "cry", "idle", "breathe_in", "idle2", "move", "breathe_out", "spit", "form_trans_lightning" };
-    
+    string[] background_anims = new string[] { "chapter1_pase_1_background", "trans_background", "chapter1_pase_2_background"};
+    protected Dictionary<string, Anim_stage_state> background_anim_state = new Dictionary<string, Anim_stage_state>();
+    public Animator background_an;
+
     [Header("비바람 패턴")]
     public Rain_storm_pattern rain_storm;
     [Header("소나기 패턴")]
@@ -32,6 +35,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     {
         base.Awake();
         anim_state.Anim_processing2(ref an, anims);
+        background_anim_state.Anim_processing2(ref background_an, background_anims);
         rain_storm.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage1_rain_storm_data").text);
         rush.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage1_rush_pattern_data").text);
         shower.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Stage1_shower_data").text);
@@ -45,6 +49,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
     {
         Managers.GameManager.game_start = true;
         Anim_state_machin2(anim_state["idle"], true);
+        Anim_state_machin2(background_anim_state["chapter1_pase_1_background"], true);
     }
     public override void Pattern_processing()
     {
@@ -498,6 +503,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 break;
             case 2:
                 Anim_state_machin2(anim_state["form_trans"], true, true);
+                Anim_state_machin2(background_anim_state["trans_background"], true);
                 break;
             case 3:
                 Anim_state_machin2(anim_state["form_trans_lightning"], true, true);
@@ -506,6 +512,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 phase_2.lightning.SetActive(true);
                 StartCoroutine(Background_lightning());
                 Managers.Main_camera.Shake_move();
+                Anim_state_machin2(background_anim_state["chapter1_pase_2_background"], true);
                 break;
             default:
                 break;

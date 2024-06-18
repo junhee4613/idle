@@ -34,6 +34,8 @@ public class Stage_base_controller : MonoBehaviour
                 {
                     clip_name.On_state_exit();
                     now_anim = clip_name;
+                    Debug.Log(clip_name.temp_name);
+                    Debug.Log(clip_name.an);
                     clip_name.On_state_enter();
                 }
             }

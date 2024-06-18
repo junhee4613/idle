@@ -535,6 +535,7 @@ MonoBehaviour:
   - {r: 0.09411766, g: 0.27058825, b: 0.5254902, a: 1}
   - {r: 0.04705883, g: 0.5647059, b: 0.8862746, a: 1}
   boss_trans: {fileID: 1684009971}
+  background_an: {fileID: 1957588449}
   rain_storm:
     pattern_count: 0
     pattern_ending: 0
