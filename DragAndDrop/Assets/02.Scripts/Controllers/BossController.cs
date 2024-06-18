@@ -92,11 +92,16 @@ public abstract class BossController : Stage_base_controller        //time	actio
             }
         }
     }
-    public void Warning_box_fade(Vector3 size, Vector3 pos, bool fade_option, sbyte count = 0, float minute = 0, Action dotween_end_function = null)
+    public void Warning_box_fade(Vector3 size, Vector3 pos, bool fade_option, Color color, sbyte count = 0, float minute = 0, Action dotween_end_function = null)
     {
         GameObject warning_box = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
         warning_box.transform.position = pos;
         warning_box.transform.localScale = size;
+        if (!general_warning_box_sr.ContainsValue(warning_box.GetComponent<SpriteRenderer>()))
+        {
+            general_warning_box_sr.Add(warning_box, warning_box.GetComponent<SpriteRenderer>());
+        }
+        general_warning_box_sr[warning_box].color = color;
         if (fade_option)
         {
             warning_box.GetComponent<SpriteRenderer>().DOFade(1, 0);
@@ -141,11 +146,16 @@ public abstract class BossController : Stage_base_controller        //time	actio
         }
     }
     public GameObject Warning_box_punch_scale(Vector3 pos, Vector3 init_size, Vector3 first_dotween, float first_dotween_duration, Vector3 end_size, float seconde_dotween_duration
-        ,bool auto_disable, bool only_vertical = false, bool only_horizontal = false, Action dotween_end_function = null)
+        ,bool auto_disable, Color color, bool only_vertical = false, bool only_horizontal = false, Action dotween_end_function = null)
     {
         GameObject warning_box = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
         warning_box.transform.position = pos;
         warning_box.transform.localScale = init_size;
+        if (!general_warning_box_sr.ContainsValue(warning_box.GetComponent<SpriteRenderer>()))
+        {
+            general_warning_box_sr.Add(warning_box, warning_box.GetComponent<SpriteRenderer>());
+        }
+        general_warning_box_sr[warning_box].color = color;
         if (only_horizontal)
         {
             warning_box.transform.DOScaleX(first_dotween.x, first_dotween_duration).OnComplete(() => 

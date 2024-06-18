@@ -1,12 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
 using DG.Tweening;
 using Newtonsoft.Json;
-using System.Runtime.InteropServices;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 using Random = UnityEngine.Random;
-using static The_most_angry_gunman;
 
 public class The_most_angry_gunman : BossController
 {
@@ -19,7 +16,7 @@ public class The_most_angry_gunman : BossController
     public GameObject[] hands = new GameObject[2];
     Dictionary<string, Anim_stage_state> right_hand_state = new Dictionary<string, Anim_stage_state>();
     Dictionary<string, Anim_stage_state> left_hand_state = new Dictionary<string, Anim_stage_state>();
-    string[] anims = new string[] {"idle", "reload", "right_move","right_shot","left_move", "left_shot", "stage2_dead", "dynamite_throw", "change_weapon", "right_dynamite_throw", "left_dynamite_throw" };
+    string[] anims = new string[] { "idle", "reload", "right_move", "right_shot", "left_move", "left_shot", "stage2_dead", "dynamite_throw", "change_weapon", "right_dynamite_throw", "left_dynamite_throw" };
     string[] weapon_anims = new string[] { "gun_idle", "reload", "shot", "look_on", "gun_shot_init", "dynamite_idle", "dynamite_boom", "dynamite_instance", "gun_base", "change_weapon" };
     protected override void Awake()
     {
@@ -43,10 +40,10 @@ public class The_most_angry_gunman : BossController
     }
 
     // Update is called once per frame
-    
+
     public override void Pattern_processing()
     {
-        Pattern_function(ref gun_shoot.pattern_data, ref gun_shoot.pattern_ending, ref gun_shoot.duration,ref gun_shoot.pattern_count, Gun_shoot_pattern);
+        Pattern_function(ref gun_shoot.pattern_data, ref gun_shoot.pattern_ending, ref gun_shoot.duration, ref gun_shoot.pattern_count, Gun_shoot_pattern);
         Aim_moving();
         Pattern_function(ref dynamite.pattern_data, ref dynamite.pattern_ending, ref dynamite.duration, ref dynamite.pattern_count, Dynamite_pattern);
         Pattern_function(ref tumbleweed.pattern_data, ref tumbleweed.pattern_ending, ref tumbleweed.duration, ref tumbleweed.pattern_count, Tumbleweed_pattern);
@@ -68,13 +65,13 @@ public class The_most_angry_gunman : BossController
         }
     }
     public void Gun_shoot_pattern()
-    {   
+    {
         //패턴별 행동들
         switch (gun_shoot.pattern_data[gun_shoot.pattern_count].action_num)
         {
             case 0:     //에임 생성
-                
-                if(gun_shoot.aims[0] == null && gun_shoot.aims[1] == null)
+
+                if (gun_shoot.aims[0] == null && gun_shoot.aims[1] == null)
                 {
                     Scope_create(ref gun_shoot.aims[0], gun_shoot.pop_pos[0]);
                     Scope_create(ref gun_shoot.aims[1], gun_shoot.pop_pos[1]);
@@ -91,7 +88,7 @@ public class The_most_angry_gunman : BossController
                         gun_shoot.right_shoot = true;
                     }
                 }
-                else if(gun_shoot.aim_idle_state[1] && gun_shoot.aims[1].activeSelf)
+                else if (gun_shoot.aim_idle_state[1] && gun_shoot.aims[1].activeSelf)
                 {
                     Lock_on(ref gun_shoot, 1);
                     gun_shoot.aims_data[1].attack_action = true;
@@ -102,7 +99,7 @@ public class The_most_angry_gunman : BossController
                 if (!gun_shoot.aim_idle_state[0] && gun_shoot.aims_data[0].attack_action)
                 {
                     Managers.Main_camera.Punch(4.8f, 5, 0.05f);
-                    Shoot_after_init_pos((value) => gun_shoot.aim_idle_state[0] = value, 0,ref gun_shoot.aims_data[0].attack_action);
+                    Shoot_after_init_pos((value) => gun_shoot.aim_idle_state[0] = value, 0, ref gun_shoot.aims_data[0].attack_action);
                 }
                 else if (!gun_shoot.aim_idle_state[1] && gun_shoot.aims_data[1].attack_action)
                 {
@@ -154,7 +151,7 @@ public class The_most_angry_gunman : BossController
                 break;
         }
     }
-    public void Scope_side_move(ref GameObject aim, ref float dir_x, ref float dir_y, float range_x, float range_y, float pop_pos_x , float pop_pos_y, float speed)
+    public void Scope_side_move(ref GameObject aim, ref float dir_x, ref float dir_y, float range_x, float range_y, float pop_pos_x, float pop_pos_y, float speed)
     {                   //에임들이 외각에서 움직이는 코드
         aim.transform.position = new Vector3(Mathf.Clamp(aim.transform.position.x + Time.deltaTime * Mathf.Sin(45 * Mathf.Deg2Rad) * dir_x * speed, pop_pos_x - range_x, pop_pos_x + range_x),
                     Mathf.Clamp(aim.transform.position.y + Time.deltaTime * Mathf.Cos(315 * Mathf.Deg2Rad) * dir_y * speed, pop_pos_y - range_y, pop_pos_y + range_y));
@@ -210,8 +207,8 @@ public class The_most_angry_gunman : BossController
                     gun_shoot.aims[gun_num].transform.DOPunchScale(Vector3.one * 0.2f, 0.1f).OnComplete(() =>
                     {
                         Bullet_mark_ceate(gun_shoot.aims[gun_num].transform.position);
-                        gun_shoot.aims[gun_num].transform.DOLocalMove(gun_shoot.move_befor_pos[gun_num], 0.2f).OnComplete(() => 
-                        { 
+                        gun_shoot.aims[gun_num].transform.DOLocalMove(gun_shoot.move_befor_pos[gun_num], 0.2f).OnComplete(() =>
+                        {
                             scope_action_end(true);
                         });
                     });
@@ -230,8 +227,8 @@ public class The_most_angry_gunman : BossController
         scope.SetActive(true);
         DG.Tweening.Sequence sequence = DOTween.Sequence();
         sequence.Append(scope.transform.DOScale(Vector3.one * 1.5f, 0.2f));
-        sequence.Append(scope.transform.DOScale(Vector3.one * 1f, 0.2f).OnComplete(() => 
-        { 
+        sequence.Append(scope.transform.DOScale(Vector3.one * 1f, 0.2f).OnComplete(() =>
+        {
             scope_action_end(true);
         }));
     }
@@ -268,8 +265,8 @@ public class The_most_angry_gunman : BossController
                     Anim_state_machin2(left_hand_state["gun_shot_init"], false);
                     break;
             }
-            gun_shoot.aims[num].transform.DOLocalMove(gun_shoot.move_befor_pos[num], 0.2f).OnComplete(() => 
-            { 
+            gun_shoot.aims[num].transform.DOLocalMove(gun_shoot.move_befor_pos[num], 0.2f).OnComplete(() =>
+            {
                 scope_action_end(true);
             });
         });
@@ -337,7 +334,7 @@ public class The_most_angry_gunman : BossController
                 }
                 break;
             case 3:     //다이너마이트 터짐
-                if(Managers.GameManager.Player_character.transform.position.x < dynamite.throw_dynamite.transform.position.x + 1 && Managers.GameManager.Player_character.transform.position.x > dynamite.throw_dynamite.transform.position.x - 1)
+                if (Managers.GameManager.Player_character.transform.position.x < dynamite.throw_dynamite.transform.position.x + 1 && Managers.GameManager.Player_character.transform.position.x > dynamite.throw_dynamite.transform.position.x - 1)
                 {
                     Managers.GameManager.Player.Hit();
                 }
@@ -411,14 +408,14 @@ public class The_most_angry_gunman : BossController
             case 1:     //큰 경고판 1.5
                 tumbleweed.small_turn = false;
                 int big_num = Random.Range(0, tumbleweed.big_tumbleweed.Count - 1);
-                tumbleweed.warning.Add(Warning_box_punch_scale(new Vector3(0, tumbleweed.big_tumbleweed[big_num], 0), new Vector3(15, 1.25f, 0), new Vector3(15, 1.4f, 0), 0.1f, new Vector3(15, 1.5f, 0), 0.05f, false, true));
+                tumbleweed.warning.Add(Warning_box_punch_scale(new Vector3(0, tumbleweed.big_tumbleweed[big_num], 0), new Vector3(15, 1.25f, 0), new Vector3(15, 1.4f, 0), 0.1f, new Vector3(15, 1.5f, 0), 0.05f, false, color[1], true));
                 tumbleweed.horizontal_tumbleweed_instance.Add(tumbleweed.big_tumbleweed[big_num]);
                 tumbleweed.big_tumbleweed.RemoveAt(big_num);
                 break;
             case 2:    //(작은 장판)) 1.25
                 tumbleweed.small_turn = true;
                 int small_num = Random.Range(0, tumbleweed.small_tumbleweed.Count - 1);
-                tumbleweed.warning.Add(Warning_box_punch_scale(new Vector3(0, tumbleweed.small_tumbleweed[small_num], 0), new Vector3(15, 0.8f, 0), new Vector3(15, 1, 0), 0.1f, new Vector3(15, 1.25f, 0), 0.05f, false, true));
+                tumbleweed.warning.Add(Warning_box_punch_scale(new Vector3(0, tumbleweed.small_tumbleweed[small_num], 0), new Vector3(15, 0.8f, 0), new Vector3(15, 1, 0), 0.1f, new Vector3(15, 1.25f, 0), 0.05f, false, color[1], true));
                 tumbleweed.horizontal_tumbleweed_instance.Add(tumbleweed.small_tumbleweed[small_num]);
                 tumbleweed.small_tumbleweed.RemoveAt(small_num);
                 break;
@@ -426,7 +423,7 @@ public class The_most_angry_gunman : BossController
                 float pos_x = tumbleweed.vertical_tumbleweed[Random.Range(0, tumbleweed.vertical_tumbleweed.Count - 1)];
                 tumbleweed.vertical_tumbleweed.Remove(pos_x);
                 GameObject warning = Warning_box_punch_scale(new Vector3(pos_x, 0, 0), new Vector3(1.5f, 7.5f, 0),
-                    new Vector3(1.8f, 7.5f, 0), 0.5f, new Vector3(2.5f, 7.5f, 0), 0.1f, true, false, true, () =>
+                    new Vector3(1.8f, 7.5f, 0), 0.5f, new Vector3(2.5f, 7.5f, 0), 0.1f, true, color[1], false, true, () =>
                     {
                         Vertical_tumble(Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Vertical_tumbleweed")), pos_x);
                     });
@@ -458,21 +455,6 @@ public class The_most_angry_gunman : BossController
                     powder_keg.objs.Add(temp.transform);
                     Placed_obj(temp.transform.position, temp.transform);
                 }
-                /*if (powder_keg.objs.Count != 0)
-                {
-                    foreach (var item in powder_keg.objs)
-                    {
-                        if (item.transform.position != temp.transform.position)
-                        {
-                            if (item.position.x == temp.transform.position.x && !powder_keg.boom.Contains(item))
-                            {
-                            }
-                            else if (item.position.y == temp.transform.position.y && !powder_keg.boom.Contains(item))
-                            {
-                            }
-                        }
-                    }
-                }*/
                 break;
             case 1:     //화약통 다 사라짐 0.4초 dotween 그리고 박스 작아짐: 0, -1.5, 0의 위치와 1의 스케일
                 foreach (var item in powder_keg.objs)
@@ -508,14 +490,13 @@ public class The_most_angry_gunman : BossController
             powder_keg.boom[pos.x + "x"].Add(obj);
             if (powder_keg.boom[pos.x + "x"].Count == 3)
             {
-                Warning_box_fade(new Vector3(5f, 7.5f, 0), new Vector3(pos.x, 0, 0), true, 3, 0.23f, () => Powder_keg_pattern_boom(pos.x + "x", powder_keg.boom));
+                Warning_box_fade(new Vector3(5f, 7.5f, 0), new Vector3(pos.x, 0, 0), true, color[1], 3, 0.23f, () => Powder_keg_pattern_boom(pos.x + "x", powder_keg.boom));
             }
         }
         else
         {
             powder_keg.boom.Add(pos.x + "x", new List<Transform>());
             powder_keg.boom[pos.x + "x"].Add(obj);
-
         }
 
         if (powder_keg.boom.ContainsKey(pos.y + "y"))
@@ -523,7 +504,7 @@ public class The_most_angry_gunman : BossController
             powder_keg.boom[pos.y + "y"].Add(obj);
             if (powder_keg.boom[pos.y + "y"].Count == 3)
             {
-                Warning_box_fade(new Vector3(15f, 2.5f, 0), new Vector3(0, pos.y, 0), true, 3, 0.23f, () => Powder_keg_pattern_boom(pos.y + "y", powder_keg.boom));
+                Warning_box_fade(new Vector3(15f, 2.5f, 0), new Vector3(0, pos.y, 0), true, color[1], 3, 0.23f, () => Powder_keg_pattern_boom(pos.y + "y", powder_keg.boom));
             }
         }
         else
@@ -546,22 +527,34 @@ public class The_most_angry_gunman : BossController
             Managers.Pool.Push(item2.gameObject);
             powder_keg.deployable_pos.Add(item2.position);
             powder_keg.objs.Remove(item2);
-            
         }
-        Managers.Sound.bgSound.Pause();
+        if (pos.Contains('y'))
+        {
+            if (Managers.GameManager.Player_character.position.x > -7.5 && Managers.GameManager.Player_character.position.x < 7.5 &&
+                   Managers.GameManager.Player_character.position.y > temp[pos][0].position.y - 1.25 && Managers.GameManager.Player_character.position.y < temp[pos][0].position.y + 1.25)
+            {
+                Managers.GameManager.Player.Hit();
+            }
+        }
+        else if (pos.Contains('x'))
+        {
+            if (Managers.GameManager.Player_character.position.x > temp[pos][0].position.y - 2.5 && Managers.GameManager.Player_character.position.x < temp[pos][0].position.y + 2.5 &&
+                   Managers.GameManager.Player_character.position.y > -3.75f && Managers.GameManager.Player_character.position.y < 3.75f)
+            {
+                Managers.GameManager.Player.Hit();
+            }
+        }
         foreach (var item in temp)
         {
             for (int i = 0; i < temp[pos].Count; i++)
             {
-                if(item.Key != pos)
+                if (item.Key != pos)
                 {
                     item.Value.Remove(temp[pos][i]);
                 }
             }
         }
         temp[pos].Clear();
-        Managers.Sound.bgSound.UnPause();
-
     }
 
     [Serializable]
@@ -587,7 +580,7 @@ public class The_most_angry_gunman : BossController
     }
     [Serializable]
     public class Dynamite : Pattern_base_data
-    {
+    {   
         public GameObject throw_dynamite;
         public float dynamite_landing_pos_x;
         public float dynamite_throw_pos_x_range;

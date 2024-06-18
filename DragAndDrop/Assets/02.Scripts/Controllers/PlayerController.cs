@@ -58,49 +58,20 @@ public class PlayerController : playerData
             Interaction_obj();
             Key_operate();
         }
-        if(Managers.GameManager.scene_name == "Main_screen")        //0 -18
+        if (Managers.GameManager.scene_name == "Main_screen")        //0 -18
         {
-                Debug.Log(1);
-            if(transform.position.x > -9 && Managers.Main_camera.state != Camera_focus_state.CHAPTER2)
+            if (transform.position.x > -9 && Managers.Main_camera.state != Camera_focus_state.CHAPTER2)
             {
-                Debug.Log(2);
                 Managers.Main_camera.state = Camera_focus_state.CHAPTER2;
                 Managers.Main_camera.Focus_move(new Vector3(0, 0, -10));
             }
-            else if(transform.position.x < -9 && Managers.Main_camera.state != Camera_focus_state.CHAPTER1)
+            else if (transform.position.x < -9 && Managers.Main_camera.state != Camera_focus_state.CHAPTER1)
             {
-                Debug.Log(3);
                 Managers.Main_camera.state = Camera_focus_state.CHAPTER1;
                 Managers.Main_camera.Focus_move(new Vector3(-18, 0, -10));
             }
         }
-        /*if (Managers.GameManager.scene_name == "Main_screen" && (Mathf.Abs(Managers.Main_camera.Main_camera.transform.position.x) - Mathf.Abs(transform.position.x) < 9.5f 
-            || Mathf.Abs(Managers.Main_camera.Main_camera.transform.position.y) - Mathf.Abs(transform.position.y) < 5.25f))
-        {
-            //Camera_focus_processing();
-        }*/
     }
-    /*void Camera_focus_processing()
-    {
-        if (Managers.Main_camera.Main_camera.transform.position.x - 9.5f > transform.position.x)       //왼쪽으로 넘어감
-        {
-            Managers.Main_camera.Focus_move(new Vector3(Managers.Main_camera.Main_camera.transform.position.x - 18, 0, Managers.Main_camera.Main_camera.transform.position.z));
-        }
-        else if (Managers.Main_camera.Main_camera.transform.position.x + 9.5f < transform.position.x)      //오른쪽으로 넘어감
-        {
-            Managers.Main_camera.Focus_move(new Vector3(Managers.Main_camera.Main_camera.transform.position.x + 18, 0, Managers.Main_camera.Main_camera.transform.position.z));
-        }
-
-        if (Managers.Main_camera.Main_camera.transform.position.y + 5.25f < transform.position.y)       //위쪽으로 넘어감
-        {
-            Managers.Main_camera.Focus_move(new Vector3(Managers.Main_camera.Main_camera.transform.position.x + 10, 0, Managers.Main_camera.Main_camera.transform.position.z));
-        }
-        else if (Managers.Main_camera.Main_camera.transform.position.y - 5.25f > transform.position.y)      //아래쪽으로 넘어감
-        {
-            Managers.Main_camera.Focus_move(new Vector3(Managers.Main_camera.Main_camera.transform.position.x - 10, 0, Managers.Main_camera.Main_camera.transform.position.z));
-        }
-        
-    }*/
     public void Mouse_button_down()
     {
         player_statu = Player_statu.DRAG;
