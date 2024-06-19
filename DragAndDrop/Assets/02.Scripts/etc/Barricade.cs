@@ -7,7 +7,7 @@ public class Barricade : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if(Managers.GameManager.stage_clear[this.gameObject.name] == true)
+        if(Managers.GameManager.stage_clear[this.gameObject.name] == true || Managers.instance.invincibility)
         {
             gameObject.SetActive(false);
         }

@@ -17,7 +17,7 @@ public class playerData : Unit
     [Header("피격 당한 후 무적 시간")]
     public float invincibility_time;
     [Header("처음 목숨 갯수")]
-    public int player_life = 3;
+    protected int player_life = 3;
     [Header("브레이크 크기")]
     public byte speed_break = 3;
 }

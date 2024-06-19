@@ -350,6 +350,7 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                     transform.position = new Vector3(rush.init_pos_x * rush.dir, 2.7f);
                 }
                 transform.DOMoveX(0, 0.4f);
+                rush.dir = rush.dir * -1;
                 break;
             case 7:         //위에서 달려가다 잠시 멈추기 위한 로직 2
                 Anim_state_machin2(anim_state["idle"], true, true);
@@ -374,13 +375,9 @@ public class ChaInGureumi : BossController          //비트는 80dlek
                 }
                 break;
             case 9:             //위에서 달려가다 잠시 멈추기 위한 로직 3
-                transform.DOMoveX(rush.target_rush_pos_x * rush.dir, 0.4f);
+                transform.DOMoveX(rush.target_rush_pos_x * -1, 0.4f);
                 Anim_state_machin2(anim_state["move"], true, true);
-                if (rush.duration == 0)
-                {
-                    rush.rush_start = false;
-                    rush.dir = rush.dir * -1;
-                }
+                rush.rush_start = false;
                 break;
             case 10:
                 Anim_state_machin2(anim_state["idle"], true, true);

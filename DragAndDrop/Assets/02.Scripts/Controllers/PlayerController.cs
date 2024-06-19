@@ -43,11 +43,18 @@ public class PlayerController : playerData
     // Start is called before the first frame update
     private void Awake()
     {
-        Managers.GameManager.gameover += Player_die_setActive;
         move_fragments_figurel.module = move_particles[0].emission;
     }
     void Start()
     {
+        if (Managers.instance.invincibility)
+        {
+            player_life = 1000;
+        }
+        else
+        {
+            player_life = 3;
+        }
     }
 
     // Update is called once per frame
@@ -203,17 +210,22 @@ public class PlayerController : playerData
 
             if (player_life <= 0)
             {
-                Managers.GameManager.player_die = true;
-                gameObject.SetActive(false);
-                Managers.GameManager.gameover();
-                return;
+                if (Managers.GameManager.stage_clear["Tutorial_stage"])
+                {
+                    Managers.GameManager.player_die = true;
+                    gameObject.SetActive(false);
+                    Managers.GameManager.gameover();
+                    return;
+                }
+                else
+                {
+                    gameObject.SetActive(false);
+                    Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Tutorial_stage", 1);
+                }
             }
         }
     }
-    public void Player_die_setActive()
-    {
-        //플레이어 죽은 후 처리 애니메이션이 작동한다든지 등등
-    }
+    
     public void Interaction_obj()       //DEL : 나중에 불필요하면 제거
     {
         if (!hit_statu)
