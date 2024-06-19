@@ -5,11 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class Portal : MonoBehaviour, IInteraction_obj
 {
-    public Transform portals;
-    byte index = 0;
     public void Awake()
     {
-        portals = gameObject.transform.parent;
         if (!Managers.instance.invincibility)
         {
             Setting();
@@ -19,20 +16,6 @@ public class Portal : MonoBehaviour, IInteraction_obj
         {
             gameObject.layer = 8;
         }
-        if (!Managers.instance.invincibility)
-        {
-            for (byte i = 0; i < portals.childCount; i++)
-            {
-                if (portals.transform.GetChild(i).gameObject == this.gameObject)
-                {
-                    index = i;
-                    if (index != 0)
-                    {
-                        portals.transform.GetChild(i).gameObject.SetActive(false);
-                    }
-                }
-            } 
-        }
     }
     private void Start()
     {
@@ -40,17 +23,22 @@ public class Portal : MonoBehaviour, IInteraction_obj
     }
     public void Setting()
     {
-        if (Managers.GameManager.stage_clear[this.gameObject.name])
+        for (int i = 0; i < Managers.GameManager.Portals.childCount; i++)
         {
-            if (index + 1 < portals .childCount)
+            if(i == Managers.GameManager.clear_stage_count)
             {
-                portals.GetChild(index + 1).gameObject.SetActive(true);
-                portals.GetChild(index).gameObject.SetActive(false);
+                Managers.GameManager.Portals.GetChild(i).gameObject.SetActive(true);
+            }
+            else
+            {
+                Managers.GameManager.Portals.GetChild(i).gameObject.SetActive(false);
             }
         }
     }
     public void practice()
     {
         Managers.UI_jun.Fade_out_next_in("Black", 0, 1, gameObject.name, 1);
+        Managers.GameManager.portal_pos = transform.position;
+        Managers.Main_camera.camera_pos = Managers.Main_camera.Main_camera.transform.position;
     }
 }

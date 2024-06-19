@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using DG.Tweening;
+using System.Linq;
 
 public abstract class BossController : Stage_base_controller        //time	action_num	duration
 {
@@ -20,7 +21,11 @@ public abstract class BossController : Stage_base_controller        //time	actio
         {
             Anim_end_push();
             Pattern_processing();
-            if(Managers.Sound.bgSound.clip != null && Managers.Sound.bgSound)
+            if ((Managers.instance.invincibility || Managers.instance.tutorial_skip) && Input.GetKeyDown(KeyCode.S))
+            {
+                Game_clear();
+            }
+            if (Managers.Sound.bgSound.clip != null && Managers.Sound.bgSound)
             {
                 if (Managers.Sound.bgSound.loop == false && Managers.Sound.bgSound.time >= Managers.Sound.bgSound.clip.length - 0.2f)
                 {
@@ -327,19 +332,24 @@ public abstract class BossController : Stage_base_controller        //time	actio
         Managers.GameManager.game_start = false;
         if (!string.IsNullOrEmpty(Managers.GameManager.scene_name) && !Managers.GameManager.stage_clear[Managers.GameManager.scene_name])          //전에 있던 스테이지가 어떤 스테이지인지 알기 위해 scene_name이 변수에 할당 하기 전에 먼저 실행
         {
-            if (Managers.GameManager.stage_clear.TryGetValue(Managers.GameManager.scene_name, out bool is_clear))
+            if (Managers.GameManager.stage_clear.TryGetValue(Managers.GameManager.scene_name, out bool is_clear))           //게임을 클리어 했다면 \
             {
                 is_clear = true;
                 Managers.GameManager.stage_clear[Managers.GameManager.scene_name] = is_clear;
-                if (Managers.GameManager.stage_clear.TryGetValue(Managers.GameManager.last_stage, out bool is_init))
+                if (Managers.GameManager.stage_clear.TryGetValue(Managers.GameManager.last_stage, out bool is_init))        //게임 내 마지막 스테이지라면
                 {
                     if (is_init == true)
                     {
-                        Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Lobby_screen", 1, stage_clear_init);
+                        Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Tutorial_stage", 1, Managers.GameManager.stage_clear_init);
+                        Managers.GameManager.clear_stage_count = 0;
                     }
                     else
                     {
                         Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Main_screen", 1);
+                        if(Managers.GameManager.scene_name != "Tutorial_stage")
+                        {
+                            Managers.GameManager.clear_stage_count++;
+                        }
                     }
                 }
             }
@@ -347,14 +357,8 @@ public abstract class BossController : Stage_base_controller        //time	actio
         
         
     }
-    void stage_clear_init()
-    {
-        foreach (var item in Managers.GameManager.stage_clear)
-        {
-            Managers.GameManager.stage_clear[item.Key] = false;
-        }
-        
-    }
+    
+
     public abstract void Pattern_processing();
     public void Anim_end_push()
     {

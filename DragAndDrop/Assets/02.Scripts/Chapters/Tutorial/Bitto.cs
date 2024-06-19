@@ -23,7 +23,6 @@ public class Bitto : BossController
     string[] bitto_box_anims = new string[] { "face_angry_trans", "face_nomal_trans", "face_on1", "face_on2", "trans_ping_pong", "blank_face", "ping_pong_change_normal", "blank_box_face_on"};
     public GameObject player_box;       //FIX : 여기 나중에 풀링으로 수정
     protected Dictionary<string, Anim_stage_state> bitto_box_anim_state = new Dictionary<string, Anim_stage_state>();
-    bool base_tutorial_end = false;
     bool tutorial_bgm_start = false;
     bool rurotial_operation_bgm_start = false;
     AudioClip tutorial_clip;
@@ -84,7 +83,7 @@ public class Bitto : BossController
     // Update is called once per frame
     public override void Pattern_processing()
     {
-        if (!tutorial.player_move)
+        if (!Managers.GameManager.player_move)
         {
             if (!Managers.UI_jun.fade_start)
             {
@@ -98,12 +97,12 @@ public class Bitto : BossController
                     Managers.GameManager.operate = true;
                     if (Input.GetMouseButtonUp(0))
                     {
-                        tutorial.player_move = true;
+                        Managers.GameManager.player_move = true;
                     }
                 } 
             }
         }
-        else if (!base_tutorial_end)
+        else if (!Managers.GameManager.base_tutorial_end)
         {
             if (!rurotial_operation_bgm_start)
             {
@@ -129,9 +128,12 @@ public class Bitto : BossController
         {
             if(!tutorial_bgm_start)
             {
-                tutorial_bgm_start = true;
-                Managers.GameManager.tutorial = false;
-                Managers.Sound.BGMSound(Managers.Resource.Load<AudioClip>("Tutorial_stage"), false);
+                StartCoroutine(Managers.Sound.Async_bgm_load(Managers.Resource.Load<AudioClip>("Tutorial_stage"), false, () => 
+                {
+                    tutorial_bgm_start = true;
+                    Managers.GameManager.tutorial = false;
+                }));
+                
             }
             Boss_pattern_start();
         }
@@ -186,7 +188,7 @@ public class Bitto : BossController
                             Anim_state_machin2(anim_state["angry_bitto_idle"], false);
                             Managers.Main_camera.Move_y(1f, 0.1f, 0, 0.1f);
                             CoroutineManager.StartCoroutine(Hit_box_push(hit_box2, 0.25f));
-                            base_tutorial_end = true;
+                            Managers.GameManager.base_tutorial_end = true;
                         });
                     });
                 });
@@ -427,7 +429,6 @@ public class Bitto : BossController
     {
         public Vector3 player_init_pos;
         public Vector3 bitto_init_pos;
-        internal bool player_move = false;
         internal float bitto_appearence_wait_time;
         internal float mouse_cursor_appearence_wait_time;
         internal bool tutorial_start = false;

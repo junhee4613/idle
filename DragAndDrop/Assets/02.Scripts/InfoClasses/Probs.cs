@@ -30,6 +30,7 @@ public enum Player_statu
 }
 public enum Camera_focus_state
 {
+    NONE,
     CHAPTER1,
     CHAPTER2
 }

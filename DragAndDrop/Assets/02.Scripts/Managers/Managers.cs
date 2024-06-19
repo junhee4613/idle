@@ -8,6 +8,7 @@ using System.Linq;
 public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ ÇÒ´çµÆ´ÂÁö¿¡ ´ëÇÑ ¿©ºÎ¸¦ º¸·Á¸é Á¶»ç½Ä1°ú È£Ãâ½ºÅÃ Ã¢À» ¿­¾î³õ°í Áß´ÜÁ¡¿¡ ¿ÔÀ» ¶§ ±× ÄÚµå¸¦ ÇÒ´ç ½ÃÄÑ¾ßµÊ
 {
     public bool invincibility = false;
+    public bool tutorial_skip = false;
     static Managers _instance;
     public static Managers instance { get { Init(); return _instance; } }
     private void Awake()
@@ -24,7 +25,11 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
                 GameManager.gameover += UI_jun.Game_over_ui;
                 if(invincibility)
                 {
-                    Managers.GameManager.stage_clear.Values.All((value) => true);
+                    GameManager.stage_clear_init();
+                }
+                else if (tutorial_skip)
+                {
+                    Managers.GameManager.stage_clear["Tutorial_stage"] = true;
                 }
                 GameManager.load_end = true;
             }
@@ -56,7 +61,7 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
             if (!GameManager.splash && Input.GetKeyDown(KeyCode.Tab))
             {
                 GameManager.splash = true;
-                if (invincibility)
+                if (invincibility || tutorial_skip)
                 {
                     UI_jun.Fade_out_next_in("Black", 0, 1f, "Main_screen", 1f);
                 }

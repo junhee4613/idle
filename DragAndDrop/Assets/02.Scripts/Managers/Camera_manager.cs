@@ -9,7 +9,9 @@ public class Camera_manager
     Camera main_camera;
     float time;
     public Camera_focus_state state;
-    public Camera Main_camera { 
+    public Vector3 camera_pos = new Vector3(-18, 0, -10);
+    public Camera Main_camera 
+    { 
         get 
         {
             if (main_camera == null)

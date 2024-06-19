@@ -47,7 +47,7 @@ public class PlayerController : playerData
     }
     void Start()
     {
-        if (Managers.instance.invincibility)
+        if (Managers.invincibility || Managers.tutorial_skip)
         {
             player_life = 1000;
         }
@@ -60,7 +60,7 @@ public class PlayerController : playerData
     // Update is called once per frame
     void Update()
     {
-        if (!Managers.GameManager.option_window_on && Managers.GameManager.operate)
+        if (!Managers.GameManager.option_window_on && !Managers.UI_jun.fade_start)
         {
             Interaction_obj();
             Key_operate();

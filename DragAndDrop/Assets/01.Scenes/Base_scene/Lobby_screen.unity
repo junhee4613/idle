@@ -154,6 +154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   invincibility: 0
+  tutorial_skip: 0
 --- !u!4 &338457427
 Transform:
   m_ObjectHideFlags: 0
