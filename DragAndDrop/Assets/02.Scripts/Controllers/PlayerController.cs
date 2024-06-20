@@ -47,14 +47,7 @@ public class PlayerController : playerData
     }
     void Start()
     {
-        if (Managers.invincibility || Managers.tutorial_skip)
-        {
-            player_life = 1000;
-        }
-        else
-        {
-            player_life = 3;
-        }
+
     }
 
     // Update is called once per frame
@@ -195,19 +188,14 @@ public class PlayerController : playerData
             hit_particle.gameObject.SetActive(true);
             hit_particle.Play();
             hit_statu = true;
-            if (!Managers.invincibility)
+            if (!(Managers.GameManager.tutorial || Managers.invincibility || Managers.tutorial_skip || Managers.non_damage))
             {
-                if (!Managers.GameManager.tutorial)
-                {
-                    player_life -= 1;
-                }
-                else if(!Managers.GameManager.tutorial_hit)
-                {
-                    Managers.GameManager.tutorial_hit = true;
-                }
-                //Managers.UI_jun.player_hp[player_life].SetActive(false);
+                player_life -= 1;
             }
-
+            else if (!Managers.GameManager.tutorial_hit)
+            {
+                Managers.GameManager.tutorial_hit = true;
+            }
             if (player_life <= 0)
             {
                 if (Managers.GameManager.stage_clear["Tutorial_stage"])
