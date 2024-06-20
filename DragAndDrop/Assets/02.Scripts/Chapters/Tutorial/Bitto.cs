@@ -44,6 +44,7 @@ public class Bitto : BossController
         }
         else
         {
+            Anim_state_machin2(anim_state["idle"], false);
             bitto_obj.SetActive(false);
             Cursor.visible = false;
             tutorial_clip = Managers.Resource.Load<AudioClip>("Operation_tutorial");
