@@ -48,7 +48,6 @@ public class SoundManager
         audioSource.playOnAwake = false;
         audioSource.outputAudioMixerGroup = mixer.FindMatchingGroups("SFX_sound_volume")[0];
         audioSource.Play();
-
         UnityEngine.MonoBehaviour.Destroy(go, clip.length);
     }
 

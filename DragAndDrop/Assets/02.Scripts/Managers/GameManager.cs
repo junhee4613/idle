@@ -150,6 +150,8 @@ public class GameManager
         Managers.GameManager.stage_clear["Chapter1_boss_stage"] = false;
         Managers.GameManager.stage_clear["Chapter2_boss_stage"] = false;
         Managers.GameManager.stage_clear["Chapter2_general_stage1"] = false;
+        Managers.GameManager.portal_pos = new Vector3(-18, -2, 0);
+        Managers.Main_camera.camera_pos= new Vector3(-18, 0, -10);
     }
     void Setting_main_stage()
     {

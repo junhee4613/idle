@@ -9,6 +9,7 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
 {
     public bool invincibility = false;
     public bool tutorial_skip = false;
+    public bool oprator_key = false;
     static Managers _instance;
     public static Managers instance { get { Init(); return _instance; } }
     private void Awake()

@@ -96,7 +96,11 @@ public class UIManager_jun
             switch (item.name)
             {
                 case "Exit_button":
-                    item.onClick.AddListener(() => SceneManager.LoadScene("Main_screen"));
+                    item.onClick.AddListener(() => 
+                    { 
+                        SceneManager.LoadScene("Main_screen");
+                        Managers.GameManager.portal_pos = new Vector3(Managers.GameManager.portal_pos.x, -2, 0);
+                    });
                     break;
                 case "Retry_button":
                     item.onClick.AddListener(() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));

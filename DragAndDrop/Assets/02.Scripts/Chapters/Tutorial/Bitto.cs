@@ -36,9 +36,19 @@ public class Bitto : BossController
         ping_pong.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Tutorial_bitto_ping_pong_data").text);
         bitto_trnasform.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Tutorial_bitto_transform_data").text);
         obstacle.pattern_data = JsonConvert.DeserializeObject<List<Pattern_json_date>>(Managers.Resource.Load<TextAsset>("Tutorial_bitto_obstacle_data").text);
-        Cursor.visible = false;
-        tutorial_clip = Managers.Resource.Load<AudioClip>("Operation_tutorial");
-        Managers.GameManager.tutorial = true;
+        if (Managers.GameManager.base_tutorial_end)
+        {
+            Cursor.visible = true;
+            bitto_obj.SetActive(true);
+            Anim_state_machin2(anim_state["angry_bitto_idle"], false);
+        }
+        else
+        {
+            bitto_obj.SetActive(false);
+            Cursor.visible = false;
+            tutorial_clip = Managers.Resource.Load<AudioClip>("Operation_tutorial");
+            Managers.GameManager.tutorial = true;
+        }
         Managers.GameManager.game_start = true;
     }
     void Start()
@@ -128,12 +138,9 @@ public class Bitto : BossController
         {
             if(!tutorial_bgm_start)
             {
-                StartCoroutine(Managers.Sound.Async_bgm_load(Managers.Resource.Load<AudioClip>("Tutorial_stage"), false, () => 
-                {
-                    tutorial_bgm_start = true;
-                    Managers.GameManager.tutorial = false;
-                }));
-                
+                Managers.Sound.BGMSound(Managers.Resource.Load<AudioClip>("Tutorial_stage"), false);
+                tutorial_bgm_start = true;
+                Managers.GameManager.tutorial = false;
             }
             Boss_pattern_start();
         }

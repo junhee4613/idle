@@ -21,7 +21,7 @@ public abstract class BossController : Stage_base_controller        //time	actio
         {
             Anim_end_push();
             Pattern_processing();
-            if ((Managers.instance.invincibility || Managers.instance.tutorial_skip) && Input.GetKeyDown(KeyCode.S))
+            if ((Managers.instance.invincibility || Managers.instance.tutorial_skip || Managers.instance.oprator_key) && Input.GetKeyDown(KeyCode.S))
             {
                 Game_clear();
             }
@@ -330,6 +330,10 @@ public abstract class BossController : Stage_base_controller        //time	actio
     void Game_clear()
     {
         Managers.GameManager.game_start = false;
+        if (Managers.GameManager.tutorial)
+        {
+            Managers.GameManager.tutorial = false;
+        }
         if (!string.IsNullOrEmpty(Managers.GameManager.scene_name) && !Managers.GameManager.stage_clear[Managers.GameManager.scene_name])          //전에 있던 스테이지가 어떤 스테이지인지 알기 위해 scene_name이 변수에 할당 하기 전에 먼저 실행
         {
             if (Managers.GameManager.stage_clear.TryGetValue(Managers.GameManager.scene_name, out bool is_clear))           //게임을 클리어 했다면 \
