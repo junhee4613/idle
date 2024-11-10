@@ -38,7 +38,7 @@ public class Portal : MonoBehaviour, IInteraction_obj
     public void practice()
     {
         Managers.UI_jun.Fade_out_next_in("Black", 0, 1, gameObject.name, 1);
-        Managers.GameManager.portal_pos = transform.position;
+        Managers.GameManager.InitPos = transform.position;
         Managers.Main_camera.camera_pos = Managers.Main_camera.Main_camera.transform.position;
     }
 }

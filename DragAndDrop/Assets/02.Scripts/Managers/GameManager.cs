@@ -70,7 +70,7 @@ public class GameManager
     public bool game_stop = false;
     public bool tutorial = false;
     public bool tutorial_hit = false;
-    public Vector3 portal_pos = new Vector3(-18, -2, 0);
+    public Vector3 InitPos = new Vector3(-18, -2, 0);
     //List<Transform> portals = new List<Transform>();
     public int clear_stage_count = 0;              //스테이지 클리어 시 1이 증가, 0번째 게임 오브젝트부터 건들기 위해 -1부터 시작
 
@@ -150,12 +150,17 @@ public class GameManager
         Managers.GameManager.stage_clear["Chapter1_boss_stage"] = false;
         Managers.GameManager.stage_clear["Chapter2_boss_stage"] = false;
         Managers.GameManager.stage_clear["Chapter2_general_stage1"] = false;
-        Managers.GameManager.portal_pos = new Vector3(-18, -2, 0);
+        Managers.GameManager.InitPos = new Vector3(-18, -2, 0);
         Managers.Main_camera.camera_pos= new Vector3(-18, 0, -10);
+
+        foreach (var item in Managers.UI_jun.button_object)
+        {
+            item.gameObject.SetActive(false);
+        }
     }
     void Setting_main_stage()
     {
-        Player.transform.position = portal_pos;
+        Player.transform.position = InitPos;
         Managers.Main_camera.Main_camera.transform.position = Managers.Main_camera.camera_pos;
     }
 }

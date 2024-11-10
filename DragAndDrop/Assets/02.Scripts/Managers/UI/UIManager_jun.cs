@@ -97,22 +97,35 @@ public class UIManager_jun
             {
                 case "Exit_button":
                     item.onClick.AddListener(() => 
-                    { 
-                        SceneManager.LoadScene("Main_screen");
-                        Managers.GameManager.portal_pos = new Vector3(Managers.GameManager.portal_pos.x, -2, 0);
+                    {
+                        if(Managers.GameManager.scene_name != "Main_screen")
+                        {
+                            Managers.GameManager.InitPos = new Vector3(Managers.GameManager.InitPos.x, -2, 0);
+                            SceneManager.LoadScene("Main_screen");
+                            Managers.instance.OptionUIController();
+                        }
                     });
                     break;
                 case "Retry_button":
-                    item.onClick.AddListener(() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
+                    item.onClick.AddListener(() =>
+                    {
+                        if (Managers.GameManager.scene_name != "Main_screen")
+                        {
+                            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                            Managers.instance.OptionUIController();
+                        }
+
+                    });
                     break;
                 default:
                     break;
             }
+
+            item.gameObject.SetActive(false);
         }
+
         foreach (var item in UI_window_on)
-        {
             item.Value.SetActive(false);
-        }
     }
     public void Fade_out_in(string color, float out_delay, float out_duration, float in_delay, float in_duration, Action first_delay = null, Action second_delay = null)
     {

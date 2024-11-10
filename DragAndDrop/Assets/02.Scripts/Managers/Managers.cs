@@ -6,7 +6,7 @@ using DG.Tweening;
 using UnityEngine.Audio;
 using System.Linq;
 public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ ÇÒ´çµÆ´ÂÁö¿¡ ´ëÇÑ ¿©ºÎ¸¦ º¸·Á¸é Á¶»ç½Ä1°ú È£Ãâ½ºÅÃ Ã¢À» ¿­¾î³õ°í Áß´ÜÁ¡¿¡ ¿ÔÀ» ¶§ ±× ÄÚµå¸¦ ÇÒ´ç ½ÃÄÑ¾ßµÊ
-{
+{   //todo : ¹öÆ°À» ´©¸£¸é ¸ÇÃ³À½ Æ©Åä¸®¾ó ÁøÇàÇß´ø ½ÃÁ¡À¸·Î µ¹¾Æ°¡´Â ±â´Éµµ ÇÊ¿ä
     public bool invincibility = false;
     public bool tutorial_skip = false;
     public bool oprator_key = false;
@@ -74,35 +74,40 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
             }
             if (Input.GetKeyDown(KeyCode.Escape) && GameManager.splash && !UI_jun.fade_start)       //FIX : ³ªÁß¿¡ ¿©±â ¼öÁ¤ÇØ¾ßµÊ
             {
-                if (UI_jun.UI_window_on["Option"].activeSelf)
-                {
-                    GameManager.option_window_on = false;
-                    GameManager.game_stop = false;
-                    UI_jun.UI_window_off.Peek().SetActive(false);
-                    if (GameManager.scene_name != "Main_screen")
-                    {
-                        Sound.bgSound.pitch = 1;
-                    }
-                    Time.timeScale = 1;
-                }
-                else
-                {
-                    GameManager.option_window_on = true;
-                    GameManager.game_stop = true;
-                    UI_jun.UI_window_on["Option"].SetActive(true);
-                    Time.timeScale = 0;
-                    if (GameManager.scene_name != "Main_screen")
-                    {
-                        Sound.bgSound.pitch = 0;
-                    }
-                    UI_jun.UI_window_off.Push(UI_jun.UI_window_on["Option"]);
-
-                }
+                OptionUIController();
             }
             if (GameManager.scene_name == "Main_screen")
             {
 
             }
+        }
+    }
+
+    public void OptionUIController()
+    {
+        if (UI_jun.UI_window_on["Option"].activeSelf)
+        {
+            GameManager.option_window_on = false;
+            GameManager.game_stop = false;
+            UI_jun.UI_window_off.Peek().SetActive(false);
+            if (GameManager.scene_name != "Main_screen")
+            {
+                Sound.bgSound.pitch = 1;
+            }
+            Time.timeScale = 1;
+        }
+        else
+        {
+            GameManager.option_window_on = true;
+            GameManager.game_stop = true;
+            UI_jun.UI_window_on["Option"].SetActive(true);
+            Time.timeScale = 0;
+            if (GameManager.scene_name != "Main_screen")
+            {
+                Sound.bgSound.pitch = 0;
+            }
+            UI_jun.UI_window_off.Push(UI_jun.UI_window_on["Option"]);
+
         }
     }
     

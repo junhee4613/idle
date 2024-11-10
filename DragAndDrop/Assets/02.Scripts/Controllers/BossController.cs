@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
 using DG.Tweening;
-using System.Linq;
 
 public abstract class BossController : Stage_base_controller        //time	action_num	duration
 {
@@ -344,24 +342,39 @@ public abstract class BossController : Stage_base_controller        //time	actio
                 {
                     if (is_init == true)
                     {
-                        Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Tutorial_stage", 1, Managers.GameManager.stage_clear_init);
                         Managers.GameManager.clear_stage_count = 0;
+
+                        if (Managers.instance.tutorial_skip == true)
+                        {
+                            Managers.GameManager.InitPos = new Vector3(-18, -2, 0);
+                            Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Main_screen", 1);
+                        }
+                        else
+                            Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Tutorial_stage", 1, Managers.GameManager.stage_clear_init);
+
+                        foreach (var item in Managers.UI_jun.button_object)
+                            item.gameObject.SetActive(true);
                     }
                     else
                     {
-                        Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Main_screen", 1);
-                        if(Managers.GameManager.scene_name != "Tutorial_stage")
+                        if (Managers.GameManager.scene_name != "Tutorial_stage")
                         {
                             Managers.GameManager.clear_stage_count++;
                         }
+                        else
+                        {
+                            foreach (var item in Managers.UI_jun.button_object)
+                            {
+                                item.gameObject.SetActive(true);
+                            }
+                        }
+
+                        Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Main_screen", 1);
                     }
                 }
             }
         }
-        
-        
     }
-    
 
     public abstract void Pattern_processing();
     public void Anim_end_push()
