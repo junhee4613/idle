@@ -138,7 +138,20 @@ public class GameManager
                 break;
         }
     }
+
     public void stage_clear_init()
+    {
+        InitGameMode();
+        Managers.GameManager.InitPos = new Vector3(-18, -2, 0);
+        Managers.Main_camera.camera_pos= new Vector3(-18, 0, -10);
+
+        foreach (var item in Managers.UI_jun.button_object)
+        {
+            item.gameObject.SetActive(false);
+        }
+    }
+
+    public void InitGameMode()
     {
         if (!Managers.instance.tutorial_skip)
         {
@@ -150,13 +163,8 @@ public class GameManager
         Managers.GameManager.stage_clear["Chapter1_boss_stage"] = false;
         Managers.GameManager.stage_clear["Chapter2_boss_stage"] = false;
         Managers.GameManager.stage_clear["Chapter2_general_stage1"] = false;
-        Managers.GameManager.InitPos = new Vector3(-18, -2, 0);
-        Managers.Main_camera.camera_pos= new Vector3(-18, 0, -10);
 
-        foreach (var item in Managers.UI_jun.button_object)
-        {
-            item.gameObject.SetActive(false);
-        }
+        Managers.Main_camera.camera_pos = Vector3.zero;
     }
     void Setting_main_stage()
     {

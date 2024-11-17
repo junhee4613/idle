@@ -1,16 +1,41 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using DG.Tweening;
 using UnityEngine.Audio;
-using System.Linq;
+using System;
+
+using Object = UnityEngine.Object;
 public class Managers : MonoBehaviour           //디버깅 할 때 매개변수에 값이 할당됐는지에 대한 여부를 보려면 조사식1과 호출스택 창을 열어놓고 중단점에 왔을 때 그 코드를 할당 시켜야됨
 {   //todo : 버튼을 누르면 맨처음 튜토리얼 진행했던 시점으로 돌아가는 기능도 필요
+
+    public enum SceneName
+    {
+        None,
+        Tutorial,
+        Lobby,
+        Main,
+        Chapter1Boss,
+        Chapter2General,
+        Chapter2Boss,
+        Max
+    }
+
+    [Serializable]
+    public class SceneData 
+    {
+        public SceneName SceneName;
+        public Scene Scene;
+    }
+
+    [SerializeField]
+    public List<SceneData> SceneAssetList = new List<SceneData>();
+
     public bool invincibility = false;
     public bool tutorial_skip = false;
     public bool oprator_key = false;
     public bool non_damage = false;
+
+
     static Managers _instance;
     public static Managers instance { get { Init(); return _instance; } }
     private void Awake()

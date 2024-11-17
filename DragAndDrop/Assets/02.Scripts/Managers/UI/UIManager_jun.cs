@@ -101,8 +101,7 @@ public class UIManager_jun
                         if(Managers.GameManager.scene_name != "Main_screen")
                         {
                             Managers.GameManager.InitPos = new Vector3(Managers.GameManager.InitPos.x, -2, 0);
-                            SceneManager.LoadScene("Main_screen");
-                            Managers.instance.OptionUIController();
+                            Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Main_screen", 1, Managers.instance.OptionUIController);
                         }
                     });
                     break;
@@ -110,12 +109,18 @@ public class UIManager_jun
                     item.onClick.AddListener(() =>
                     {
                         if (Managers.GameManager.scene_name != "Main_screen")
-                        {
-                            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-                            Managers.instance.OptionUIController();
-                        }
+                            Managers.UI_jun.Fade_out_next_in("Black", 0, 1, Managers.GameManager.scene_name, 1, Managers.instance.OptionUIController);
 
                     });
+                    break;
+                case "Init":
+                    {
+                        item.onClick.AddListener(() =>
+                        {
+                            Managers.UI_jun.Fade_out_next_in("Black", 0, 1, Managers.GameManager.scene_name, 1, Managers.GameManager.InitGameMode);
+                        });
+                        //진행 중이던 스테이지 중단하고 클리어한 기록 다 없애면서 로비로 이동
+                    }
                     break;
                 default:
                     break;
