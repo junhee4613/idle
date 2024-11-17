@@ -153,6 +153,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ff6cef051d08f408f454148269be43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SceneAssetDic:
+    _serializedList:
+    - Key: 1
+      Value: {fileID: 102900000, guid: 9e54b29a4685e25498e890578b1e708f, type: 3}
+    - Key: 2
+      Value: {fileID: 102900000, guid: 265b2880e7cd34e4590224ef5cf106b9, type: 3}
+    - Key: 3
+      Value: {fileID: 102900000, guid: dc4cac095cc365146939a6d7688bfb53, type: 3}
+    - Key: 4
+      Value: {fileID: 102900000, guid: 8e337428e8886fe4491594a1f26d9115, type: 3}
+    - Key: 5
+      Value: {fileID: 102900000, guid: ee38dbffb11ad2d4aab3faad6cb5b4cc, type: 3}
+    - Key: 6
+      Value: {fileID: 102900000, guid: 7133762253808274db0a4980d1b4c932, type: 3}
   invincibility: 0
   tutorial_skip: 0
   oprator_key: 1

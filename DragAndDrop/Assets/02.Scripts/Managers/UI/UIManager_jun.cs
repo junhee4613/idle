@@ -26,16 +26,20 @@ public class UIManager_jun
     public void Init()
     {
         timer = Managers.Resource.Load<GameObject>("Timer").GetComponent<Slider>();
+
+
         if (event_system == null)
         {
-            GameObject temp = GameObject.Find("EventSystem");
-            if (!temp)
+            GameObject eventSystem = GameObject.Find("EventSystem");
+
+            if (!eventSystem)
             {
-                temp = Managers.Resource.Instantiate("EventSystem", null);
+                eventSystem = Managers.Resource.Instantiate("EventSystem", null);
             }
-            event_system = temp;
+            event_system = eventSystem;
             UnityEngine.MonoBehaviour.DontDestroyOnLoad(event_system);
         }
+
         if (canvas == null)
         {
             GameObject temp = GameObject.Find("Canvas");
@@ -91,47 +95,78 @@ public class UIManager_jun
             }
         }
         button_object = GameObject.FindObjectsOfType<Button>();
+        SetButtonStatus();
+
+        foreach (var item in UI_window_on)
+            item.Value.SetActive(false);
+    }
+
+    public void SetButtonStatus()
+    {
         foreach (var item in button_object)
         {
             switch (item.name)
             {
                 case "Exit_button":
-                    item.onClick.AddListener(() => 
                     {
-                        if(Managers.GameManager.scene_name != "Main_screen")
+                        if(item.onClick.GetPersistentEventCount() == 0)
                         {
-                            Managers.GameManager.InitPos = new Vector3(Managers.GameManager.InitPos.x, -2, 0);
-                            Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Main_screen", 1, Managers.instance.OptionUIController);
+                            item.onClick.AddListener(() =>
+                            {
+                                if (Managers.GameManager.scene_name != "Main_screen")
+                                {
+                                    Managers.GameManager.InitPos = new Vector3(Managers.GameManager.InitPos.x, -2, 0);
+                                    Managers.UI_jun.Fade_out_next_in("Black", 0, 1, Managers.instance.SceneAssetDic[SceneName.Main].name, 1, Managers.instance.OptionUIController);
+                                }
+                            });
                         }
-                    });
+
+                        item.gameObject.SetActive(false);
+                    }
                     break;
                 case "Retry_button":
-                    item.onClick.AddListener(() =>
                     {
-                        if (Managers.GameManager.scene_name != "Main_screen")
-                            Managers.UI_jun.Fade_out_next_in("Black", 0, 1, Managers.GameManager.scene_name, 1, Managers.instance.OptionUIController);
+                        if (item.onClick.GetPersistentEventCount() == 0)
+                        {
+                            item.onClick.AddListener(() =>
+                            {
+                                if (Managers.GameManager.scene_name != "Main_screen")
+                                    Managers.UI_jun.Fade_out_next_in("Black", 0, 1, Managers.GameManager.scene_name, 1, Managers.instance.OptionUIController);
 
-                    });
+                            });
+                        }
+
+                        item.gameObject.SetActive(false);
+                    }
                     break;
                 case "Init":
                     {
-                        item.onClick.AddListener(() =>
+                        if (item.onClick.GetPersistentEventCount() == 0)
                         {
-                            Managers.UI_jun.Fade_out_next_in("Black", 0, 1, Managers.GameManager.scene_name, 1, Managers.GameManager.InitGameMode);
-                        });
-                        //진행 중이던 스테이지 중단하고 클리어한 기록 다 없애면서 로비로 이동
+                            item.onClick.AddListener(() =>
+                            {
+                                Managers.instance.OptionUIController();
+                                Managers.UI_jun.Fade_out_next_in("Black", 0, 1, Managers.instance.SceneAssetDic[SceneName.Lobby].name, 1, InitGameMode);
+                            });
+                        }
+
+                        item.gameObject.SetActive(true);
                     }
                     break;
                 default:
                     break;
             }
 
-            item.gameObject.SetActive(false);
         }
-
-        foreach (var item in UI_window_on)
-            item.Value.SetActive(false);
     }
+
+    private void InitGameMode()
+    {
+        Managers.GameManager.InitGameMode();
+        Managers.GameManager.splash = false;
+        SetButtonStatus();
+    }
+
     public void Fade_out_in(string color, float out_delay, float out_duration, float in_delay, float in_duration, Action first_delay = null, Action second_delay = null)
     {
         UI_window_on[color].SetActive(true);

@@ -13,8 +13,8 @@ public class GameManager
     Transform portals;
 
     public string last_stage = "Chapter2_boss_stage";
-    public bool splash = false;             //스플레시 화면일 때 쓰는 불값
-    public string scene_name;
+    public bool splash = false;             //todo : 스플레시 화면일 때 쓰는 불값 - 2024.11.18 현재 로딩된 scene이 어떤 scene인지 런타임에 알 수 있게 되어 이건 필요 없어짐
+    public string scene_name;               //todo : 여기 enum타입으로 변경
     public bool load_end = false;
     public bool option_window_on = false;
     public Dictionary<string, bool> stage_clear = new Dictionary<string, bool>()
