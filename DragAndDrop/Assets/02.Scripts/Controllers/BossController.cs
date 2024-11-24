@@ -347,10 +347,10 @@ public abstract class BossController : Stage_base_controller        //time	actio
                         if (Managers.instance.tutorial_skip == true)
                         {
                             Managers.GameManager.InitPos = new Vector3(-18, -2, 0);
-                            Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Main_screen", 1);
+                            Managers.UI_jun.Fade_out_next_in("Black", 0, 1, SceneName.Main, 1);
                         }
                         else
-                            Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Tutorial_stage", 1, Managers.GameManager.stage_clear_init);
+                            Managers.UI_jun.Fade_out_next_in("Black", 0, 1, SceneName.Lobby, 1, Managers.GameManager.stage_clear_init);
 
                         foreach (var item in Managers.UI_jun.button_object)
                             item.gameObject.SetActive(true);
@@ -360,6 +360,7 @@ public abstract class BossController : Stage_base_controller        //time	actio
                         if (Managers.GameManager.scene_name != "Tutorial_stage")
                         {
                             Managers.GameManager.clear_stage_count++;
+                            Managers.UI_jun.Fade_out_next_in("Black", 0, 1, SceneName.Main, 1);
                         }
                         else
                         {
@@ -367,9 +368,9 @@ public abstract class BossController : Stage_base_controller        //time	actio
                             {
                                 item.gameObject.SetActive(true);
                             }
+                            Managers.UI_jun.Fade_out_next_in("Black", 0, 1, SceneName.Main, 1, Managers.GameManager.Setting_main_stage);
                         }
 
-                        Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Main_screen", 1);
                     }
                 }
             }

@@ -208,7 +208,7 @@ public class PlayerController : playerData
                 else
                 {
                     gameObject.SetActive(false);
-                    Managers.UI_jun.Fade_out_next_in("Black", 0, 1, "Tutorial_stage", 1);
+                    Managers.UI_jun.Fade_out_next_in("Black", 0, 1, SceneName.Tutorial, 1);
                 }
             }
         }

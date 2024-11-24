@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
 using AYellowpaper.SerializedCollections;
-using System;
+using UnityEngine.EventSystems;
 
 using Object = UnityEngine.Object;
 
@@ -30,11 +30,26 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
     public bool oprator_key = false;
     public bool non_damage = false;
 
+    private GameObject _eventSystem;
 
     static Managers _instance;
     public static Managers instance { get { Init(); return _instance; } }
     private void Awake()
     {
+        if (_instance != null)
+        {
+            Destroy(this);
+            return;
+        }
+
+        if (_eventSystem == null)
+        {
+            _eventSystem = new GameObject();
+            _eventSystem.AddComponent<EventSystem>();
+            _eventSystem.AddComponent<StandaloneInputModule>();
+            DontDestroyOnLoad(_eventSystem);
+        }
+
         Resource.LoadAllAsync<Object>("PreLoad", (key, count, totalCount) =>
         {
             if (count == totalCount)
@@ -85,11 +100,11 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
                 GameManager.splash = true;
                 if (invincibility || tutorial_skip)
                 {
-                    UI_jun.Fade_out_next_in("Black", 0, 1f, "Main_screen", 1f);
+                    UI_jun.Fade_out_next_in("Black", 0, 1f, SceneName.Main, 1f, GameManager.Setting_main_stage);
                 }
                 else
                 {
-                    UI_jun.Fade_out_next_in("Black", 0, 1f, "Tutorial_stage", 1f);
+                    UI_jun.Fade_out_next_in("Black", 0, 1f, SceneName.Tutorial, 1f);
                 }
             }
             if (Input.GetKeyDown(KeyCode.Escape) && GameManager.splash && !UI_jun.fade_start)       //FIX : ³ªÁß¿¡ ¿©±â ¼öÁ¤ÇØ¾ßµÊ

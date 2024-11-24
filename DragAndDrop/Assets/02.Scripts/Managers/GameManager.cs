@@ -92,7 +92,7 @@ public class GameManager
         {
             operate = true;
         }
-        Stage_setting();
+
         UI_init();
     }
     public void Sound_init(string scene_name)
@@ -126,18 +126,6 @@ public class GameManager
             }
         }
     }
-    public void Stage_setting()
-    {
-        Managers.Pool.Clear();
-        switch (scene_name)
-        {
-            case "Main_screen":
-                Setting_main_stage();
-                break;
-            default:
-                break;
-        }
-    }
 
     public void stage_clear_init()
     {
@@ -145,10 +133,8 @@ public class GameManager
         Managers.GameManager.InitPos = new Vector3(-18, -2, 0);
         Managers.Main_camera.camera_pos= new Vector3(-18, 0, -10);
 
-        foreach (var item in Managers.UI_jun.button_object)
-        {
-            item.gameObject.SetActive(false);
-        }
+        Managers.UI_jun.SetButtonStatus();
+
     }
 
     public void InitGameMode()
@@ -164,10 +150,13 @@ public class GameManager
         Managers.GameManager.stage_clear["Chapter2_boss_stage"] = false;
         Managers.GameManager.stage_clear["Chapter2_general_stage1"] = false;
 
-        Managers.Main_camera.camera_pos = Vector3.zero;
+        splash = false;
     }
-    void Setting_main_stage()
+    public void Setting_main_stage()
     {
+        if (Managers.GameManager.clear_stage_count >= 1)
+            return;
+
         Player.transform.position = InitPos;
         Managers.Main_camera.Main_camera.transform.position = Managers.Main_camera.camera_pos;
     }

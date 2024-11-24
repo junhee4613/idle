@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 using System;
+using UnityEditor;
 
 public class UIManager_jun
 {
@@ -12,7 +13,6 @@ public class UIManager_jun
     public bool option_window_on;
     public Dictionary<string, GameObject> UI_window_on = new Dictionary<string, GameObject>();
     public GameObject canvas;
-    public GameObject event_system;
     public Slider[] slider_object;
     public Button[] button_object;
 
@@ -23,22 +23,11 @@ public class UIManager_jun
     public GameObject[] player_hp = new GameObject[3];
     public GameObject[] boss_hp = new GameObject[3];
     public bool fade_start = false;
+
+    private bool _init = false;
     public void Init()
     {
         timer = Managers.Resource.Load<GameObject>("Timer").GetComponent<Slider>();
-
-
-        if (event_system == null)
-        {
-            GameObject eventSystem = GameObject.Find("EventSystem");
-
-            if (!eventSystem)
-            {
-                eventSystem = Managers.Resource.Instantiate("EventSystem", null);
-            }
-            event_system = eventSystem;
-            UnityEngine.MonoBehaviour.DontDestroyOnLoad(event_system);
-        }
 
         if (canvas == null)
         {
@@ -94,11 +83,16 @@ public class UIManager_jun
                     break;
             }
         }
-        button_object = GameObject.FindObjectsOfType<Button>();
+
+        if(button_object == null)
+            button_object = GameObject.FindObjectsOfType<Button>();
+
         SetButtonStatus();
 
         foreach (var item in UI_window_on)
             item.Value.SetActive(false);
+
+        _init = true;
     }
 
     public void SetButtonStatus()
@@ -109,14 +103,14 @@ public class UIManager_jun
             {
                 case "Exit_button":
                     {
-                        if(item.onClick.GetPersistentEventCount() == 0)
+                        if(_init == false)
                         {
                             item.onClick.AddListener(() =>
                             {
                                 if (Managers.GameManager.scene_name != "Main_screen")
                                 {
                                     Managers.GameManager.InitPos = new Vector3(Managers.GameManager.InitPos.x, -2, 0);
-                                    Managers.UI_jun.Fade_out_next_in("Black", 0, 1, Managers.instance.SceneAssetDic[SceneName.Main].name, 1, Managers.instance.OptionUIController);
+                                    Managers.UI_jun.Fade_out_next_in("Black", 0, 1, SceneName.Main, 1, Managers.instance.OptionUIController);
                                 }
                             });
                         }
@@ -126,7 +120,7 @@ public class UIManager_jun
                     break;
                 case "Retry_button":
                     {
-                        if (item.onClick.GetPersistentEventCount() == 0)
+                        if (_init == false)
                         {
                             item.onClick.AddListener(() =>
                             {
@@ -141,7 +135,7 @@ public class UIManager_jun
                     break;
                 case "Init":
                     {
-                        if (item.onClick.GetPersistentEventCount() == 0)
+                        if (_init == false)
                         {
                             item.onClick.AddListener(() =>
                             {
@@ -163,7 +157,6 @@ public class UIManager_jun
     private void InitGameMode()
     {
         Managers.GameManager.InitGameMode();
-        Managers.GameManager.splash = false;
         SetButtonStatus();
     }
 
@@ -218,7 +211,7 @@ public class UIManager_jun
             });
         });
     }
-    public void Fade_out_next_in(string color, float out_delay, float out_duration, string next_scene, float in_duration, Action action = null)
+    public void Fade_out_next_in(string color, float out_delay, float out_duration,SceneName nextScene , float in_duration, Action action = null)
     {
         fade_start = true;
         UI_window_on[color].SetActive(true);
@@ -228,7 +221,7 @@ public class UIManager_jun
         temp_image.DOFade(1, out_duration).SetDelay(out_delay).OnComplete(() =>
         {
             Managers.Sound.bgSound.pitch = 0;
-            SceneManager.LoadScene(next_scene);
+            SceneManager.LoadScene(Managers.instance.SceneAssetDic[nextScene].name);
             temp_image.DOFade(0, in_duration).OnComplete(() =>
             {
                 fade_start = false;
@@ -242,6 +235,32 @@ public class UIManager_jun
             });
         });
     }
+
+    public void Fade_out_next_in(string color, float out_delay, float out_duration, string nextScene, float in_duration, Action action = null)      //todo : 나중에 기회되면 없애기
+    {
+        fade_start = true;
+        UI_window_on[color].SetActive(true);
+        Image temp_image = UI_window_on[color].GetComponent<Image>();
+        Color origin_color = temp_image.color;
+        temp_image.color = Color.clear;
+        temp_image.DOFade(1, out_duration).SetDelay(out_delay).OnComplete(() =>
+        {
+            Managers.Sound.bgSound.pitch = 0;
+            SceneManager.LoadScene(nextScene);
+            temp_image.DOFade(0, in_duration).OnComplete(() =>
+            {
+                fade_start = false;
+                Managers.Sound.bgSound.pitch = 1;
+                temp_image.color = origin_color;
+                UI_window_on[color].SetActive(false);
+                if (action != null)
+                {
+                    action();
+                }
+            });
+        });
+    }
+
     public void Game_over_ui()
     {
         UI_window_on["Game_over"].SetActive(true);
