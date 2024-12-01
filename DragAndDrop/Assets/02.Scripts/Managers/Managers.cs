@@ -23,7 +23,7 @@ public class Managers : MonoBehaviour           //µð¹ö±ë ÇÒ ¶§ ¸Å°³º¯¼ö¿¡ °ªÀÌ Ç
     
 
     [SerializedDictionary("SceneName", "SceneAsset")]
-    public SerializedDictionary<SceneName, UnityEditor.SceneAsset> SceneAssetDic = new SerializedDictionary<SceneName, UnityEditor.SceneAsset>();
+    public SerializedDictionary<SceneName, int> SceneAssetDic = new SerializedDictionary<SceneName, int>();
 
     public bool invincibility = false;
     public bool tutorial_skip = false;

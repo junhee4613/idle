@@ -40,7 +40,7 @@ public class Portal : MonoBehaviour, IInteraction_obj
     public void practice()
     {
         Managers.UI_jun.Fade_out_next_in("Black", 0, 1, sceneName, 1);
-        Managers.GameManager.InitPos = transform.position;
+        Managers.GameManager.InitPos = new Vector3(transform.position.x, transform.position.y  - 3, transform.position.z);
         Managers.Main_camera.camera_pos = Managers.Main_camera.Main_camera.transform.position;
     }
 }

@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor.SceneManagement;
+#endif
 using UnityEditor;
 public class SceneSwitcher : MonoBehaviour
 {
+#if UNITY_EDITOR
     [MenuItem("Scenes/Load Lobby")]
     static void LobbyScene()
     {
@@ -20,4 +23,5 @@ public class SceneSwitcher : MonoBehaviour
             EditorSceneManager.OpenScene(scenePath);
         }
     }
+#endif
 }

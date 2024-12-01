@@ -53,6 +53,11 @@ public class PlayerController : playerData
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.D) && Managers.oprator_key == true)
+        {
+            player_life = 0;
+            Hit();
+        }
         if (!Managers.GameManager.option_window_on && !Managers.UI_jun.fade_start)
         {
             Interaction_obj();

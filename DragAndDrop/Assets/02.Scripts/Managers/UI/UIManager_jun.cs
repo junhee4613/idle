@@ -107,10 +107,13 @@ public class UIManager_jun
                         {
                             item.onClick.AddListener(() =>
                             {
-                                if (Managers.GameManager.scene_name != "Main_screen")
+                                if (Managers.GameManager.sceneName != SceneName.Main)
                                 {
+                                    if (Time.timeScale == 0)
+                                        Managers.instance.OptionUIController();
+
                                     Managers.GameManager.InitPos = new Vector3(Managers.GameManager.InitPos.x, -2, 0);
-                                    Managers.UI_jun.Fade_out_next_in("Black", 0, 1, SceneName.Main, 1, Managers.instance.OptionUIController);
+                                    Managers.UI_jun.Fade_out_next_in("Black", 0, 1, SceneName.Main, 1, Managers.Pool.Clear);
                                 }
                             });
                         }
@@ -124,8 +127,13 @@ public class UIManager_jun
                         {
                             item.onClick.AddListener(() =>
                             {
-                                if (Managers.GameManager.scene_name != "Main_screen")
-                                    Managers.UI_jun.Fade_out_next_in("Black", 0, 1, Managers.GameManager.scene_name, 1, Managers.instance.OptionUIController);
+                                if (Managers.GameManager.sceneName != SceneName.Main)
+                                {
+                                    if(Time.timeScale == 0)
+                                        Managers.instance.OptionUIController();
+
+                                    Managers.UI_jun.Fade_out_next_in("Black", 0, 1, Managers.GameManager.sceneName, 1, Managers.Pool.Clear);
+                                }
 
                             });
                         }
@@ -139,8 +147,10 @@ public class UIManager_jun
                         {
                             item.onClick.AddListener(() =>
                             {
-                                Managers.instance.OptionUIController();
-                                Managers.UI_jun.Fade_out_next_in("Black", 0, 1, Managers.instance.SceneAssetDic[SceneName.Lobby].name, 1, InitGameMode);
+                                if(Time.timeScale == 0)
+                                    Managers.instance.OptionUIController();
+
+                                Managers.UI_jun.Fade_out_next_in("Black", 0, 1, SceneName.Lobby, 1, Managers.GameManager.stage_clear_init);
                             });
                         }
 
@@ -152,12 +162,6 @@ public class UIManager_jun
             }
 
         }
-    }
-
-    private void InitGameMode()
-    {
-        Managers.GameManager.InitGameMode();
-        SetButtonStatus();
     }
 
     public void Fade_out_in(string color, float out_delay, float out_duration, float in_delay, float in_duration, Action first_delay = null, Action second_delay = null)
@@ -190,27 +194,7 @@ public class UIManager_jun
             });
         });
     }
-    public void Fade_out_in(string color, float out_delay, float out_duration, float in_delay, float in_duration, string next_scene, Action out_end_action = null, Action in_end_action = null)
-    {
-        UI_window_on[color].SetActive(true);
-        Image temp_image = UI_window_on[color].GetComponent<Image>();
-        Color origin_color = temp_image.color;
-        temp_image.color = Color.clear;
-        temp_image.DOFade(1, out_duration).SetDelay(out_delay).OnComplete(() =>
-        {
-            if (out_end_action != null)
-                out_end_action();
-            temp_image.DOFade(0, in_duration).SetDelay(in_delay).OnComplete(() =>
-            {
-                temp_image.color = origin_color;
-                UI_window_on[color].SetActive(false);
-                if (in_end_action != null)
-                    in_end_action();
 
-                SceneManager.LoadScene(next_scene);
-            });
-        });
-    }
     public void Fade_out_next_in(string color, float out_delay, float out_duration,SceneName nextScene , float in_duration, Action action = null)
     {
         fade_start = true;
@@ -221,42 +205,16 @@ public class UIManager_jun
         temp_image.DOFade(1, out_duration).SetDelay(out_delay).OnComplete(() =>
         {
             Managers.Sound.bgSound.pitch = 0;
-            SceneManager.LoadScene(Managers.instance.SceneAssetDic[nextScene].name);
+            Managers.GameManager.sceneName = nextScene;
+            SceneManager.LoadScene(Managers.instance.SceneAssetDic[nextScene]);
             temp_image.DOFade(0, in_duration).OnComplete(() =>
             {
                 fade_start = false;
                 Managers.Sound.bgSound.pitch = 1;
                 temp_image.color = origin_color;
                 UI_window_on[color].SetActive(false);
-                if (action != null)
-                {
-                    action();
-                }
-            });
-        });
-    }
-
-    public void Fade_out_next_in(string color, float out_delay, float out_duration, string nextScene, float in_duration, Action action = null)      //todo : 나중에 기회되면 없애기
-    {
-        fade_start = true;
-        UI_window_on[color].SetActive(true);
-        Image temp_image = UI_window_on[color].GetComponent<Image>();
-        Color origin_color = temp_image.color;
-        temp_image.color = Color.clear;
-        temp_image.DOFade(1, out_duration).SetDelay(out_delay).OnComplete(() =>
-        {
-            Managers.Sound.bgSound.pitch = 0;
-            SceneManager.LoadScene(nextScene);
-            temp_image.DOFade(0, in_duration).OnComplete(() =>
-            {
-                fade_start = false;
-                Managers.Sound.bgSound.pitch = 1;
-                temp_image.color = origin_color;
-                UI_window_on[color].SetActive(false);
-                if (action != null)
-                {
-                    action();
-                }
+                Managers.Pool.Clear();
+                action?.Invoke();
             });
         });
     }

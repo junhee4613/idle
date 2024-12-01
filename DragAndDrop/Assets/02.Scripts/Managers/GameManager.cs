@@ -9,17 +9,31 @@ public class GameManager
 {
     PlayerController player;
     Transform player_character;
+    Transform playerTr;
     GameObject beat_box;
     Transform portals;
+
+    Portal[] portalsObj;
 
     public string last_stage = "Chapter2_boss_stage";
     public bool splash = false;             //todo : 스플레시 화면일 때 쓰는 불값 - 2024.11.18 현재 로딩된 scene이 어떤 scene인지 런타임에 알 수 있게 되어 이건 필요 없어짐
     public string scene_name;               //todo : 여기 enum타입으로 변경
+    public SceneName sceneName = SceneName.Lobby;
     public bool load_end = false;
     public bool option_window_on = false;
     public Dictionary<string, bool> stage_clear = new Dictionary<string, bool>()
     { { "Tutorial_stage", false },  {"Chapter1_boss_stage", false}, { "Chapter2_boss_stage", false }, { "Chapter2_general_stage1", false }};
     #region 프로퍼티 함수들
+
+    public Portal[] PortalsObj
+    {
+        get
+        {
+            portalsObj = GameObject.FindObjectsOfType<Portal>();
+
+            return portalsObj;
+        }
+    }
     public PlayerController Player 
     { 
         get { 
@@ -28,6 +42,15 @@ public class GameManager
                 player = GameObject.FindObjectOfType<PlayerController>();
             } 
             return player; 
+        }
+    }
+    public Transform PlayerTr
+    {
+        get
+        {
+            playerTr = GameObject.FindObjectOfType<PlayerController>().transform;
+
+            return playerTr;
         }
     }
     public Transform Player_character
@@ -93,6 +116,17 @@ public class GameManager
             operate = true;
         }
 
+        if (sceneName == SceneName.Main)
+        {
+            PlayerTr.position = InitPos;
+            Managers.Main_camera.Main_camera.transform.position = Managers.Main_camera.camera_pos;
+            foreach (var portal in PortalsObj)
+            {
+                portal.Setting();
+            }
+            
+        }
+
         UI_init();
     }
     public void Sound_init(string scene_name)
@@ -149,6 +183,8 @@ public class GameManager
         Managers.GameManager.stage_clear["Chapter1_boss_stage"] = false;
         Managers.GameManager.stage_clear["Chapter2_boss_stage"] = false;
         Managers.GameManager.stage_clear["Chapter2_general_stage1"] = false;
+
+        clear_stage_count = 0;
 
         splash = false;
     }

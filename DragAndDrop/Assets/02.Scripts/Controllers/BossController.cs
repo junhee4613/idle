@@ -214,7 +214,7 @@ public abstract class BossController : Stage_base_controller        //time	actio
     }
     public GameObject General_warning_box(Vector3 init_size, Vector3 pos, Color color)
     {
-        GameObject warning_box = Managers.Resource.Load<GameObject>("Warning_box");
+        GameObject warning_box = Managers.Pool.Pop(Managers.Resource.Load<GameObject>("Warning_box"));
         warning_box.transform.position = pos;
         warning_box.transform.localScale = init_size;
         if (!general_warning_box_sr.ContainsValue(warning_box.GetComponent<SpriteRenderer>()))
@@ -222,7 +222,7 @@ public abstract class BossController : Stage_base_controller        //time	actio
             general_warning_box_sr.Add(warning_box, warning_box.GetComponent<SpriteRenderer>());
         }
         general_warning_box_sr[warning_box].color = color;
-        return Managers.Pool.Pop(warning_box);
+        return warning_box;
     }
     /// <summary>
     /// 0.5 단위로 피봇값 설정 양의 Y축이면 0.5로 설정
