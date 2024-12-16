@@ -169,7 +169,7 @@ MonoBehaviour:
       Value: 5
   invincibility: 0
   tutorial_skip: 0
-  oprator_key: 0
+  oprator_key: 1
   non_damage: 0
 --- !u!4 &338457427
 Transform:
